@@ -1,462 +1,9 @@
-<!DOCTYPE HTML>
-<html lang="zh-Hans">
-
-
-<head>
-    <meta charset="utf-8">
-    <meta name="keywords" content="自己动手构建简易虚拟机和编译器-构建XASM汇编器（4）, 技术分享">
-    <meta name="description" content="读书笔记、技术文章">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
-    <title>自己动手构建简易虚拟机和编译器-构建XASM汇编器（4） | Li的博客</title>
-    <link rel="icon" type="image/png" href="/medias/blog32.png">
-
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
-
-    <script src="/libs/jquery/jquery.min.js"></script>
-
-<meta name="generator" content="Hexo 5.0.0"><link rel="alternate" href="/atom.xml" title="Li的博客" type="application/atom+xml">
-</head>
-
-
-<body>
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/blogLogo.jpg" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">Li的博客</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>Index</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>Tags</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>Categories</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>Archives</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>About</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>Contact</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/blogLogo.jpg" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">Li的博客</div>
-        <div class="logo-desc">
-            
-            读书笔记、技术文章
-            
-        </div>
-    </div>
-
-    
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			Index
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			Tags
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			Categories
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			Archives
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			About
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			Contact
-		</a>
-          
-        </li>
-        
-        
-    </ul>
-</div>
-
-
-        </div>
-
-        
-    </nav>
-
-</header>
-
-    
-
-
-
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
-    <div class="container" style="right: 0px;left: 0px;">
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div class="brand">
-                    <h1 class="description center-align post-title">自己动手构建简易虚拟机和编译器-构建XASM汇编器（4）</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<main class="post-container content">
-
-    
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-<style>
-    #articleContent h1::before,
-    #articleContent h2::before,
-    #articleContent h3::before,
-    #articleContent h4::before,
-    #articleContent h5::before,
-    #articleContent h6::before {
-        display: block;
-        content: " ";
-        height: 100px;
-        margin-top: -100px;
-        visibility: hidden;
-    }
-
-    #articleContent :focus {
-        outline: none;
-    }
-
-    .toc-fixed {
-        position: fixed;
-        top: 64px;
-    }
-
-    .toc-widget {
-        width: 345px;
-        padding-left: 20px;
-    }
-
-    .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    .toc-widget ol {
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-content {
-        height: calc(100vh - 250px);
-        overflow: auto;
-    }
-
-    #toc-content ol {
-        padding-left: 10px;
-    }
-
-    #toc-content ol li {
-        padding-left: 10px;
-    }
-
-    #toc-content .toc-link:hover {
-        color: #42b983;
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    #toc-content .toc-link::before {
-        background-color: transparent;
-        max-height: 25px;
-
-        position: absolute;
-        right: 23.5vw;
-        display: block;
-    }
-
-    #toc-content .is-active-link {
-        color: #42b983;
-    }
-
-    #floating-toc-btn {
-        position: fixed;
-        right: 15px;
-        bottom: 76px;
-        padding-top: 15px;
-        margin-bottom: 0;
-        z-index: 998;
-    }
-
-    #floating-toc-btn .btn-floating {
-        width: 48px;
-        height: 48px;
-    }
-
-    #floating-toc-btn .btn-floating i {
-        line-height: 48px;
-        font-size: 1.4rem;
-    }
-</style>
-<div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
-<div id="artDetail">
-    <div class="card">
-        <div class="card-content article-info">
-            <div class="row tag-cate">
-                <div class="col s7">
-                    
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E8%84%9A%E6%9C%AC/">
-                                <span class="chip bg-color">脚本</span>
-                            </a>
-                        
-                            <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">
-                                <span class="chip bg-color">虚拟机</span>
-                            </a>
-                        
-                            <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/">
-                                <span class="chip bg-color">编译器</span>
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-                <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/" class="post-category">
-                                重学计算机系列
-                            </a>
-                        
-                            <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="post-category">
-                                编译原理
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="post-info">
-                
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2018-05-13
-                </div>
-                
-
-                
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2018-12-17
-                </div>
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    3.7k
-                </div>
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    18 Min
-                </div>
-                
-
-                
-                    <div id="busuanzi_container_page_pv" class="info-break-policy">
-                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
-                        <span id="busuanzi_value_page_pv"></span>
-                    </div>
-				
-            </div>
-        </div>
-        <hr class="clearfix">
-        <div class="card-content article-card-content">
-            <div id="articleContent">
-                <p>本章我们将构建XASM汇编器，将汇编代码汇编成虚拟机可以执行的二进制文件。</p>
-<a id="more"></a>
-<h2 id="本章所处位置"><a href="#本章所处位置" class="headerlink" title="本章所处位置"></a>本章所处位置</h2><p><img src="xasm.png" alt="xasm"></p>
-<h2 id="汇编内容"><a href="#汇编内容" class="headerlink" title="汇编内容"></a>汇编内容</h2><p>根据前一章的内容可知，汇编器的主要工作是将汇编代码转换成虚拟机能解析执行的机器码。主要包含以下几个方面的内容。</p>
-<h3 id="汇编指令"><a href="#汇编指令" class="headerlink" title="汇编指令"></a>汇编指令</h3><p>汇编指令采用的是助记符形式，如 <code>Mov X,4</code> 等，最终会被翻译为如 <code>3 2 4</code> 这样的机器码。<br>要翻译自然需要一个指令查找表，当 C 语言被翻译成机器码时，参考的是 CPU 制造商提供的汇编参考手册，而这里的汇编代码会运行在我们自己的虚拟机上，那么参考手册需要我们来提供。在实现层面上，可以用语言提供的数据结构如链表、哈希表来存储所有的指令映射关系，如下图所示。</p>
-<p><img src="opcodelookuptable.png" alt="opcodelookuptable"></p>
-<p>上述映射表格中，每一条记录除了存储助记符对应的操作码之外，还需要存储该指令的操作数列表，其中操作数列表中包含了各个操作数的操作符类型和数据，由于一个操作符的类型可能有几种，如 <code>Mov X,Y</code> 中， <code>Y</code> 可以是整形、浮点数、字符串或者变量，所以我们可以用 Bit Vector 来存储多种类型的情况，如下图所示：</p>
-<p><img src="bitvector.png" alt="bitvector"></p>
-<h3 id="汇编变量"><a href="#汇编变量" class="headerlink" title="汇编变量"></a>汇编变量</h3><p>由于我们的虚拟机是基于栈实现的，所以变量、数组会被汇编为基于当前栈的索引。需要注意的地方是，全局变量能够在任意地方访问，而局部变量是基于当前作用域访问，故全局变量采用从下往上的正索引值，局部变量采用基于当前栈顶向下的索引值，全局变量采用绝对定位，局部变量采用相对定位。</p>
-<p><img src="stackindex.png" alt="stackindex"></p>
-<p>变量计算方法为：如果一个函数有 4 个变量， 2 个参数，那么该函数的栈帧的大小为 7(4+2+1) ，其中多加的 1 为函数返回值，四个变量的索引分别为 -1~-4 ，函数返回地址为 -5 ，两个参数索引为 -6 和 -7 。</p>
-<p><img src="stackframe.png" alt="stackframe"><br><img src="variables.png" alt="variables"></p>
-<p>注意上图中栈帧是以 -2 开始而不是 -1 ，主要是为记录其他数据预留了一个位置，后续章节会介绍。</p>
-<h3 id="汇编操作数"><a href="#汇编操作数" class="headerlink" title="汇编操作数"></a>汇编操作数</h3><p>由上一章知道，我们的指令包含多种类型的操作数，如下图所示：</p>
-<p><img src="operandtypes.png" alt="operandtypes"></p>
-<p>其实每条指令的操作数有两个不同点，其一是指令包含的操作数类型，其二是指令包含的操作数个数。所以只要我们记录了这两个数据，便能识别一条指令，指令被汇编后的格式如下：</p>
-<p><img src="instructionformat.png" alt="instructionformat"></p>
-<h3 id="汇编字符串"><a href="#汇编字符串" class="headerlink" title="汇编字符串"></a>汇编字符串</h3><p>初一想，字符串也可以像整型、浮点数一样，直接汇编到指令流里面啊，但是这样做的结果不仅使得我们最后的指令流格式丑陋，同时也不便于优化性能。很自然的我们可以想到用索引（指针）的方式，在最后的指令流将字符串字面量替换为指向字符串表的索引，如下图所示：</p>
-<p><img src="stringliteral.png" alt="stringliteral"></p>
-<h3 id="汇编跳转和函数调用"><a href="#汇编跳转和函数调用" class="headerlink" title="汇编跳转和函数调用"></a>汇编跳转和函数调用</h3><p>函数调用和跳转指令在汇编后都会被替换为对应指令的索引，如下图所示：</p>
-<p><img src="labelasm.png" alt="labelasm"></p>
-<p>观察上图会发现一个问题，在处理第 5 条语句时 Label1 在下一行，而下一行还没解析，这涉及到 <code>forward reference</code> （向前引用）</p>
-<h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><p>如果汇编代码量很大或者为了性能考虑，可以将代码分块载入内存汇编，不过这会增加复杂性。为了实现简单我们采用全部载入内存的方式。</p>
-<h2 id="XVM输入部分（-XVM-汇编脚本指令）"><a href="#XVM输入部分（-XVM-汇编脚本指令）" class="headerlink" title="XVM输入部分（ XVM 汇编脚本指令）"></a>XVM输入部分（ XVM 汇编脚本指令）</h2><p>XVM 汇编脚本代码由以下部分组成。</p>
-<h3 id="SetStackSize"><a href="#SetStackSize" class="headerlink" title="SetStackSize"></a>SetStackSize</h3><p>SetStackSize能够指定脚本代码栈大小：</p>
-<pre class="line-numbers language-none"><code class="language-none">SetStackSize 1024<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>如果大小为 0 或者未写该指令，按照 XVM 默认大小 1024 分配。</p>
-<h3 id="Func"><a href="#Func" class="headerlink" title="Func"></a>Func</h3><pre class="line-numbers language-none"><code class="language-none">Func _Main()
+<!DOCTYPE HTML><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="keywords" content="自己动手构建简易虚拟机和编译器-构建XASM汇编器（4）, 技术分享"><meta name="description" content="读书笔记、技术文章"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>自己动手构建简易虚拟机和编译器-构建XASM汇编器（4） | Li的博客</title><link rel="icon" type="image/png" href="/medias/blog32.png"><link rel="stylesheet" href="/libs/awesome/css/all.css"><link rel="stylesheet" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" href="/libs/aos/aos.css"><link rel="stylesheet" href="/libs/animate/animate.min.css"><link rel="stylesheet" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" href="/css/matery.css"><link rel="stylesheet" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><meta name="generator" content="Hexo 5.0.0"><link rel="alternate" href="/atom.xml" title="Li的博客" type="application/atom+xml"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/blogLogo.jpg" class="logo-img" alt="LOGO"> <span class="logo-span">Li的博客</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/contact" class="waves-effect waves-light"><i class="fas fa-comments" style="zoom:.6"></i> <span>Contact</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/blogLogo.jpg" class="logo-img circle responsive-img"><div class="logo-name">Li的博客</div><div class="logo-desc">读书笔记、技术文章</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/contact" class="waves-effect waves-light"><i class="fa-fw fas fa-comments"></i> Contact</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/17.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><h1 class="description center-align post-title">自己动手构建简易虚拟机和编译器-构建XASM汇编器（4）</h1></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{width:345px;padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content{height:calc(100vh - 250px);overflow:auto}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px;position:absolute;right:23.5vw;display:block}#toc-content .is-active-link{color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/%E8%84%9A%E6%9C%AC/"><span class="chip bg-color">脚本</span></a> <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/"><span class="chip bg-color">虚拟机</span></a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"><span class="chip bg-color">编译器</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/" class="post-category">重学计算机系列</a> <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="post-category">编译原理</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i> Publish Date:&nbsp;&nbsp; 2018-05-13</div><div class="post-date info-break-policy"><i class="far fa-calendar-check fa-fw"></i> Update Date:&nbsp;&nbsp; 2018-12-17</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i> Word Count:&nbsp;&nbsp; 3.7k</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i> Read Times:&nbsp;&nbsp; 18 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i> Read Count:&nbsp;&nbsp;<span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><div id="articleContent"><p>本章我们将构建XASM汇编器，将汇编代码汇编成虚拟机可以执行的二进制文件。</p><a id="more"></a><h2 id="本章所处位置"><a href="#本章所处位置" class="headerlink" title="本章所处位置"></a>本章所处位置</h2><p><img src="xasm.png" alt="xasm"></p><h2 id="汇编内容"><a href="#汇编内容" class="headerlink" title="汇编内容"></a>汇编内容</h2><p>根据前一章的内容可知，汇编器的主要工作是将汇编代码转换成虚拟机能解析执行的机器码。主要包含以下几个方面的内容。</p><h3 id="汇编指令"><a href="#汇编指令" class="headerlink" title="汇编指令"></a>汇编指令</h3><p>汇编指令采用的是助记符形式，如 <code>Mov X,4</code> 等，最终会被翻译为如 <code>3 2 4</code> 这样的机器码。<br>要翻译自然需要一个指令查找表，当 C 语言被翻译成机器码时，参考的是 CPU 制造商提供的汇编参考手册，而这里的汇编代码会运行在我们自己的虚拟机上，那么参考手册需要我们来提供。在实现层面上，可以用语言提供的数据结构如链表、哈希表来存储所有的指令映射关系，如下图所示。</p><p><img src="opcodelookuptable.png" alt="opcodelookuptable"></p><p>上述映射表格中，每一条记录除了存储助记符对应的操作码之外，还需要存储该指令的操作数列表，其中操作数列表中包含了各个操作数的操作符类型和数据，由于一个操作符的类型可能有几种，如 <code>Mov X,Y</code> 中， <code>Y</code> 可以是整形、浮点数、字符串或者变量，所以我们可以用 Bit Vector 来存储多种类型的情况，如下图所示：</p><p><img src="bitvector.png" alt="bitvector"></p><h3 id="汇编变量"><a href="#汇编变量" class="headerlink" title="汇编变量"></a>汇编变量</h3><p>由于我们的虚拟机是基于栈实现的，所以变量、数组会被汇编为基于当前栈的索引。需要注意的地方是，全局变量能够在任意地方访问，而局部变量是基于当前作用域访问，故全局变量采用从下往上的正索引值，局部变量采用基于当前栈顶向下的索引值，全局变量采用绝对定位，局部变量采用相对定位。</p><p><img src="stackindex.png" alt="stackindex"></p><p>变量计算方法为：如果一个函数有 4 个变量， 2 个参数，那么该函数的栈帧的大小为 7(4+2+1) ，其中多加的 1 为函数返回值，四个变量的索引分别为 -1~-4 ，函数返回地址为 -5 ，两个参数索引为 -6 和 -7 。</p><p><img src="stackframe.png" alt="stackframe"><br><img src="variables.png" alt="variables"></p><p>注意上图中栈帧是以 -2 开始而不是 -1 ，主要是为记录其他数据预留了一个位置，后续章节会介绍。</p><h3 id="汇编操作数"><a href="#汇编操作数" class="headerlink" title="汇编操作数"></a>汇编操作数</h3><p>由上一章知道，我们的指令包含多种类型的操作数，如下图所示：</p><p><img src="operandtypes.png" alt="operandtypes"></p><p>其实每条指令的操作数有两个不同点，其一是指令包含的操作数类型，其二是指令包含的操作数个数。所以只要我们记录了这两个数据，便能识别一条指令，指令被汇编后的格式如下：</p><p><img src="instructionformat.png" alt="instructionformat"></p><h3 id="汇编字符串"><a href="#汇编字符串" class="headerlink" title="汇编字符串"></a>汇编字符串</h3><p>初一想，字符串也可以像整型、浮点数一样，直接汇编到指令流里面啊，但是这样做的结果不仅使得我们最后的指令流格式丑陋，同时也不便于优化性能。很自然的我们可以想到用索引（指针）的方式，在最后的指令流将字符串字面量替换为指向字符串表的索引，如下图所示：</p><p><img src="stringliteral.png" alt="stringliteral"></p><h3 id="汇编跳转和函数调用"><a href="#汇编跳转和函数调用" class="headerlink" title="汇编跳转和函数调用"></a>汇编跳转和函数调用</h3><p>函数调用和跳转指令在汇编后都会被替换为对应指令的索引，如下图所示：</p><p><img src="labelasm.png" alt="labelasm"></p><p>观察上图会发现一个问题，在处理第 5 条语句时 Label1 在下一行，而下一行还没解析，这涉及到 <code>forward reference</code> （向前引用）</p><h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><p>如果汇编代码量很大或者为了性能考虑，可以将代码分块载入内存汇编，不过这会增加复杂性。为了实现简单我们采用全部载入内存的方式。</p><h2 id="XVM输入部分（-XVM-汇编脚本指令）"><a href="#XVM输入部分（-XVM-汇编脚本指令）" class="headerlink" title="XVM输入部分（ XVM 汇编脚本指令）"></a>XVM输入部分（ XVM 汇编脚本指令）</h2><p>XVM 汇编脚本代码由以下部分组成。</p><h3 id="SetStackSize"><a href="#SetStackSize" class="headerlink" title="SetStackSize"></a>SetStackSize</h3><p>SetStackSize能够指定脚本代码栈大小：</p><pre class="line-numbers language-none"><code class="language-none">SetStackSize 1024<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>如果大小为 0 或者未写该指令，按照 XVM 默认大小 1024 分配。</p><h3 id="Func"><a href="#Func" class="headerlink" title="Func"></a>Func</h3><pre class="line-numbers language-none"><code class="language-none">Func _Main()
 {
   ;代码入口
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>XVM 脚本代码会在源文件中查找 _Main 函数，如果找到则以此为入口，否则需要其他函数调用代码才会执行。此外，函数不支持嵌套定义，汇编器会默认加上 Ret 语句，在函数完成时返回。</p>
-<h3 id="Var-Var"><a href="#Var-Var" class="headerlink" title="Var/Var []"></a>Var/Var []</h3><p>XVM 汇编脚本支持单个变量和一维数组：</p>
-<pre class="line-numbers language-none"><code class="language-none">Var X
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p>XVM 脚本代码会在源文件中查找 _Main 函数，如果找到则以此为入口，否则需要其他函数调用代码才会执行。此外，函数不支持嵌套定义，汇编器会默认加上 Ret 语句，在函数完成时返回。</p><h3 id="Var-Var"><a href="#Var-Var" class="headerlink" title="Var/Var []"></a>Var/Var []</h3><p>XVM 汇编脚本支持单个变量和一维数组：</p><pre class="line-numbers language-none"><code class="language-none">Var X
 Var X[16]
-Var Y[X]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="Param"><a href="#Param" class="headerlink" title="Param"></a>Param</h3><pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">Func MyFunc
+Var Y[X]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><h3 id="Param"><a href="#Param" class="headerlink" title="Param"></a>Param</h3><pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">Func MyFunc
 {
   ; Declare parameters
   Param U
@@ -470,23 +17,8 @@ Var Y[X]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
   Mov MyArray [ 0 ], U
   Mov MyArray [ 1 ], V
   Mov MyArray [ 2 ], W
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>注意参数压入顺序和声明顺序，如下：</p>
-<p><img src="paramseq.png" alt="paramseq"></p>
-<p>第二种方法保证了栈的索引与声明顺序一致。</p>
-<h3 id="Instructions"><a href="#Instructions" class="headerlink" title="Instructions"></a>Instructions</h3><p>指令格式如下：</p>
-<pre class="line-numbers language-none"><code class="language-none">Mnemonic Operand,Operand，Operand<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>其中 Operand 包含 Integer ,floating-point literals,String literals,variables,Array Indices,Line Label,Functions 和 Host API Calls</p>
-<h3 id="Line-Labels"><a href="#Line-Labels" class="headerlink" title="Line Labels"></a>Line Labels</h3><p>标号格式如下：</p>
-<pre class="line-numbers language-none"><code class="language-none">Label:<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="Host-API-Function-Calls"><a href="#Host-API-Function-Calls" class="headerlink" title="Host API Function Calls"></a>Host API Function Calls</h3><p>Host API 会像字符串一样处理，因为 Host API 要一直保留到运行时。</p>
-<h3 id="RetVal-寄存器"><a href="#RetVal-寄存器" class="headerlink" title="_RetVal 寄存器"></a>_RetVal 寄存器</h3><p>_RetVal 是一个全局变量，会传递函数的返回值。</p>
-<h3 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h3><p>XVM 脚本支持以下两种注释：</p>
-<pre class="line-numbers language-none"><code class="language-none">;这是注释
-Mov X,Y ;这也是注释<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><pre class="line-numbers language-none"><code class="language-none">; Example script
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>注意参数压入顺序和声明顺序，如下：</p><p><img src="paramseq.png" alt="paramseq"></p><p>第二种方法保证了栈的索引与声明顺序一致。</p><h3 id="Instructions"><a href="#Instructions" class="headerlink" title="Instructions"></a>Instructions</h3><p>指令格式如下：</p><pre class="line-numbers language-none"><code class="language-none">Mnemonic Operand,Operand，Operand<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>其中 Operand 包含 Integer ,floating-point literals,String literals,variables,Array Indices,Line Label,Functions 和 Host API Calls</p><h3 id="Line-Labels"><a href="#Line-Labels" class="headerlink" title="Line Labels"></a>Line Labels</h3><p>标号格式如下：</p><pre class="line-numbers language-none"><code class="language-none">Label:<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h3 id="Host-API-Function-Calls"><a href="#Host-API-Function-Calls" class="headerlink" title="Host API Function Calls"></a>Host API Function Calls</h3><p>Host API 会像字符串一样处理，因为 Host API 要一直保留到运行时。</p><h3 id="RetVal-寄存器"><a href="#RetVal-寄存器" class="headerlink" title="_RetVal 寄存器"></a>_RetVal 寄存器</h3><p>_RetVal 是一个全局变量，会传递函数的返回值。</p><h3 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h3><p>XVM 脚本支持以下两种注释：</p><pre class="line-numbers language-none"><code class="language-none">;这是注释
+Mov X,Y ;这也是注释<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><pre class="line-numbers language-none"><code class="language-none">; Example script
 ; Demonstrates the basic layout of an XVM
 ; assembly-language script.
 ; ---- Globals ------------------------------------------------
@@ -535,41 +67,16 @@ Func _Main
 {
   ; Call the MyFunc test function
   Call MyFunc
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="XVM输出部分"><a href="#XVM输出部分" class="headerlink" title="XVM输出部分"></a>XVM输出部分</h2><h3 id="XSE-XtremeScript-Script-Executable"><a href="#XSE-XtremeScript-Script-Executable" class="headerlink" title="XSE(XtremeScript Script Executable)"></a>XSE(XtremeScript Script Executable)</h3><p>XASM 会将汇编脚本代码汇编为 .xse 结尾的可执行文件，内容如下：</p>
-<p><img src="xse.png" alt="xse"></p>
-<p>其中各个部分都采用 <code>继承</code> 结构。</p>
-<h3 id="Main-Header"><a href="#Main-Header" class="headerlink" title="Main Header"></a>Main Header</h3><p><img src="mainheader.png" alt="mainheader"><br><img src="mainheader1.png" alt="mainheader1"></p>
-<h3 id="Instruction-Stream"><a href="#Instruction-Stream" class="headerlink" title="Instruction Stream"></a>Instruction Stream</h3><p>指令流结构如下：</p>
-<p><img src="instructionstream.png" alt="instructionstream"><br><img src="instructiontable.png" alt="instructiontable"></p>
-<h3 id="Operand-Types"><a href="#Operand-Types" class="headerlink" title="Operand Types"></a>Operand Types</h3><p>操作数类别代码如下：</p>
-<p><img src="operandtypecode.png" alt="operandtypecode"></p>
-<h3 id="String-Table"><a href="#String-Table" class="headerlink" title="String Table"></a>String Table</h3><p><img src="stringtable.png" alt="stringtable"></p>
-<h3 id="Function-Table"><a href="#Function-Table" class="headerlink" title="Function Table"></a>Function Table</h3><p><img src="functiontable.png" alt="functiontable"></p>
-<h3 id="Host-API-Call-Table"><a href="#Host-API-Call-Table" class="headerlink" title="Host API Call Table"></a>Host API Call Table</h3><p><img src="hostapi.png" alt="hostapi"></p>
-<h2 id="Assembler-实现"><a href="#Assembler-实现" class="headerlink" title="Assembler 实现"></a>Assembler 实现</h2><h3 id="词法分析和语法分析"><a href="#词法分析和语法分析" class="headerlink" title="词法分析和语法分析"></a>词法分析和语法分析</h3><h4 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h4><p>词法分析的目的是将源代码的字符流转换为词素（<code>Token</code>），如下所示：</p>
-<p><img src="lexer.png" alt="lexer"></p>
-<pre class="line-numbers language-none"><code class="language-none">MOV SUM , X<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>将被转换为如下 <code>Token</code></p>
-<pre class="line-numbers language-none"><code class="language-none">TOKEN_TYPE_INSTR
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h2 id="XVM输出部分"><a href="#XVM输出部分" class="headerlink" title="XVM输出部分"></a>XVM输出部分</h2><h3 id="XSE-XtremeScript-Script-Executable"><a href="#XSE-XtremeScript-Script-Executable" class="headerlink" title="XSE(XtremeScript Script Executable)"></a>XSE(XtremeScript Script Executable)</h3><p>XASM 会将汇编脚本代码汇编为 .xse 结尾的可执行文件，内容如下：</p><p><img src="xse.png" alt="xse"></p><p>其中各个部分都采用 <code>继承</code> 结构。</p><h3 id="Main-Header"><a href="#Main-Header" class="headerlink" title="Main Header"></a>Main Header</h3><p><img src="mainheader.png" alt="mainheader"><br><img src="mainheader1.png" alt="mainheader1"></p><h3 id="Instruction-Stream"><a href="#Instruction-Stream" class="headerlink" title="Instruction Stream"></a>Instruction Stream</h3><p>指令流结构如下：</p><p><img src="instructionstream.png" alt="instructionstream"><br><img src="instructiontable.png" alt="instructiontable"></p><h3 id="Operand-Types"><a href="#Operand-Types" class="headerlink" title="Operand Types"></a>Operand Types</h3><p>操作数类别代码如下：</p><p><img src="operandtypecode.png" alt="operandtypecode"></p><h3 id="String-Table"><a href="#String-Table" class="headerlink" title="String Table"></a>String Table</h3><p><img src="stringtable.png" alt="stringtable"></p><h3 id="Function-Table"><a href="#Function-Table" class="headerlink" title="Function Table"></a>Function Table</h3><p><img src="functiontable.png" alt="functiontable"></p><h3 id="Host-API-Call-Table"><a href="#Host-API-Call-Table" class="headerlink" title="Host API Call Table"></a>Host API Call Table</h3><p><img src="hostapi.png" alt="hostapi"></p><h2 id="Assembler-实现"><a href="#Assembler-实现" class="headerlink" title="Assembler 实现"></a>Assembler 实现</h2><h3 id="词法分析和语法分析"><a href="#词法分析和语法分析" class="headerlink" title="词法分析和语法分析"></a>词法分析和语法分析</h3><h4 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h4><p>词法分析的目的是将源代码的字符流转换为词素（<code>Token</code>），如下所示：</p><p><img src="lexer.png" alt="lexer"></p><pre class="line-numbers language-none"><code class="language-none">MOV SUM , X<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>将被转换为如下 <code>Token</code></p><pre class="line-numbers language-none"><code class="language-none">TOKEN_TYPE_INSTR
 TOKEN_TYPE_IDENT
 TOKEN_TYPE_COMMA
-TOKEN_TYPE_IDENT<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h4><p>词法分析是将字符流转换为一个个 <code>Token</code> ，而语法分析器则更进一步，将 <code>Token</code> 组合识别出有意义的程序结构，如下图所示：</p>
-<p><img src="parsing.png" alt="parsing"></p>
-<h2 id="Assembler-Framework"><a href="#Assembler-Framework" class="headerlink" title="Assembler Framework"></a>Assembler Framework</h2><p>在词法和语法分析的过程中，会产生许多中间信息，比如变量、函数、标签等。我们需要用数据结构将其保存，以供生成机器码时使用。如果使用高级语言，则可以使用高级语言提供的数据结构存储，如 C++ 的 STL ， Java 的集合等。 C 语言则可以使用简单的链表存储各种中间数据。</p>
-<h3 id="源代码表示"><a href="#源代码表示" class="headerlink" title="源代码表示"></a>源代码表示</h3><p>源代码可以用一个二维指针表示，如下图所示：</p>
-<p><img src="sourcecode.png" alt="sourcecode"></p>
-<h3 id="指令流"><a href="#指令流" class="headerlink" title="指令流"></a>指令流</h3><h4 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Instr</span>          <span class="token comment">// An instruction</span>
+TOKEN_TYPE_IDENT<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><h4 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h4><p>词法分析是将字符流转换为一个个 <code>Token</code> ，而语法分析器则更进一步，将 <code>Token</code> 组合识别出有意义的程序结构，如下图所示：</p><p><img src="parsing.png" alt="parsing"></p><h2 id="Assembler-Framework"><a href="#Assembler-Framework" class="headerlink" title="Assembler Framework"></a>Assembler Framework</h2><p>在词法和语法分析的过程中，会产生许多中间信息，比如变量、函数、标签等。我们需要用数据结构将其保存，以供生成机器码时使用。如果使用高级语言，则可以使用高级语言提供的数据结构存储，如 C++ 的 STL ， Java 的集合等。 C 语言则可以使用简单的链表存储各种中间数据。</p><h3 id="源代码表示"><a href="#源代码表示" class="headerlink" title="源代码表示"></a>源代码表示</h3><p>源代码可以用一个二维指针表示，如下图所示：</p><p><img src="sourcecode.png" alt="sourcecode"></p><h3 id="指令流"><a href="#指令流" class="headerlink" title="指令流"></a>指令流</h3><h4 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Instr</span>          <span class="token comment">// An instruction</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">int</span> iOpcode<span class="token punctuation">;</span>               <span class="token comment">// Opcode</span>
   <span class="token keyword">int</span> iOpCount<span class="token punctuation">;</span>              <span class="token comment">// Number of operands</span>
   Op <span class="token operator">*</span> pOpList<span class="token punctuation">;</span>              <span class="token comment">// Pointer to operand list</span>
 <span class="token punctuation">}</span>
-Instr<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="操作数"><a href="#操作数" class="headerlink" title="操作数"></a>操作数</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Op</span>             <span class="token comment">// An assembled operand</span>
+Instr<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="操作数"><a href="#操作数" class="headerlink" title="操作数"></a>操作数</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Op</span>             <span class="token comment">// An assembled operand</span>
 <span class="token punctuation">{</span>
 <span class="token keyword">int</span> iType<span class="token punctuation">;</span>                 <span class="token comment">// Type</span>
 <span class="token keyword">union</span>                      <span class="token comment">// The value</span>
@@ -584,18 +91,14 @@ Instr<span class="token punctuation">;</span><span aria-hidden="true" class="lin
   <span class="token keyword">int</span> iReg<span class="token punctuation">;</span>              <span class="token comment">// Register code</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 <span class="token keyword">int</span> iOffsetIndex<span class="token punctuation">;</span>          <span class="token comment">// Index of the offset</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>注意根据 iType 不同，操作数代表的值意义也不一样，故可以用 <code>联合体</code> 表示，其中 <code>iOffsetIndex</code> 是当 <code>union</code> 取 <code>iStackIndex</code> 时才有意义，其中 <code>iStackIndex</code> 代表基地址，iOffsetIndex 代表相对索引。</p>
-<h4 id="脚本头"><a href="#脚本头" class="headerlink" title="脚本头"></a>脚本头</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_ScriptHeader</span>    <span class="token comment">// Script header data</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>注意根据 iType 不同，操作数代表的值意义也不一样，故可以用 <code>联合体</code> 表示，其中 <code>iOffsetIndex</code> 是当 <code>union</code> 取 <code>iStackIndex</code> 时才有意义，其中 <code>iStackIndex</code> 代表基地址，iOffsetIndex 代表相对索引。</p><h4 id="脚本头"><a href="#脚本头" class="headerlink" title="脚本头"></a>脚本头</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_ScriptHeader</span>    <span class="token comment">// Script header data</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">int</span> iStackSize<span class="token punctuation">;</span>             <span class="token comment">// Requested stack size</span>
   <span class="token keyword">int</span> iGlobalDataSize<span class="token punctuation">;</span>        <span class="token comment">// The size of the script's global data</span>
   <span class="token keyword">int</span> iIsMainFuncPresent<span class="token punctuation">;</span>     <span class="token comment">// Is _Main () present?</span>
   <span class="token keyword">int</span> iMainFuncIndex<span class="token punctuation">;</span>         <span class="token comment">// _Main ()'s function index</span>
 <span class="token punctuation">}</span>
-ScriptHeader<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="链表的简单实现"><a href="#链表的简单实现" class="headerlink" title="链表的简单实现"></a>链表的简单实现</h4><p><img src="linkedlist.png" alt="linkedlist"></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_LinkedListNode</span>  <span class="token comment">// A linked list node</span>
+ScriptHeader<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="链表的简单实现"><a href="#链表的简单实现" class="headerlink" title="链表的简单实现"></a>链表的简单实现</h4><p><img src="linkedlist.png" alt="linkedlist"></p><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_LinkedListNode</span>  <span class="token comment">// A linked list node</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">void</span> <span class="token operator">*</span> pData<span class="token punctuation">;</span>               <span class="token comment">// Pointer to the node's data</span>
   _LinkedListNode <span class="token operator">*</span> pNext<span class="token punctuation">;</span>    <span class="token comment">// Pointer to the next node in the list</span>
@@ -680,11 +183,7 @@ LinkedList<span class="token punctuation">;</span>
           <span class="token keyword">break</span><span class="token punctuation">;</span>
       <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>切记链表的释放！</p>
-<h4 id="字符串表"><a href="#字符串表" class="headerlink" title="字符串表"></a>字符串表</h4><p>复用刚才的链表即可：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">AddString</span> <span class="token punctuation">(</span> LinkedList <span class="token operator">*</span> pList<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrString <span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>切记链表的释放！</p><h4 id="字符串表"><a href="#字符串表" class="headerlink" title="字符串表"></a>字符串表</h4><p>复用刚才的链表即可：</p><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">AddString</span> <span class="token punctuation">(</span> LinkedList <span class="token operator">*</span> pList<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrString <span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token comment">// ---- First check to see if the string is already in the list</span>
   <span class="token comment">// Create a node to traverse the list</span>
@@ -705,9 +204,7 @@ LinkedList<span class="token punctuation">;</span>
   <span class="token function">strcpy</span> <span class="token punctuation">(</span> pstrStringNode<span class="token punctuation">,</span> pstrString <span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token comment">// Add the string to the list and return its index</span>
   <span class="token keyword">return</span> <span class="token function">AddNode</span> <span class="token punctuation">(</span> pList<span class="token punctuation">,</span> pstrStringNode <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="函数表"><a href="#函数表" class="headerlink" title="函数表"></a>函数表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="函数表"><a href="#函数表" class="headerlink" title="函数表"></a>函数表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">
 <span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_FuncNode</span>        <span class="token comment">// A function table node</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">int</span> iIndex<span class="token punctuation">;</span>                 <span class="token comment">// Index</span>
@@ -766,9 +263,7 @@ FuncNode <span class="token operator">*</span> <span class="token function">GetF
   <span class="token punctuation">}</span>
   <span class="token comment">// The structure was not found, so return a NULL pointer</span>
   <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="符号表"><a href="#符号表" class="headerlink" title="符号表"></a>符号表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="符号表"><a href="#符号表" class="headerlink" title="符号表"></a>符号表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">
 <span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_SymbolNode</span>      <span class="token comment">// A symbol table node</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">int</span> iIndex<span class="token punctuation">;</span>                 <span class="token comment">// Index</span>
@@ -819,10 +314,7 @@ SymbolNode <span class="token operator">*</span> <span class="token function">Ge
   <span class="token punctuation">}</span>
   <span class="token comment">// The specified symbol was not found, so return NULL</span>
   <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>注意条件 <code>if ( CurrNode.FuncIndex == FuncIndex || CurrNode.StackIndex &gt;= 0 )</code> 是因为全局变量 StackIndex 从零开始。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">GetStackIndexByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>注意条件 <code>if ( CurrNode.FuncIndex == FuncIndex || CurrNode.StackIndex &gt;= 0 )</code> 是因为全局变量 StackIndex 从零开始。</p><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">GetStackIndexByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token comment">// Get the symbol's information</span>
   SymbolNode <span class="token operator">*</span> pSymbol <span class="token operator">=</span> <span class="token function">GetSymbolByIdent</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -836,9 +328,7 @@ SymbolNode <span class="token operator">*</span> <span class="token function">Ge
   SymbolNode <span class="token operator">*</span> pSymbol <span class="token operator">=</span> <span class="token function">GetSymbolByIdent</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token comment">// Return its size</span>
   <span class="token keyword">return</span> pSymbol<span class="token operator">-&gt;</span>iSize<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="标签表"><a href="#标签表" class="headerlink" title="标签表"></a>标签表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_LabelNode</span>       <span class="token comment">// A label table node</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="标签表"><a href="#标签表" class="headerlink" title="标签表"></a>标签表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_LabelNode</span>       <span class="token comment">// A label table node</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">int</span> iIndex<span class="token punctuation">;</span>                 <span class="token comment">// Index</span>
   <span class="token keyword">char</span> pstrIdent <span class="token punctuation">[</span> MAX_IDENT_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment">// Identifier</span>
@@ -863,11 +353,7 @@ SymbolNode <span class="token operator">*</span> <span class="token function">Ge
   pNewLabel<span class="token operator">-&gt;</span>iIndex <span class="token operator">=</span> iIndex<span class="token punctuation">;</span>
   <span class="token comment">// Return the new label's index</span>
   <span class="token keyword">return</span> iIndex<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="Host-API-表"><a href="#Host-API-表" class="headerlink" title="Host API 表"></a>Host API 表</h4><p>复用链表即可。</p>
-<p><code>LinkedList g_HostAPICallTable;</code></p>
-<h4 id="指令集查找表"><a href="#指令集查找表" class="headerlink" title="指令集查找表"></a>指令集查找表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_InstrLookup</span>     <span class="token comment">// An instruction lookup</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="Host-API-表"><a href="#Host-API-表" class="headerlink" title="Host API 表"></a>Host API 表</h4><p>复用链表即可。</p><p><code>LinkedList g_HostAPICallTable;</code></p><h4 id="指令集查找表"><a href="#指令集查找表" class="headerlink" title="指令集查找表"></a>指令集查找表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_InstrLookup</span>     <span class="token comment">// An instruction lookup</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">char</span> pstrMnemonic <span class="token punctuation">[</span> MAX_INSTR_MNEMONIC_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// Mnemonic string</span>
   <span class="token keyword">int</span> iOpcode<span class="token punctuation">;</span>                <span class="token comment">// Opcode</span>
@@ -913,29 +399,18 @@ InstrLookup<span class="token punctuation">;</span>
 <span class="token keyword">void</span> <span class="token function">SetOpType</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iInstrIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpIndex<span class="token punctuation">,</span> OpTypes iOpType <span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   g_InstrTable <span class="token punctuation">[</span> iInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>OpList <span class="token punctuation">[</span> iOpIndex <span class="token punctuation">]</span> <span class="token operator">=</span> iOpType<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>Operand Type Bitfield Masks 如下：</p>
-<p><img src="bitfieldmask.png" alt="bitfieldmask"></p>
-<p>设置如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">iInstrIndex <span class="token operator">=</span> <span class="token function">AddInstrLookup</span> <span class="token punctuation">(</span> <span class="token string">"Mov"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Operand Type Bitfield Masks 如下：</p><p><img src="bitfieldmask.png" alt="bitfieldmask"></p><p>设置如下：</p><pre class="line-numbers language-c" data-language="c"><code class="language-c">iInstrIndex <span class="token operator">=</span> <span class="token function">AddInstrLookup</span> <span class="token punctuation">(</span> <span class="token string">"Mov"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">SetOpType</span> <span class="token punctuation">(</span> iInstrIndex<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> OP_FLAG_TYPE_MEM_REF <span class="token operator">|</span>
 OP_FLAG_TYPE_REG <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">SetOpType</span> <span class="token punctuation">(</span> iInstrIndex<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> OP_FLAG_TYPE_INT <span class="token operator">|</span>
 OP_FLAG_TYPE_FLOAT <span class="token operator">|</span>
 OP_FLAG_TYPE_STRING <span class="token operator">|</span>
 OP_FLAG_TYPE_MEM_REF <span class="token operator">|</span>
-OP_FLAG_TYPE_REG <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>除了直接将指令 <code>硬编码</code> 以外，我们还可以将指令用一种可解析的格式写入文件，如下：</p>
-<pre class="line-numbers language-arm" data-language="arm"><code class="language-arm">Mov 0 2
+OP_FLAG_TYPE_REG <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>除了直接将指令 <code>硬编码</code> 以外，我们还可以将指令用一种可解析的格式写入文件，如下：</p><pre class="line-numbers language-arm" data-language="arm"><code class="language-arm">Mov 0 2
 MemRef
 Int Float String MemRef
 Jmp 19 1
-Label<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>通过不同的指令文件，我们的系统就可以解析不同的指令集，使得我们的汇编器扩展性增强。</p>
-<p><img src="instructionSets.png" alt="instructionSets"></p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>到目前我们的汇编器全局的数据结构如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Source code representation</span>
+Label<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>通过不同的指令文件，我们的系统就可以解析不同的指令集，使得我们的汇编器扩展性增强。</p><p><img src="instructionSets.png" alt="instructionSets"></p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>到目前我们的汇编器全局的数据结构如下：</p><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Source code representation</span>
 <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span> g_ppstrSourceCode <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
 <span class="token keyword">int</span> g_iSourceCodeSize<span class="token punctuation">;</span>
 <span class="token comment">// The instruction lookup table</span>
@@ -967,10 +442,7 @@ LabelNode <span class="token operator">*</span> <span class="token function">Get
 <span class="token comment">//Lastly, there’s the instruction lookup table:</span>
 <span class="token keyword">int</span> <span class="token function">AddInstrLookup</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrMnemonic<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpcode<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpCount <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">void</span> <span class="token function">SetOpType</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iInstrIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpIndex<span class="token punctuation">,</span> OpTypes iOpType <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token function">GetInstrByMnemonic</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrMnemonic<span class="token punctuation">,</span> InstrLookup <span class="token operator">*</span> pInstr <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<hr>
-<script>
-        document.querySelectorAll('.github-emoji')
+<span class="token keyword">int</span> <span class="token function">GetInstrByMnemonic</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrMnemonic<span class="token punctuation">,</span> InstrLookup <span class="token operator">*</span> pInstr <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><hr><script>document.querySelectorAll('.github-emoji')
           .forEach(el => {
             if (!el.dataset.src) { return; }
             const img = document.createElement('img');
@@ -986,460 +458,14 @@ LabelNode <span class="token operator">*</span> <span class="token function">Get
               img.remove();
             });
             document.body.appendChild(img);
-          });
-      </script>
-            </div>
-            <hr/>
-
-            
-
-    <div class="reprint" id="reprint-statement">
-        
-            <div class="reprint__author">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-user">
-                        Author:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">liaoli</a>
-                </span>
-            </div>
-            <div class="reprint__type">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-link">
-                        Link:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="http://www.cqull.com/2018/05/13/zi-ji-dong-shou-gou-jian-jian-yi-xu-ni-ji-he-bian-yi-qi-gou-jian-xasm-hui-bian-qi/">http://www.cqull.com/2018/05/13/zi-ji-dong-shou-gou-jian-jian-yi-xu-ni-ji-he-bian-yi-qi-gou-jian-xasm-hui-bian-qi/</a>
-                </span>
-            </div>
-            <div class="reprint__notice">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-copyright">
-                        Reprint policy:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    All articles in this blog are used except for special statements
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    reprint polocy. If reproduced, please indicate source
-                    <a href="/about" target="_blank">liaoli</a>
-                    !
-                </span>
-            </div>
-        
-    </div>
-
-    <script async defer>
-      document.addEventListener("copy", function (e) {
+          });</script></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author:</i></span> <span class="reprint-info"><a href="/about" rel="external nofollow noreferrer">liaoli</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link:</i></span> <span class="reprint-info"><a href="http://www.cqull.com/2018/05/13/zi-ji-dong-shou-gou-jian-jian-yi-xu-ni-ji-he-bian-yi-qi-gou-jian-xasm-hui-bian-qi/">http://www.cqull.com/2018/05/13/zi-ji-dong-shou-gou-jian-jian-yi-xu-ni-ji-he-bian-yi-qi-gou-jian-xasm-hui-bian-qi/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy:</i></span> <span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="/about" target="_blank">liaoli</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }
-    </script>
-
-
-
-            <div class="tag_share" style="display: block;">
-                <div class="post-meta__tag-list" style="display: inline-block;">
-                    
-                        <div class="article-tag">
-                            
-                                <a href="/tags/%E8%84%9A%E6%9C%AC/">
-                                    <span class="chip bg-color">脚本</span>
-                                </a>
-                            
-                                <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">
-                                    <span class="chip bg-color">虚拟机</span>
-                                </a>
-                            
-                                <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/">
-                                    <span class="chip bg-color">编译器</span>
-                                </a>
-                            
-                        </div>
-                    
-                </div>
-                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
-<div id="article-share">
-
-    
-    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
-    
-
-    
-
-</div>
-
-                </div>
-            </div>
-            
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.4rem;
-        line-height: 38px;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechatpay.png" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-
-            
-        </div>
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-<article id="prenext-posts" class="prev-next articles">
-    <div class="row article-row">
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
-            <div class="card">
-                <a href="/2018/05/17/quan-mian-jie-shao-di-gui/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="全面介绍递归-序言">
-                        
-                        <span class="card-title">全面介绍递归-序言</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            To iterate is human,to recurse divine.
-
-
-
-
-递归递归作为一个广泛的概念存在于各个学科，如数学、生物学、语言学、计算机，甚至艺术。在计算机中作为一种问题求解策略，可以说无处不在。如果你网上搜索递归相关
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2018-05-17
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
-                                </a>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/%E9%80%92%E5%BD%92/" class="post-category">
-                                    递归
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%AE%97%E6%B3%95/">
-                        <span class="chip bg-color">算法</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%80%92%E5%BD%92/">
-                        <span class="chip bg-color">递归</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2018/05/12/zi-ji-dong-shou-gou-jian-jian-yi-xu-ni-ji-he-bian-yi-qi-she-ji-mu-biao/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="自己动手构建简易虚拟机和编译器-设计目标（2）">
-                        
-                        <span class="card-title">自己动手构建简易虚拟机和编译器-设计目标（2）</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            在开始之前，我们必须明确我们的脚本语言需要哪些特性。XtremeScript 是一个类 C 的过程性脚本语言，但是没有 C 的指针、结构体等，显然这些东西会大大增加复杂性。
-
-语法特性数据结构XtremeScript 只支持简单的单个变量和
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-05-12
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/" class="post-category">
-                                    重学计算机系列
-                                </a>
-                            
-                            <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="post-category">
-                                    编译原理
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E8%84%9A%E6%9C%AC/">
-                        <span class="chip bg-color">脚本</span>
-                    </a>
-                    
-                    <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">
-                        <span class="chip bg-color">虚拟机</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/">
-                        <span class="chip bg-color">编译器</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
-</article>
-
-</div>
-
-
-<script>
-    $('#articleContent').on('copy', function (e) {
-        // IE8 or earlier browser is 'undefined'
-        if (typeof window.getSelection === 'undefined') return;
-
-        var selection = window.getSelection();
-        // if the selection is short let's not annoy our users.
-        if (('' + selection).length < Number.parseInt('120')) {
-            return;
-        }
-
-        // create a div outside of the visible area and fill it with the selected text.
-        var bodyElement = document.getElementsByTagName('body')[0];
-        var newdiv = document.createElement('div');
-        newdiv.style.position = 'absolute';
-        newdiv.style.left = '-99999px';
-        bodyElement.appendChild(newdiv);
-        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
-
-        // we need a <pre> tag workaround.
-        // otherwise the text inside "pre" loses all the line breaks!
-        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
-            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
-        }
-
-        var url = document.location.href;
-        newdiv.innerHTML += '<br />'
-            + 'From: Li的博客<br />'
-            + 'Author: liaoli<br />'
-            + 'Link: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
-
-        selection.selectAllChildren(newdiv);
-        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
-    });
-</script>
-
-
-<!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
-
-<!-- 代码语言 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
-
-
-<!-- 代码块复制 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
-
-
-<!-- 代码块收缩 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
-
-
-<!-- 代码块折行 -->
-
-<style type="text/css">
-code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
-</style>
-
-
-    </div>
-    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
-        <div class="toc-widget">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
-            <div id="toc-content"></div>
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
+      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/%E8%84%9A%E6%9C%AC/"><span class="chip bg-color">脚本</span></a> <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/"><span class="chip bg-color">虚拟机</span></a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"><span class="chip bg-color">编译器</span></a></div></div><div class="post_share" style="zoom:80%;width:fit-content;display:inline-block;float:right;margin:-.15rem 0"><link rel="stylesheet" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.4rem;line-height:38px}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22ab38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019fe8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechatpay.png" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i> &nbsp;Previous</div><div class="card"><a href="/2018/05/17/quan-mian-jie-shao-di-gui/"><div class="card-image"><img src="/medias/featureimages/10.jpg" class="responsive-img" alt="全面介绍递归-序言"> <span class="card-title">全面介绍递归-序言</span></div></a><div class="card-content article-content"><div class="summary block-with-text">To iterate is human,to recurse divine. 递归递归作为一个广泛的概念存在于各个学科，如数学、生物学、语言学、计算机，甚至艺术。在计算机中作为一种问题求解策略，可以说无处不在。如果你网上搜索递归相关</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i> 2018-05-17</span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">算法</a> <a href="/categories/%E7%AE%97%E6%B3%95/%E9%80%92%E5%BD%92/" class="post-category">递归</a></span></div></div><div class="card-action article-tags"><a href="/tags/%E7%AE%97%E6%B3%95/"><span class="chip bg-color">算法</span></a> <a href="/tags/%E9%80%92%E5%BD%92/"><span class="chip bg-color">递归</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/2018/05/12/zi-ji-dong-shou-gou-jian-jian-yi-xu-ni-ji-he-bian-yi-qi-she-ji-mu-biao/"><div class="card-image"><img src="/medias/featureimages/7.jpg" class="responsive-img" alt="自己动手构建简易虚拟机和编译器-设计目标（2）"> <span class="card-title">自己动手构建简易虚拟机和编译器-设计目标（2）</span></div></a><div class="card-content article-content"><div class="summary block-with-text">在开始之前，我们必须明确我们的脚本语言需要哪些特性。XtremeScript 是一个类 C 的过程性脚本语言，但是没有 C 的指针、结构体等，显然这些东西会大大增加复杂性。 语法特性数据结构XtremeScript 只支持简单的单个变量和</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i> 2018-05-12</span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/" class="post-category">重学计算机系列</a> <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="post-category">编译原理</a></span></div></div><div class="card-action article-tags"><a href="/tags/%E8%84%9A%E6%9C%AC/"><span class="chip bg-color">脚本</span></a> <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/"><span class="chip bg-color">虚拟机</span></a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"><span class="chip bg-color">编译器</span></a></div></div></div></div></article></div><script>$("#articleContent").on("copy",function(e){if(void 0!==window.getSelection){var n=window.getSelection();if(!((""+n).length<Number.parseInt("120"))){var t=document.getElementsByTagName("body")[0],o=document.createElement("div");o.style.position="absolute",o.style.left="-99999px",t.appendChild(o),o.appendChild(n.getRangeAt(0).cloneContents()),"PRE"===n.getRangeAt(0).commonAncestorContainer.nodeName&&(o.innerHTML="<pre>"+o.innerHTML+"</pre>");var i=document.location.href;o.innerHTML+='<br />From: Li的博客<br />Author: liaoli<br />Link: <a href="'+i+'">'+i+"</a><br />本文章著作权归作者所有，任何形式的转载都请注明出处。",n.selectAllChildren(o),window.setTimeout(function(){t.removeChild(o)},200)}}})</script><script src="/libs/codeBlock/codeBlockFuction.js"></script><script src="/libs/codeBlock/codeLang.js"></script><script src="/libs/codeBlock/codeCopy.js"></script><script src="/libs/codeBlock/codeShrink.js"></script><style>code[class*=language-],pre[class*=language-]{white-space:pre!important}</style></div><div id="toc-aside" class="expanded col l3 hide-on-med-and-down"><div class="toc-widget"><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
@@ -1510,170 +536,4 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });
-</script>
-
-    
-
-</main>
-
-
-
-
-    <footer class="page-footer bg-color">
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            <span id="year">2018</span>
-            <a href="/about" target="_blank">liaoli</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
-            <br>
-            
-            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">71.9k</span>&nbsp;字
-            
-            
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            
-            <br>
-            
-            <br>
-            
-            <span id="icp"><img src="/medias/icp.png" style="vertical-align: text-bottom;" />
-                <a href="http://www.beian.gov.cn/" target="_blank">渝ICP备20008985号-1</a>
-            </span>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/cquliaoli" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:956168488@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=956168488" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 956168488" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
-</footer>
-
-<div class="progress-bar"></div>
-
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
-            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
-    </div>
-</div>
-
-<script src="/js/search.js"></script>
-<script type="text/javascript">
-$(function () {
-    searchFunc("/search.xml", 'searchInput', 'searchResult');
-});
-</script>
-
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
-
-
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-
-    <!-- Baidu Analytics -->
-
-    <!-- Baidu Push -->
-
-<script>
-    (function () {
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        } else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
-    })();
-</script>
-
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
-
-    
-
-    
-
-    
-
-    
-    
-    <script type="text/javascript" size="150" alpha='0.6'
-        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
-    
-
-    
-
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
-
-</body>
-
-</html>
+    });</script></main><footer class="page-footer bg-color"><div class="container row center-align" style="margin-bottom:0!important"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">2018</span> <a href="/about" target="_blank">liaoli</a> |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a> |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a><br>&nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">71.9k</span>&nbsp;字 <span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次</span> <span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;人</span><br><br><span id="icp"><img src="/medias/icp.png" style="vertical-align:text-bottom"> <a href="http://www.beian.gov.cn/" target="_blank">渝ICP备20008985号-1</a></span></div><div class="col s12 m4 l4 social-link social-statis"><a href="https://github.com/cquliaoli" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50"><i class="fab fa-github"></i></a><a href="mailto:956168488@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50"><i class="fas fa-envelope-open"></i></a><a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=956168488" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 956168488" data-position="top" data-delay="50"><i class="fab fa-qq"></i></a><a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50"><i class="fas fa-rss"></i></a></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i> &nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script>$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script>!function(){var t=document.createElement("script"),e=window.location.protocol.split(":")[0];t.src="https"===e?"https://zz.bdstatic.com/linksubmit/push.js":"http://push.zhanzhang.baidu.com/push.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}()</script><script src="/libs/others/clicklove.js" async></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script size="150" alpha="0.6" zindex="-1" src="/libs/background/ribbon-refresh.min.js" async></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html>
