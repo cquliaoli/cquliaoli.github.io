@@ -1,0 +1,1309 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="程序语言,函数式编程,解释器,编译器">
+    <meta name="description" content="读书笔记、技术文章">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>An Introduction to Scheme and its Implementation--Introduction | Li的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.0.0"><link rel="alternate" href="/atom.xml" title="Li的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Li的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Li的博客</div>
+        <div class="logo-desc">
+            
+            读书笔记、技术文章
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">An Introduction to Scheme and its Implementation--Introduction</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/">
+                                <span class="chip bg-color">程序语言</span>
+                            </a>
+                        
+                            <a href="/tags/scheme/">
+                                <span class="chip bg-color">scheme</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/" class="post-category">
+                                程序语言
+                            </a>
+                        
+                            <a href="/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/scheme/" class="post-category">
+                                scheme
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-10-06
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
+                    2018-10-07
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    5.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    20 Min
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <pre><code>本章主要介绍 `scheme` 的基本特点与语法。</code></pre>
+<a id="more"></a>
+<h2 id="What-is-Scheme"><a href="#What-is-Scheme" class="headerlink" title="What is Scheme?"></a>What is Scheme?</h2><p><code>scheme</code> 作为 <code>Lisp</code> 的一个变种，具有以下特点：</p>
+<ol>
+<li>词法作用域、块结构和动态类型的函数式编程语言。</li>
+<li><code>First-class procedures</code> 和  <code>First-class continuations</code> 的特点，其中 <code>First-class xx</code> 指 <code>xx</code> 可以同时作为参数传递和返回值。</li>
+<li>参数是以值传递，所有的值都是引用。</li>
+<li>具有强大的 <code>宏</code> ，能够实现语法变换。</li>
+</ol>
+<p><code>scheme</code> 语法定义十分简单，通过 <code>scheme</code> 的学习让我们更加清晰的了解程序语言的本质。</p>
+<h2 id="Basic-Scheme-Features"><a href="#Basic-Scheme-Features" class="headerlink" title="Basic Scheme Features"></a>Basic Scheme Features</h2><h3 id="Code-Consists-of-Expressions"><a href="#Code-Consists-of-Expressions" class="headerlink" title="Code Consists of Expressions"></a>Code Consists of Expressions</h3><h4 id="Parenthesized-Prefix-Expressions"><a href="#Parenthesized-Prefix-Expressions" class="headerlink" title="Parenthesized Prefix Expressions"></a>Parenthesized Prefix Expressions</h4><p><code>scheme</code> 代码是由带括号的前缀表达式组成，前缀表达式初看与我们日常习惯相悖，比如其他语言的 <code>3+5</code> 在 <code>scheme</code> 中变成了 <code>(+ 3 5)</code> ，但是带括号的前缀表达式却让 <code>+ - / *</code> 等运算符与过程调用完美的统一了，并且避免了运算的优先级歧义，更能体现计算的本质。</p>
+<h3 id="Expressions-Return-Values-But-May-Have-Side-Effects"><a href="#Expressions-Return-Values-But-May-Have-Side-Effects" class="headerlink" title="Expressions Return Values, But May Have Side-Effects"></a>Expressions Return Values, But May Have Side-Effects</h3><p><code>scheme</code> 表达式同时具有表达式和语句的特点，既能返回值也能产生副作用。 <code>(set! foo 3)</code> 等价于 <code>c</code> 语言的    <code>foo=3</code> 。函数式编程推崇无副作用操作，所以产生副作用的操作后都有感叹号。</p>
+<h4 id="Defining-Variables-and-Procedures"><a href="#Defining-Variables-and-Procedures" class="headerlink" title="Defining Variables and Procedures"></a>Defining Variables and Procedures</h4><p>在 <code>scheme</code> 中定义变量的方式为 <code>(define foo 5)</code> ，其中 <code>define</code> 做了以下三件事：</p>
+<ol>
+<li>在作用域中声明了一个 <code>foo</code> 变量。</li>
+<li><code>scheme</code> 给 <code>foo</code> 变量分配存储空间，该过程称为 <code>绑定</code> ，将变量绑定到某个内存地址，通过变量引用该内存区域。</li>
+<li>将 <code>foo</code> 引用的内存初始化为 <code>5</code> 。</li>
+</ol>
+<p>** <code>scheme</code> 中一切值都是指向对象的指针**。</p>
+<p><code>foo</code> 变量也可以指向过程：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (foo)
+    15)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="var.png" alt="var"></p>
+<h4 id="Most-Operators-are-Procedures-vs-Special-Forms"><a href="#Most-Operators-are-Procedures-vs-Special-Forms" class="headerlink" title="Most Operators are Procedures vs Special Forms"></a>Most Operators are Procedures vs Special Forms</h4><p>在传统语言中 <code>a+b</code> 是一个表达式，而 <code>scheme</code> 中却是过程调用，由于函数在 <code>scheme</code> 中是一等公民，所以 <code>Scheme</code> 中绝大多数的表达式都是过程组成的。但是有少部分语法是 <code>特殊形式</code> ，如 <code>define</code> <code>set!</code> 等，当解释器看到特殊形式的语法时，会特殊处理。特殊形式包含以下几个方面：</p>
+<ol>
+<li>结构控制如 <code>if</code> <code>cond</code> <code>and</code> 等。</li>
+<li><code>define</code></li>
+<li>本地变量定义如 <code>let</code> 及其变种 <code>letrec</code> <code>let*</code></li>
+<li>循环构造， <code>do</code> <code>named let</code></li>
+<li><code>quote</code> 和 <code>quasiquote</code> ，可以以文本字面量书写复杂数据结构</li>
+<li><code>lambda</code></li>
+<li><code>macros</code></li>
+</ol>
+<h4 id="Control-Structures-are-Expressions"><a href="#Control-Structures-are-Expressions" class="headerlink" title="Control Structures are Expressions"></a>Control Structures are Expressions</h4><p>由于 <code>scheme</code> 中控制结构也是表达式，所以 <code>scheme</code> 没有传统程序的 <code>return</code> 语句，表达式的值作为过程的返回值，如果返回值不需要可以忽略。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">int min(int a, int b)
+{
+   if (a &lt; b)
+      return a;
+   else
+      return b;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+ <pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (min a b)
+  (if (&lt; a b)
+      a
+      b))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="The-Boolean-Values-t-and-f"><a href="#The-Boolean-Values-t-and-f" class="headerlink" title="The Boolean Values #t and #f"></a>The Boolean Values #t and #f</h3><p>前面说了在 <code>scheme</code> 中一切值都是指向对象的指针，所以 <code>scheme</code> 提供了两个唯一的对象表示真值和假值。<code>false object</code> 和 <code>c</code> 语言中的 <code>0</code> 是不一样的，也不同于 <code>lisp</code> 中的空指针，它代表一个独一无二的对象。</p>
+<h3 id="Some-Other-Control-Flow-Constructs-cond-and-and-or"><a href="#Some-Other-Control-Flow-Constructs-cond-and-and-or" class="headerlink" title="Some Other Control-Flow Constructs: cond, and, and or"></a>Some Other Control-Flow Constructs: cond, and, and or</h3><p>为了更加方便的写代码，<code>scheme</code> 为我们提供了类似与 <code>switch case</code> 的语法糖 <code>cond</code> ，<code>cond</code> 语法糖可以用 <code>if</code> 语句实现。</p>
+<h3 id="All-Values-are-Pointers-to-Objects"><a href="#All-Values-are-Pointers-to-Objects" class="headerlink" title="All Values are Pointers to Objects"></a>All Values are Pointers to Objects</h3><h4 id="All-Values-are-Pointers"><a href="#All-Values-are-Pointers" class="headerlink" title="All Values are Pointers"></a>All Values are Pointers</h4><p>所有的 <code>scheme</code> 对象都分配在堆上，通过指针引用，且不用担心解引用的问题，因为在 <code>scheme</code> 中解引用是统一的。一旦计算过程需要值， <code>scheme</code> 会自动 <code>dereference a pointer to a value</code> 。</p>
+<p>比如表达式 <code>(+ 2 4)</code> <code>scheme</code> 会有一个指向 <code>2</code> 的指针和一个指向 <code>4</code> 的指针，并作为参数传递给过程 <code>+</code> ，该过程返回一个指向 <code>6</code> 的指针，所有的参数和返回值都是指针，如果我们忽略指针操作，你会发现这和其他语言语义上是一致的。</p>
+<p>我们知道在 <code>c</code> 语言中会有 <code>指针语义</code> 和 <code>原始值语义</code> ，比如 <code>2</code> 是原始值，<code>int * p</code> 中的 <code>p</code> 是一个指针，这就要求我们时刻注意区分，变量到底是原始值还是指针，其中涉及到强制类型转换。而 <code>scheme</code> 中所有值都是指针，把一切都统一了，你可以说 <code>scheme</code> 中没有指针变量或者 <code>scheme</code> 一切都是指针。</p>
+<h4 id="Most-Implementations-Optimize-Away-Many-Pointers"><a href="#Most-Implementations-Optimize-Away-Many-Pointers" class="headerlink" title="Most Implementations Optimize Away Many Pointers"></a>Most Implementations Optimize Away Many Pointers</h4><p>根据上面所述，所有的值都是指针，你可能会有疑问，对应数字 <code>2</code> 难道 <code>scheme</code> 也是用指针实现的？这样的化效率必然很低。其实 <code>Everything's a pointer</code> 是从程序员的层面观察到的，是 <code>scheme</code> 语义上达到的一个效果。在真正实现的时候，会进行很多优化，比如一个变量是数字，那么该变量往往会直接存储该数字的值，但怎么区分一个变量是立即值还是指针呢？ <code>scheme</code> 会将变量值的某几位作为标记，以区分是立即值还是指针，这种解决方案叫做 <code>tagging</code> 。直接存储立即值在变量里，是否会打破刚刚提到的 <code>Everything's a pointer</code> 抽象呢？其实不会，因为程序员是无法看到这中间的区别的。</p>
+<h4 id="Objects-on-the-Heap"><a href="#Objects-on-the-Heap" class="headerlink" title="Objects on the Heap"></a>Objects on the Heap</h4><p>从语义上来说，任何 <code>scheme</code> 对象都分配在堆上，由属性构成，属性的值可以是任何 <code>scheme value</code> ，比如 <code>tagged immediate value or a tagged pointer to another heap-allocated object</code> 。</p>
+<p>比如 <code>pair</code> 就是一个拥有两个属性的对象，这两个属性可以是数字、字符串、布尔值或者指向另一个对象的指针等。 <code>pair</code> 由 <code>con</code> 创建，示例如下：</p>
+<p><img src="pair.png" alt="pair"></p>
+<p>在绝大多数 <code>scheme</code> 实现中，堆分配的对象都有一个头部，该头部记录的该对象的类型信息，对程序员来说的不可见的。其中数字 <code>22</code> <code>15</code> 可能是由 30 位 bit 其中两位 <code>tag</code> 信息的立即数。</p>
+<h3 id="Scheme-Reclaims-Memory-Automatically"><a href="#Scheme-Reclaims-Memory-Automatically" class="headerlink" title="Scheme Reclaims Memory Automatically"></a>Scheme Reclaims Memory Automatically</h3><p> 在 <code>c</code> 语言中，数据对象会以以下三种方式分配存储空间：</p>
+<ol>
+<li>allocated statically (as in the case of global variables)</li>
+<li>on an activation stack as part of a procedure activation record (as in the case of local variables)</li>
+<li>dynamically allocated on the heap at run time using an allocation routine like malloc or new</li>
+</ol>
+<p>由于 <code>scheme</code> 所有对象都分配在堆上，通过指针引用。 <code>Lisp</code> 家族语言是最早实现垃圾回收机制的，也就是说内存对应程序员是无线的，我们只管使用，由 <code>GC</code> 负责内存的回收。 <code>GC</code> 通过引用计数、标记-清除等策略保证，没有被引用的对象能够及时清理，而需要的对象一直存在。</p>
+<h3 id="Objects-Have-Types-Variables-Don’t"><a href="#Objects-Have-Types-Variables-Don’t" class="headerlink" title="Objects Have Types, Variables Don’t"></a>Objects Have Types, Variables Don’t</h3><p>根据前面所述 <code>scheme</code> 中的所有变量都是同一种类型 <code>pointer to anything</code> 。那么 <code>scheme</code> 是无类型的吗？虽然 <code>scheme</code> 变量是无类型的，但是 <code>scheme</code> 对象却有一个带有类型信息的头部，你无法将 <code>+</code> 应用于两个字符串，所以 <code>scheme</code> 是 <code>动态类型</code> ，其类型检查发生在运行时。好的编译器会在编译期间进行类型推导，生成更高效的代码，所以不用太过担心效率问题。</p>
+<h3 id="The-Empty-List"><a href="#The-Empty-List" class="headerlink" title="The Empty List"></a>The Empty List</h3><p>在 <code>scheme</code> 中存在一个空指针值，也把它叫做 <code>the empty list</code> ，打印出来为 <code>()</code> 。空列表是一个比较特殊的对象，空指针是一个指向特殊结尾的列表对象。我们可以忽略空指针和空列表在语义上的区别，对于空指针可以使用 <code>null?</code> 来判断。那么为什么空指针对象会被称为空列表呢？后续会给出解释，主要与 <code>scheme</code> 大量使用列表有关。</p>
+<h2 id="Pairs-and-Lists"><a href="#Pairs-and-Lists" class="headerlink" title="Pairs and Lists"></a>Pairs and Lists</h2><h3 id="cdr-linked-lists"><a href="#cdr-linked-lists" class="headerlink" title="cdr-linked lists"></a>cdr-linked lists</h3><p>前面我们介绍了 <code>pair</code> ，本节介绍 <code>list</code> ，其实 <code>scheme</code> 中根本没有 <code>list</code> 数据类型，<code>list</code> 不过是一系列 <code>pair</code> 构成，以空指针结束，而空指针是空列表，包含以空指针结束的0个 <code>pair</code> ，这也解释了刚刚提到的为什么空指针也被称作空列表。</p>
+<p><code>(define foo '(22 15 6))</code>  其结构如下：<br><img src="foolist.png" alt="list"></p>
+<p>更直观的表现形式是：<br><img src="barlist.png" alt="list"></p>
+<p><strong>顺便提一下 <code>pair</code> 和 <code>list</code> 相关的几个操作， <code>car</code> 返回 <code>pair</code> 第一部分， <code>cdr</code> 返回 <code>pair</code> 的第二部分，类型为 <code>list</code> ，<code>cons</code> 生成一个新的 <code>pair</code> ，第一个域指向第一个参数，第二个域指向第二个参数，第二个参数一般为 <code>list</code> 。</strong></p>
+<h3 id="Lists-and-Quoting"><a href="#Lists-and-Quoting" class="headerlink" title="Lists and Quoting"></a>Lists and Quoting</h3><p>如果每次生成 <code>list</code> 都用 <code>cons</code> 未免太过繁琐， <code>scheme</code> 提供了用 <code>quote</code> 以字面量形式书写 <code>list</code> 的方式。 <code>(quote (1  2 3))</code> 返回 <code>list (1 2 3)</code> 。<br>对于 <code>quote</code> 注意以下几点：</p>
+<ol>
+<li><code>quote</code> 是一种特殊形式，不是 <code>procedure</code> 。</li>
+<li><code>quote</code> 返回的是数据结构，不是字符串对象，该数据结构可以嵌套，可以是列表、树或者数组等等。</li>
+<li><code>quote</code> 多次执行，返回的是同一个数据结构，如果要每次返回不同的数据结构，请使用 <code>list</code>。</li>
+<li><code>quote</code> 可用引号代替 <code>'</code> 。</li>
+</ol>
+<h3 id="Where-the-Empty-List-Got-its-Name"><a href="#Where-the-Empty-List-Got-its-Name" class="headerlink" title="Where the Empty List Got its Name"></a>Where the Empty List Got its Name</h3><p>通过前面的 <code>list</code> 和 <code>quote</code> ，我们知道空指针和空列表的联系了。对于给定的列表 <code>'(1 2 3)'</code>  第一次 <code>cdr</code> 返回的是列表 <code>(2 3)</code> ，继续 <code>cdr</code> 返回的是列表 <code>(3)</code> ，再次 <code>cdr</code> 返回的就是空列表 <code>()</code> ，包含 0 项的列表等和空指针是一回事。</p>
+<h3 id="Some-Handy-Procedures-that-Operate-on-Lists"><a href="#Some-Handy-Procedures-that-Operate-on-Lists" class="headerlink" title="Some Handy Procedures that Operate on Lists"></a>Some Handy Procedures that Operate on Lists</h3><p>由于 <code>scheme</code> 的 <code>list</code> 十分灵活和强大，所以 <code>scheme</code> 提供了一些处理列表的过程。</p>
+<h4 id="length"><a href="#length" class="headerlink" title="length"></a>length</h4><p><code>length</code> 返回列表的长度，如 <code>(length '(0 #t #f)) returns 3</code> 。</p>
+<h4 id="list"><a href="#list" class="headerlink" title="list"></a>list</h4><p><code>list</code> 接收一个或者多个参数，构造前面提到的 <code>cdr-linked</code> 列表，每个 <code>pair</code> 的第一个域指向对应的参数。</p>
+<p><code>list</code> 和 <code>cons</code> 都可以构造列表，但是 <code>list</code> 直接用参数构建列表，而 <code>cons</code> 是将新的数据项加入到已有列表中。有一个细节值得注意，构建只有一个数据项的列表，采用 <code>list</code> 是 <code>(list 1)</code> 而用 <code>cons</code> 语法为 <code>(cons 1 '()')</code> 。</p>
+<h4 id="append"><a href="#append" class="headerlink" title="append"></a>append</h4><p><code>append</code> 输入参数为两个或者更多的列表，构建一个新的列表。如 <code>(append '(1 2) '(3 4))</code> 返回 <code>(1 2 3 4)</code> ，但是 <code>(list '(1 2) '(3 4))</code> 返回 <code>((1 2) (3 4))</code> 。注意两者之间的区别， <code>append</code> 要求其参数为列表，将各个列表中的元素组成一个新的列表，而 <code>list</code> 对其元素并无要求。另外值得注意的是， <code>append</code> 只会连接顶层的元素，并不会展平(<code>flatten</code>)嵌套的结构。如<br> </p><pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(append '((1 2) (3 4))
+       '((5 6) (7 8)))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>返回 <code>((1 2) (3 4) (5 6) (7 8))</code> 。此外，<code>append</code> 的元素是共享的，改变其中一个其他会跟着改变，这也是强调 <code>无副作用</code> 计算的原因。<p></p>
+<h4 id="reverse"><a href="#reverse" class="headerlink" title="reverse"></a>reverse</h4><p>和 <code>append</code> 类似，将给定列表反序。</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(reverse '(1 2 3 4)) ;(4 3 2 1)
+(reverse '((1 2) (3 4)));returns ((3 4) (1 2)), not ((4 3) (2 1))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h4 id="member"><a href="#member" class="headerlink" title="member"></a>member</h4><p>schemeVal x list –&gt;bool<br>传入一个搜索的值和列表，判断列表中是否有该值。</p>
+<h3 id="Recursion-Over-Lists-and-Other-Data-Structures"><a href="#Recursion-Over-Lists-and-Other-Data-Structures" class="headerlink" title="Recursion Over Lists and Other Data Structures"></a>Recursion Over Lists and Other Data Structures</h3><p> <code>scheme</code> 中递归具有举足轻重的地位，用递归过程操作递归数据结构将十分简单。例如我们要深拷贝 <code>pair-tree</code> ，首先 <code>pair-tree</code> 的递归定义如下：</p>
+<ul>
+<li>a non-pair (leaf), or</li>
+<li>a pair whose car and cdr are pair-trees</li>
+</ul>
+<p>第一个规则是基本条件，不需要递归，第二个条件的定义涉及到递归，某个内部节点的 <code>car cdr</code> 也是 <code>pair-trees</code> 。编写对应的递归程序是比较容易的，首先将对应数据结构的递归定义描述清楚，然后用程序按照递归定义遍历数据结构并计算结果。</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (pair-tree-deep-copy thing)
+   (if (not (pair? thing))
+       thing
+       (cons (pair-tree-deep-copy (car thing))
+             (pair-tree-deep-copy (cdr thing)))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>pair-tree-deep-copy</code> 能够拷贝 <code>pair-tree</code> 但是拷贝 <code>proper list</code> 时就有问题，因为 其 <code>car</code> 并非是一个 <code>pair</code> ，导致 <code>pair-tree-deep-copy</code> 直接使用 <code>car</code> 值，而没有进一步拷贝。  <code>proper list</code> 拷贝定义如下：</p>
+<ul>
+<li>the empty list if the original list is empty, or</li>
+<li>(if the list is nonempty) a pair whose car value is the same as the car of the original list, and whose cdr value is a copy of the rest of the original list.</li>
+</ul>
+<p>代码如下：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (list-copy lis)
+   (cond ((null? lis)
+          '())
+         (else
+          (cons (car lis)
+                (list-copy (cdr lis))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>编写递归的关键是准确定义某个过程返回什么，以及假定该过程确实返回了该结果，然后利用归纳法，将子问题合并得到原过程的结果。</strong></p>
+<h3 id="Type-and-Equality-Predicates"><a href="#Type-and-Equality-Predicates" class="headerlink" title="Type and Equality Predicates"></a>Type and Equality Predicates</h3><p>由于 <code>scheme</code> 的值是指向堆对象的指针，那么其数据类型是什么，决定了能够进行何种操作。</p>
+<h4 id="Type-Predicates"><a href="#Type-Predicates" class="headerlink" title="Type Predicates"></a>Type Predicates</h4><p><code>scheme</code> 提供了几个判断数据类型的谓词，<code>number?,  string?, character?, vector?, pair? ,and  port?</code></p>
+<h4 id="Equality-Predicates"><a href="#Equality-Predicates" class="headerlink" title="Equality Predicates"></a>Equality Predicates</h4><p><code>相等</code> 的含义在不同环境是不一样的， <code>scheme</code> 提供了 <code>equal? eq? eqv?</code> 等多种方式，<code>equal?</code> 指结构上的值相等，如 <code>(equal? '(1 2 3) '(1 2 3))</code> 返回 <code>#t</code> ；而 <code>eq?</code> 比较的是两个对象的地址是否相等。由于 <code>eq?</code> 比较的是两个变量是否引用同一个对象，是指针的比较，所以相对来说更快。 <code>eqv?</code> 用于比较两个数字是否相等，如果传入的不是数字，会立即报错。</p>
+<h4 id="Choosing-Equality-Predicates"><a href="#Choosing-Equality-Predicates" class="headerlink" title="Choosing Equality Predicates"></a>Choosing Equality Predicates</h4><p>这么多种相等比较，我们该如何选择呢？可以用以下几条规则判断：</p>
+<ul>
+<li>eq? is useful for fast identity (same object) comparisons of non-numbers,</li>
+<li>= performs numeric comparisons on numbers,</li>
+<li>eqv? is like eq?, but treats copies of the same number as though they were the same object, and</li>
+<li>equal? performs a “deep” comparison of the structure of data structures. (It uses eqv? for components that are numbers.)</li>
+</ul>
+<h3 id="Quoting-and-Literals"><a href="#Quoting-and-Literals" class="headerlink" title="Quoting and Literals"></a>Quoting and Literals</h3><p>在传统程序中，字面量往往只能表示有限的数字或者字符串，而 <code>scheme</code> 中，字面量可以创建复杂、嵌套的数据结构。另一方面， <code>scheme</code> 的代码和字面量数据十分相似。比如，<code>(min 1 2)</code> 作为表达式代表求较小值，如果我们用字面量 <code>(define foo (quote (min 1 2)))</code> 定义 <code>foo</code> ，不难发现 <code>foo</code> 代表的数据结构和表达式形式上是一致的，唯一区别便是，一个表示表达式，另一个代表 <code>list</code> 。该 <code>list</code> 结构如下：<br><img src="quote.png" alt="quote"></p>
+<h4 id="Simple-Literals-and-Self-Evaluation"><a href="#Simple-Literals-and-Self-Evaluation" class="headerlink" title="Simple Literals and Self-Evaluation"></a>Simple Literals and Self-Evaluation</h4><p>如果仔细观察会发现，<code>scheme</code> 中数字和布尔值并没有加引号来避免 <code>scheme</code> 对待其他表达式一样执行它，那么数字和布尔值是否被执行了呢？这涉及到 <code>scheme</code> 中特殊的规则，数字和布尔值的执行结果就是它本身，这种表达式叫做 <code>自执行（self-evaluating）</code> 。</p>
+<h2 id="Local-Variables-and-Lexical-Scope"><a href="#Local-Variables-and-Lexical-Scope" class="headerlink" title="Local Variables and Lexical Scope"></a>Local Variables and Lexical Scope</h2><p>还记得最前面我们提到， <code>scheme</code> 是支持嵌套作用域块结构的语言。代码块可以嵌套，每个代码块可以定义局部变量，该变量的作用范围为该代码块。</p>
+<p>另一方面 <code>scheme</code> 支持词法作用域，也叫静态作用域，从字面理解，静态是指我们通过阅读代码便可以确定每个变量的作用范围。相反动态作用域指变量的作用范围必须在运行时确定，这会带来很多麻烦，基本已经没有语言采用动态作用域了。</p>
+<h3 id="let"><a href="#let" class="headerlink" title="let"></a>let</h3><p>让我先来看段 <code>c</code> 语言代码：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">{  int x = 10;
+   int y = 20;
+
+   foo(x,y);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当进入代码块时，会分配存储空间给本地变量 <code>x y</code> ，并且存储空间会被初始化为 <code>10 20</code> ，以上这个过程我们称为 <code>x y</code> 被绑定了，即绑定是一种 <code>name</code> 到 <code>storage</code> 的关联。当离开代码块时 <code>x y</code> 的绑定消失了，可能在外层 <code>x y</code> 是和其他值绑定的。在 <code>c</code> 语言中局部变量的存储空间一般分配在活动栈上。</p>
+<p><code>scheme</code> 的 <code>let</code> 与上述代码类似：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">...
+(let ((x 10)
+      (y 20))
+   (foo x y))
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>有一点需要注意， <code>scheme</code> 的局部变量分配在堆上，那效率是不是很低呢？好的编译器会将其优化存储在寄存器中，所以不用担心效率问题。</p>
+<h3 id="Lexical-Scope"><a href="#Lexical-Scope" class="headerlink" title="Lexical Scope"></a>Lexical Scope</h3><p>刚刚提到，<code>scheme</code> 支持嵌套块结构，那么内部的块可能会重复定义局部变量：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(let ((x 10)    ; outer binding of x
+      (a 20))   ; binding of a
+   (foo x)
+   (let ((x (bar))       ; inner binding of x
+         (b (baz x x)))  ; binding of b
+      (quux x a)
+      (quux y b))
+   (baz x a)  ; refers to outer x (and a)
+   (baz x b)) ; illegal?<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先声明一个概念 <code>bingding environment</code> ，绑定环境就是名称集合到存储位置的映射。在程序执行的每个点能够 <code>看得到</code> 的绑定关系就是程序执行的环境。最外层是全局绑定关系，当进入一个新的块时，会生成一个新的绑定关系，同时链接到上层环境中，如果存在同名变量，内层变量会覆盖外层变量绑定。当需要查找某个变量的绑定关系时，由内向外依次查找。块结构和作用域可以用轮廓图清晰的表示：</p>
+<p><img src="blockstructure.png" alt="blockstructure"></p>
+<p>从图中可以看出， <code>let</code> 前面定义的变量对后续变量莱索是不可见的。如果需要可见需要用 <code>let*</code> 。</p>
+<h3 id="let-1"><a href="#let-1" class="headerlink" title="let*"></a>let*</h3><p>前面说了， <code>let</code> 前面定义的变量对后续变量不可见，为了达到可见的效果我们可以嵌套 <code>let</code> :</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(let ((a-structure (some-procedure)))
+   (let ((a-substructure (get-some-subpart a-structure)))
+      (let ((a-subsubstructure (get-another-subpart a-substructure)))
+         (foo a-substructure))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>需求是满足了，如果变量太多，这样写起来肯定不优雅，所以 <code>scheme</code> 提供了 <code>let*</code> 语法糖：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(let* ((a-structure (some-procedure))
+       (a-substructure (get-some-subpart a-structure))
+       (a-subsubstructure (get-another-subpart a-substructure)))
+   (foo a-substructure))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="letstar.png" alt="letstar"></p>
+<h2 id="Procedures"><a href="#Procedures" class="headerlink" title="Procedures"></a>Procedures</h2><h3 id="Procedures-are-First-Class"><a href="#Procedures-are-First-Class" class="headerlink" title="Procedures are First Class"></a>Procedures are First Class</h3><p>在  <code>scheme</code> 中，procedure 是一等的，可以将 <code>procedure</code> 作为参数或者返回值。对应表达式 <code>(+ a b)</code> ，<code>scheme</code> 会做一下事情：</p>
+<ol>
+<li>look up the value of (the current binding of) the variable +, which we assume is a procedure,</li>
+<li>look up the values of (the current bindings of) the variables a and b, and</li>
+<li>apply the procedure to those values, i.e., call it with those values as arguments.</li>
+</ol>
+<p>注意 <code>procedure</code> 不仅仅只能以 <code>name</code> 提供，如果该表达式的值是一个 <code>procedure</code> 也是可以的。如 <code>((look-up-appropriate-procedure key) foo bar)</code> 。</p>
+<h3 id="Anonymous-Procedures-and-lambda"><a href="#Anonymous-Procedures-and-lambda" class="headerlink" title="Anonymous Procedures and lambda"></a>Anonymous Procedures and lambda</h3><p>在 <code>scheme</code> 中用 <code>lambda</code> 代表匿名过程，使用 <code>define</code> 定义过程不过是 <code>lambda</code> 的语法糖。</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (double x)
+   (+ x x))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>等价于</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define double (lambda (x)
+                  (+ x x)))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="lambda-and-Lexical-Scope"><a href="#lambda-and-Lexical-Scope" class="headerlink" title="lambda and Lexical Scope"></a>lambda and Lexical Scope</h3><p>前面介绍过 <code>scheme</code> 是词法作用域，那么在定义 <code>lambda</code> 过程时，应该创建哪些东西呢？首先 <code>lambda</code> 包含形式参数和函数体，这里有一个概念 <code>自由变量</code> 指函数体中不包含形参的变量，可以这么理解，那些在函数体中和形式参数同名的变量被约束了，其他的变量是自由的。当 <code>lambda</code> 被执行时自由变量应该在哪儿找它的绑定呢？答案是 <code>lambda</code> 的环境，所以创建 <code>lambda</code> 时需要记录过程所在环境。包含 <code>lambda</code> 形参、函数体以及所在环境的整体叫做 <code>闭包</code> 。</p>
+<h3 id="Local-Definitions"><a href="#Local-Definitions" class="headerlink" title="Local Definitions"></a>Local Definitions</h3><p>如果某些过程只在特定的范围有效，可以使用局部定义，而不用定义成全局的。</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (quadruple x)
+   (let ((double (lambda (x)
+                    (+ x x))))
+      (double (double x))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>局部过程也遵守词法作用域。</p>
+<h3 id="Recursive-Local-Procedures-and-letrec"><a href="#Recursive-Local-Procedures-and-letrec" class="headerlink" title="Recursive Local Procedures and letrec"></a>Recursive Local Procedures and letrec</h3><p>根据前面的描述，可以利用 <code>let</code> 和 <code>lambda</code> 来定义本地过程，但是怎么定义递归过程呢？<br>尝试：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (foo x)
+   (let ((local-proc (lambda (y)
+                        ...
+                        (local-proc ...)   ; recursive call?  No.
+                        ...)))
+      ...
+      (local-proc x)
+      ...)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上述代码的问题是，local-proc 对于其函数体不可见，其作用域范围如下图所示：<br><img src="letrec.png" alt="letrec"></p>
+<p>这正是 <code>letrec</code> 解决的事， <code>letrec</code> 先声明所有变量，分配存储空间，但是并未赋值。 <code>letrec</code> 保证所有变量都是可见的。其作用域如下图所示：<br><img src="letrec2.png" alt="letrec"></p>
+<p><code>letrec</code> 对互递归也能很好的支持：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (my-proc)
+   (letrec ((local-proc-1 (lambda ()
+                             ...
+                             (local-proc-2)
+                             ...))
+            (local-proc-2 (lambda ()
+                             ...
+                             (local-proc-1)
+                             ...)))
+      (local-proc-1))) ; start off mutual recursion by calling local-proc-1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="letrec3.png" alt="letrec"></p>
+<h3 id="Multiple-defines-are-like-a-letrec"><a href="#Multiple-defines-are-like-a-letrec" class="headerlink" title="Multiple defines are like a letrec"></a>Multiple defines are like a letrec</h3><p>有了 <code>letrec</code> 我们可以解释 <code>define</code> 的工作机制了。</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">...
+
+(define (foo)
+   (... (bar) ...))
+
+(define (bar)
+   (... (baz) ...))
+
+(define (baz)
+   (... (quux) ...))
+...
+(foo)
+...
+;等价于
+...
+
+(define foo
+        (lambda ()
+           (... (bar) ...)))
+
+(define bar
+        (lambda ()
+           (... (baz) ...)))
+
+(define baz
+        (lambda ()
+           (... (foo) ...)))
+...
+(foo)
+...
+;等价于
+(letrec (...
+
+         (foo (lambda ()
+                 (... (bar) ...)))
+         (bar (lambda ()
+                 (... (baz) ...)))
+         (baz (lambda ()
+                 (... (foo) ...)))
+         ...)
+ ...
+ (foo)
+ ...)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>同样的局部过程也可以用 <code>letrec</code> 去糖：</p>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (my-proc)
+   (define (local-proc-1)
+      ...)
+   (define (local-proc-2)
+      ...)
+   (local-proc-1)
+   (local-proc-1))
+
+;等价于
+(define (my-proc)
+  (letrec ((local-proc-1 (lambda () ...))
+           (local-proc-2 (lambda () ...)))
+    (local-proc-1)
+    (local-proc-2)))
+;去糖
+(define my-proc
+  (lambda ()
+    (letrec ((local-proc-1 (lambda () ...))
+             (local-proc-2 (lambda () ...)))
+      (local-proc-1)
+      (local-proc-2))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">liaoli</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://www.cqull.com/2018/10/06/an-introduction-to-scheme-and-its-implementation-introduction/">http://www.cqull.com/2018/10/06/an-introduction-to-scheme-and-its-implementation-introduction/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">liaoli</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/">
+                                    <span class="chip bg-color">程序语言</span>
+                                </a>
+                            
+                                <a href="/tags/scheme/">
+                                    <span class="chip bg-color">scheme</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2018/10/08/suan-fa-yu-shu-ju-jie-gou-zhi-dong-tai-gui-hua-1/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="算法与数据结构之动态规划-1">
+                        
+                        <span class="card-title">算法与数据结构之动态规划-1</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+######
+
+
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src)
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-10-08
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
+                                </a>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-category">
+                                    数据结构
+                                </a>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/DP/" class="post-category">
+                                    DP
+                                </a>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/DP/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="post-category">
+                                    动态规划
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">算法</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+                        <span class="chip bg-color">动态规划</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                        <span class="chip bg-color">数据结构</span>
+                    </a>
+                    
+                    <a href="/tags/DP/">
+                        <span class="chip bg-color">DP</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/05/27/zi-ji-dong-shou-gou-jian-jian-yi-xu-ni-ji-he-bian-yi-qi-gou-jian-xvm-xu-ni-ji/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="自己动手构建简易虚拟机和编译器-构建XVM虚拟机">
+                        
+                        <span class="card-title">自己动手构建简易虚拟机和编译器-构建XVM虚拟机</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            前面我们已经将汇编语言汇编成可执行文件，接下来将构建让其运行的运行时环境（XVM XtremeScript Virtual Machine）。本章将阐述虚拟机如何工作， XVM 原型和构造细节。
+
+虚拟机平时编写的代码最终会转换成机器码，运
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-05-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/" class="post-category">
+                                    重学计算机系列
+                                </a>
+                            
+                            <a href="/categories/%E9%87%8D%E5%AD%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E5%88%97/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="post-category">
+                                    编译原理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E8%84%9A%E6%9C%AC/">
+                        <span class="chip bg-color">脚本</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+                        <span class="chip bg-color">虚拟机</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/">
+                        <span class="chip bg-color">编译器</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + 'From: Li的博客<br />'
+            + 'Author: liaoli<br />'
+            + 'Link: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2018</span>
+            <a href="/about" target="_blank">liaoli</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">71.9k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+            <span id="icp"><img src="/medias/icp.png" style="vertical-align: text-bottom;" />
+                <a href="http://www.beian.gov.cn/# 备案链接" target="_blank">渝ICP备20008985号-1# 备案信息</a>
+            </span>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/cquliaoli" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:956168488@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=956168488" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 956168488" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

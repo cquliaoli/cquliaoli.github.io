@@ -1,0 +1,1198 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="编程语言,错误,异常">
+    <meta name="description" content="读书笔记、技术文章">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>异常与错误处理探讨-概念介绍（上） | Li的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.0.0"><link rel="alternate" href="/atom.xml" title="Li的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Li的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Li的博客</div>
+        <div class="logo-desc">
+            
+            读书笔记、技术文章
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">异常与错误处理探讨-概念介绍（上）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">
+                                <span class="chip bg-color">编程语言</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%94%99%E8%AF%AF/">
+                                <span class="chip bg-color">错误</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%BC%82%E5%B8%B8/">
+                                <span class="chip bg-color">异常</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="post-category">
+                                编程语言
+                            </a>
+                        
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%94%99%E8%AF%AF/" class="post-category">
+                                错误
+                            </a>
+                        
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%94%99%E8%AF%AF/%E5%BC%82%E5%B8%B8/" class="post-category">
+                                异常
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-05-19
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
+                    2018-05-20
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    3.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    13 Min
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote><p>人总会犯错，悔过是圣人，坚持就是恶魔</p>
+<footer><strong>本杰明.富兰克林</strong></footer></blockquote>
+
+<a id="more"></a>
+<h2 id="错误来源"><a href="#错误来源" class="headerlink" title="错误来源"></a>错误来源</h2><p>错误可能并且一定会发生。几乎任何操作都会带来意想不到的结果。网络异常、磁盘空间耗完、内存溢出等等。如果不对这些错误情况处理，毫无疑问我们的软件将脆弱不堪。一般错误可以归为以下几类：</p>
+<h3 id="用户错误"><a href="#用户错误" class="headerlink" title="用户错误"></a>用户错误</h3><p>用户总是会以你想不到的方式操作软件。错误的输入、荒谬的操作，都有可能与我们预期不一致。一个好的程序有责任指出错误所在，并帮助用户来改正它。</p>
+<h3 id="程序员错误"><a href="#程序员错误" class="headerlink" title="程序员错误"></a>程序员错误</h3><p>任何人都不可能永远编写 <code>bug free</code> 的代码，空指针、非法参数，这些是程序员编写代码不当造成的错误，我们应该尽量避免。</p>
+<h3 id="意外情况"><a href="#意外情况" class="headerlink" title="意外情况"></a>意外情况</h3><p>现实总有太多的不确定性，网络连接失败，打印机墨水耗尽，磁盘空间耗尽，对于这些错误我们是无能为力的。</p>
+<h2 id="错误的报告机制"><a href="#错误的报告机制" class="headerlink" title="错误的报告机制"></a>错误的报告机制</h2><p>我们需要一套完善的机制应对各种错误情况，提高代码的稳定性。至少我们应该做到以下几点：</p>
+<ol>
+<li>当问题出现时能够提出错误</li>
+<li>检测到所有的错误</li>
+<li>恰当的处理错误</li>
+<li>如果不能处理错误，传播它。</li>
+</ol>
+<p>错误报告机制一般有如下几种：</p>
+<h3 id="不报告"><a href="#不报告" class="headerlink" title="不报告"></a>不报告</h3><p>这或许是最简单的处理错误的方式。不过如果你想让你的程序随意崩溃，以一种不可预知的方式运行，那你大可忽略错误。忽略、逃避错误，以一种侥幸心理对待错误，是大忌！！另一种处理忽略错误的做法是，遇到错误立即中止程序，这种方法虽然比完全忽略好一点，不过这并不是一个好的工程解决方案。</p>
+<h3 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h3><p>用一个返回值表示操作成功与否，这或许是一个简单可行的机制。根据返回值的类型和位置不同，一般又有以下几种方法：</p>
+<ol>
+<li>返回一个复合数据类型如元组，比如 Nodejs Go 语言就是采用这种方法。</li>
+<li>通过函数参数返回错误代码，在 C++或者 .NET中可以通过引用参数传递， C 语言中，可以通过指针控制，不过这种方法既不美观也不直观。windows API 更进一步采用 HRESULT 统一返回错误代码，输出参数也通过函数参数传递，不过这使得函数参数语义变得复杂。</li>
+<li>预留一些返回值表示错误。比如 length 返回 -1 代表错误或者未找到，因为长度不可能是负数；指针返回 NULL 表示操作失败。这种方法有时会有问题，比如返回值全部都有业务意义时，我们就无法区分错误情况了。</li>
+</ol>
+<h3 id="错误状态变量"><a href="#错误状态变量" class="headerlink" title="错误状态变量"></a>错误状态变量</h3><p>由上面知道函数返回值并不总是能分出一部分表示错误情况，将错误状态设置成全局变量似乎是可行之道。 C 语言标准通过 errno 来应用这种技术，不过这要求我们使用函数前，必须手动清除 errno。这种隐性的要求是出现 bug 的常见原因。功能上看，这种方法和返回值是等价的，但是它的缺陷之多足以让人放弃它。</p>
+<h3 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h3><p>异常作为管理错误的语言工具，Java Python C# Javascript 都支持异常。当代码遇到无法处理的问题是，程序运行便会停止，并抛出异常（一个错误对象—）。运行时环境会自动在调用栈中向后退，直到找到可以处理异常的代码。根据异常处理之后的运行情况，有以下两种模式：</p>
+<ol>
+<li>终止模式。程序在捕获异常的处理程序执行完后继续执行。 Java C# 都属于这一类。</li>
+<li>恢复模式。顾名思义，程序会从异常出现的地方恢复执行。</li>
+</ol>
+<p>异常一般不能忽略，如果没有捕获或者处理，异常会传播到调用栈的最高层，往往会导致程序崩溃。异常在面向对象中一般都有一套类层次定义，实现了多态。<br>异常并非完美，首先异常会造成性能上的损失，其次异常的特点决定了它不适合异步、并行编程。另一个重要话题涉及到 <code>异常安全(excaption safe)</code> ，有恢复能力的代码必须是异常安全的。不论出现什么异常，它都能 <code>正确</code> 执行。 异常安全有以下几个层次。这些层次都是对调用代码而言的。</p>
+<ol>
+<li>基本保证。如果出现异常必须保证不会泄露资源。但是代码的状态可能并不能保证，比如函数向容器添加 10 个元素，有可能全部添加，有可能添加了部分。</li>
+<li>强力保证。这种保证比基本保证严格得多。即使通过你的代码传播了一个异常，程序的状态保存不变。任何对象和全局变量都不变。以上面例子而言，一个对象也不会插入。</li>
+<li>不抛出保证。操作永远不能抛出异常，这意味着我们不能调用任何可能抛出异常的操作。</li>
+</ol>
+<p>异常安全对应保证程序的状态一致性十分重要，这也是有人反对异常的地方，见<a target="_blank" rel="noopener" href="http://www.lighterra.com/papers/exceptionsharmful/" title="Exception Handling
+Considered Harmful">这儿</a>。<br>异常按照同步、异步以及异常的发现者，分为以下几类：</p>
+<ol>
+<li>Detected by the environment and raised synchronously;e.g. array bounds error or divide by zero</li>
+<li>Detected by the application and raised synchronously, e.g.the failure of a program-defined assertion check</li>
+<li>Detected by the environment and raised asynchronously;e.g. an exception raised due to the failure of some health monitoring mechanism</li>
+<li>Detected by the application and raised asynchronously;e.g. one process may recognise that an error condition has occurred which will result in another process not meeting its deadline or not terminating correctly</li>
+</ol>
+<p>通常对异常处理有以下几个要求：</p>
+<ol>
+<li>– R1: The facility must be simple to understand and use</li>
+<li>– R2: The code for exception handling should not obscure understanding of the program’s normal error-free operation</li>
+<li>– R3: The mechanism should be designed so that run-time overheads are incurred only when handling an exception</li>
+<li>– R4: The mechanism should allow the uniform treatment of exceptions detected both by the environment and by the program</li>
+<li>– R5: the exception mechanism should allow recovery actions to be programmed</li>
+</ol>
+<p>详细请参考<a target="_blank" rel="noopener" href="https://www.cs.york.ac.uk/rts/books/RTSbookThirdEdition/chap6.pdf" title="Exceptions and Exception Handling">这儿</a></p>
+<h3 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h3><p>信号是硬件中断的软件等价物。通过信号处理程序处理错误事件，程序从被中断的位置继续执行。操作系统为每个信号提供了合理的错误处理程序，我们可以覆盖这些默认的处理程序。</p>
+<h2 id="检测错误"><a href="#检测错误" class="headerlink" title="检测错误"></a>检测错误</h2><h3 id="返回值和错误状态变量"><a href="#返回值和错误状态变量" class="headerlink" title="返回值和错误状态变量"></a>返回值和错误状态变量</h3><p>这两种错误表现形式决定了，我们需要判断函数的返回值或者全局变量，以确定是否发生故障。<br>不过调用层次较多时，会让我的代码结构可读性降低，变得混乱不堪。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">void nastyErrorHandling(){
+  if(op1()){
+    //do something
+    if(op2()){
+      //do something
+      if(op3()){
+        //do more..
+
+      }
+    }
+  }
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以上问题可以解决吗？可以的，通过引入一个状态变量 <code>ok</code> 比如：</p>
+<pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">void flattenedErrorHandling(){
+  bool ok=op1();
+  if(ok){
+    //do something
+    ok=op2();
+  }
+  if(ok){
+    //do something
+    ok=op3();
+  }
+  //....
+
+  if(!ok){
+    //clean up after errors
+  }
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不过这种方法对代码由一定限制，那就是中间不能 <code>return</code> 否则会跳过资源清理。<br>为了解决提前退出和资源清理，又有了饱受争议的 <code>goto</code> 语句。</p>
+<pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">void gotHell(){
+  if(op1()) goto error;
+  //do something
+  if(op2()) goto error;
+  //do something
+  if(op3()) goto error;
+  //do more
+  return;
+  error:
+    //clean up
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在 C++ 中倒是可以用类似智能指针的 RAII(Resource Acquisition Is Iniitiallization)的技术避免上述问题。</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class LockGuard{
+public:
+    LockGuard(std::mutex &amp;m):_m(m){
+      m.lock();
+    }
+    ~LockGuard(){
+      m.unlock();
+    }
+private:
+    std::mutex&amp;_m;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在 Go 中可以用 <code>defer</code> 关键字实现类似效果。</p>
+<h3 id="异常-1"><a href="#异常-1" class="headerlink" title="异常"></a>异常</h3><p>异常发生时，你可以选择捕获和处理异常，如果无处处理该异常则让它继续传播到更高层。Java是唯一一个强制实施异常规范作为函数签名一部分的主流语言。 C++ 中异常规范是运行时实施的。</p>
+<h3 id="信号-1"><a href="#信号-1" class="headerlink" title="信号"></a>信号</h3><p>检查信号的方式只有一种：为其安装一个处理程序。</p>
+<h2 id="处理错误"><a href="#处理错误" class="headerlink" title="处理错误"></a>处理错误</h2><p>错误总会发生。那么我们应该采取什么措施呢？这个问题没有统一的答案。很大程度上取决于环境和错误的严重程度。为了做成决策，我们需要知道错误的关键信息：</p>
+<ol>
+<li>错误来源。错误的来源是一个核心组件或是第三方库，这需要我们必须弄清楚。</li>
+<li>错误上下文。错误发生的上下文是什么？清晰的错误上下文能够帮助我们快速修复错误。</li>
+<li>程序状态。错误发生的操作当前的状态是什么？全部完成、完成了一半或者一点没完成？</li>
+<li>错误发生的时间。错误发生的时间点，是刚刚发生还是两小时前？</li>
+<li>错误的严重性。错误的严重性决定了损失的大小。</li>
+<li>如何修正错误。这个问题的答案有时很明显，有时也许不那么明显，通常情况我们需要其他信息辅助判断。</li>
+</ol>
+<h3 id="处理错误的时机"><a href="#处理错误的时机" class="headerlink" title="处理错误的时机"></a>处理错误的时机</h3><p>对于应该在何时处理错误，存在两个不同的学派：</p>
+<h4 id="尽可能早的处理"><a href="#尽可能早的处理" class="headerlink" title="尽可能早的处理"></a>尽可能早的处理</h4><p>一发现错误就对其处理，这可以让控制流经过较少的无效状态代码。对返回错误代码的函数来说通常是最佳的选择。</p>
+<h4 id="尽可能迟的处理"><a href="#尽可能迟的处理" class="headerlink" title="尽可能迟的处理"></a>尽可能迟的处理</h4><p>支持该观点的人认为，检测到错误的代码往往是不知道如何处理错误的。异常很适合该放手，我们可以让异常传播到能够处理它的地方。这让错误的检测和处理清晰的分开。理论上将错误的处理与业务逻辑分开很好，但是二者往往交织在一起，强行分开会使编码复杂。折中的方案是，让错误处理与错误发生的地方保持合适的距离，使得错误有清晰的上下文，同时又不会破坏正常代码的结构。</p>
+<h3 id="处理错误的内容"><a href="#处理错误的内容" class="headerlink" title="处理错误的内容"></a>处理错误的内容</h3><p>错误发生了，我们也捕获了错误，那我们具体应该做些什么呢？</p>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><p>任何工程项目都应该使用日志工具。日志可以搜集重要的跟踪信息，不仅能够帮助我们分析错误，在分析用户行为、系统性能等方面都十分重要。日志内容应包含前面提到的所有关键信息，保证错误上下文足够完整。但是也应该注意，不要记录重复的错误信息和其他无关信息，这会给发现错误带来干扰和障碍。</p>
+<h4 id="报告"><a href="#报告" class="headerlink" title="报告"></a>报告</h4><p>如有必要，我们应该讲错误报告给用户，比如文件被占用，可以报告用户让其关闭占用文件。但是要注意报告的频率和用语，用户不希望遭受无休止的错误报告轰炸，同时也不应该将敏感信息和专业错误的信息呈现给用户。</p>
+<h4 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h4><p>不是所有的错误都意味着世界末日，有些错误我们应该尝试恢复，例如网络信号不稳定，我们可以尝试间歇性重连。无法处理错误时，可以抛出错误，或许上层代码知道如何处理。</p>
+<h4 id="忽略"><a href="#忽略" class="headerlink" title="忽略"></a>忽略</h4><p>忽略错误并不能节省时间。我们会花费比编写错误处理程序多得多的时间来查找出现错误的原因。所以，忘记这种处理方式吧！</p>
+<h4 id="传播"><a href="#传播" class="headerlink" title="传播"></a>传播</h4><p>无法处理错误时，唯一的选择是清理并传播错误。一般有两种传播方式：</p>
+<ol>
+<li>输出搜集到的所有错误信息（返回相同的原因代码或传播异常）</li>
+<li>重新解释错误信息，返回不同的错误代码</li>
+</ol>
+<p>我们尽量应该使得错误代码与发生错误的操作概念上相关或一致。另一方面，我们在包装错误信息时尽量保留整个错误链。</p>
+<h2 id="设计错误处理方案注意点"><a href="#设计错误处理方案注意点" class="headerlink" title="设计错误处理方案注意点"></a>设计错误处理方案注意点</h2><p>大多数时候错误处理都只停留在单个开发者层面，没有形成统一的错误处理方案。错误处理应该基于系统而不应该基于开发者。统一的错误处理不仅能减少响应时间，也有利于持续集成和交付（<code>CI/CD</code>）。设计错误处理方案应该考虑如下几点：</p>
+<ol>
+<li>Establish naming conventions and standard error messages across the team. Align error names with business logic and naming conventions from other systems. Naming should not be unique to any one developer;</li>
+<li>Always include version information and details about releases or commits in your errors;</li>
+<li>Identify the feature and/or unit test associated with the error;</li>
+<li>Create a standard for exception handling and clearly communicate this to the entire team;</li>
+<li>Leverage error monitoring tools to quickly spot and respond to errors.</li>
+</ol>
+<p>编写错误消息应该注意一下几点：</p>
+<ol>
+<li>用户不会像程序员那样思考，例如磁盘空间只剩 <code>10k</code> ，在用户看来可能是 1<code>OK</code> 。</li>
+<li>报告信息不要太专业。满屏的异常调用栈会吓到用户的！</li>
+<li>不要呈现毫无意义的错误代码。试想当用户面对一个错误消息： <code>Error code 007</code> 时该怎么办?错误代码应该作为错误消息的一部分，而不是全部。</li>
+<li>将错误与警告醒目的区分开。</li>
+</ol>
+<h2 id="管理错误"><a href="#管理错误" class="headerlink" title="管理错误"></a>管理错误</h2><p>我们不能把希望都寄托在错误处理上，有很多错误我们应该尽力避免：</p>
+<ol>
+<li>检查所有的函数参数。</li>
+<li>检查执行过程中关键点的不变条件是否满足。</li>
+<li>检查外部值的有效性，防止恶意用户的输入，如 <code>SQL注入</code>。</li>
+<li>检查系统调用和下级函数的返回状态。</li>
+</ol>
+<p>在管理程序错误的出现、检查和处理时，要考虑以下因素：</p>
+<ol>
+<li>与其处理错误，不如提前避免它。</li>
+<li>定义程序在不正常环境的预期行为。</li>
+<li>清晰定义错误处理层次，不同组件负责哪个错误。</li>
+<li>不同情况选择合适的错误表达方式。有人认为对于不期望发生的事，可以采用异常，觉得可能发生的事可以使用返回码。</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://raygun.com/blog/errors-and-exceptions">https://raygun.com/blog/errors-and-exceptions</a></li>
+<li><a target="_blank" rel="noopener" href="https://raygun.com/blog/architecting-your-software-errors-for-better-error-reporting">https://raygun.com/blog/architecting-your-software-errors-for-better-error-reporting</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.inf.unibz.it/~calvanese/teaching/ip/lecture-notes/uni10.pdf">https://www.inf.unibz.it/~calvanese/teaching/ip/lecture-notes/uni10.pdf</a></li>
+<li><a target="_blank" rel="noopener" href="https://pdfs.semanticscholar.org/a834/36e314643ddb40bc7f84554e33488df4b51e.pdf">https://pdfs.semanticscholar.org/a834/36e314643ddb40bc7f84554e33488df4b51e.pdf</a></li>
+</ul>
+<hr>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">liaoli</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://www.cqull.com/2018/05/19/yi-chang-yu-cuo-wu-chu-li-tan-tao-gai-nian-jie-shao-shang/">http://www.cqull.com/2018/05/19/yi-chang-yu-cuo-wu-chu-li-tan-tao-gai-nian-jie-shao-shang/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">liaoli</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">
+                                    <span class="chip bg-color">编程语言</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%94%99%E8%AF%AF/">
+                                    <span class="chip bg-color">错误</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%BC%82%E5%B8%B8/">
+                                    <span class="chip bg-color">异常</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2018/05/19/yi-chang-yu-cuo-wu-chu-li-tan-tao-c-java-yi-chang-chu-li-zhong/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="异常与错误处理探讨-C# Java异常处理(中）">
+                        
+                        <span class="card-title">异常与错误处理探讨-C# Java异常处理(中）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            从 异常与错误处理探讨-概念介绍 知道， Java 和 C# 都有语言内置异常模块。本章中，我们会探讨两者异常的异同和一些最佳实践。
+
+异常体系java 和 C# 都有一套面向对象的异常继承体系，异常作为一个对象存在，拥有异常栈和异常链，使
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-05-19
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="post-category">
+                                    编程语言
+                                </a>
+                            
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%94%99%E8%AF%AF/" class="post-category">
+                                    错误
+                                </a>
+                            
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%94%99%E8%AF%AF/%E5%BC%82%E5%B8%B8/" class="post-category">
+                                    异常
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">
+                        <span class="chip bg-color">编程语言</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%94%99%E8%AF%AF/">
+                        <span class="chip bg-color">错误</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%BC%82%E5%B8%B8/">
+                        <span class="chip bg-color">异常</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/05/17/quan-mian-jie-shao-di-gui-di-gui-bian-cheng-ji-ben-gai-nian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="全面介绍递归-递归编程基本概念">
+                        
+                        <span class="card-title">全面介绍递归-递归编程基本概念</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+从前有座山,山上有座庙,庙里有个老和尚和一个小和尚,有一天,老和尚对小和尚说:从前有座山,山上有座庙,庙里有个老和尚和一个小和尚,有一天,老和尚对小和尚说:从前有座山,山上有座庙,庙里有个老和尚和一个小和尚,有一天,老和尚对小和尚说…….
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-05-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
+                                </a>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E9%80%92%E5%BD%92/" class="post-category">
+                                    递归
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">算法</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%80%92%E5%BD%92/">
+                        <span class="chip bg-color">递归</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + 'From: Li的博客<br />'
+            + 'Author: liaoli<br />'
+            + 'Link: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2018</span>
+            <a href="/about" target="_blank">liaoli</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">71.9k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+            <span id="icp"><img src="/medias/icp.png" style="vertical-align: text-bottom;" />
+                <a href="http://www.beian.gov.cn/# 备案链接" target="_blank">渝ICP备20008985号-1# 备案信息</a>
+            </span>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/cquliaoli" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:956168488@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=956168488" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 956168488" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

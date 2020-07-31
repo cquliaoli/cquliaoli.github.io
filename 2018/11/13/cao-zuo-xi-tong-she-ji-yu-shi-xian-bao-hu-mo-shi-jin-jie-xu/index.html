@@ -1,0 +1,1620 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="操作系统设计与实现-保护模式进阶（续）, Li的博客">
+    <meta name="description" content="读书笔记、技术文章">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>操作系统设计与实现-保护模式进阶（续） | Li的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.0.0"><link rel="alternate" href="/atom.xml" title="Li的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Li的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Li的博客</div>
+        <div class="logo-desc">
+            
+            读书笔记、技术文章
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">操作系统设计与实现-保护模式进阶（续）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                                <span class="chip bg-color">操作系统</span>
+                            </a>
+                        
+                            <a href="/tags/linux/">
+                                <span class="chip bg-color">linux</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/linux/" class="post-category">
+                                linux
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-11-13
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
+                    2018-11-15
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    6.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    28 Min
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>本节介绍内核加载和特权级相关内容。</p>
+<a id="more"></a>
+<h2 id="内核加载"><a href="#内核加载" class="headerlink" title="内核加载"></a>内核加载</h2><p>前面我们直接使用汇编语言编写代码，不过越是底层的语言，开发效率越低，后续开发内核大部分功能肯定还是要使用 C 语言，汇编语言编写代码编译后直接就是可执行二进制文件了，C 语言编写的代码却要经过编译、汇编到目标代码，然后由连接器链接后才变成可执行文件。如下代码：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">int main(void){
+  while (1) ;
+  return 0;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>只对其编译和汇编成目标代码：</p>
+<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">gcc -c -o main.o main.c
+file main.o
+#结果
+main.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到目标文件是<code>可重定位文件</code>，即其中的符号和函数的地址尚未确定。</p>
+<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">nm main.o
+#输出
+0000000000000000 T main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>如果用 <code>ld</code> 命令链接后：</p>
+<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">ld main.o -Ttext 0xc0001500 -e main -o kernel.bin
+file kernel.bin
+
+kernel.bin: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
+
+nm kernel.bin
+
+00000000c0004000 R __bss_start
+00000000c0004000 R _edata
+00000000c0004000 R _end
+00000000c0001500 T main
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以发现链接后 <code>kernel.bin</code>变成了可执行文件，且 <code>main</code> 有了相应地址。</p>
+<h3 id="二级制程序运行方法"><a href="#二级制程序运行方法" class="headerlink" title="二级制程序运行方法"></a>二级制程序运行方法</h3><p>前面的 <code>mbr</code> 和 <code>loader</code> 的地址都是硬编码在 <code>0x7c00</code> 和 <code>0x900</code> 处，那有没有一种灵活指定程序加载地址的方式呢？很容易想到，我们需要相应的数据结构描述要加载程序的元信息，比如入口地址、大小等。其实各种协议已经为我们指明了方向，如 <code>http</code> 协议，就是由消息头和消息体组成，消息头是元信息描述了请求方法、消息内容格式、消息大小等等，比如各种消息中间件的消息格式等都是按照这种方式实现。<br>所以我们也可以用同样的方式描述可执行文件，如下图所示：</p>
+<p><img src="ph.png" alt="ph.png"></p>
+<h3 id="elf格式"><a href="#elf格式" class="headerlink" title="elf格式"></a>elf格式</h3><p>上面介绍的描述二进制文件的格式在<code>linux</code>下就是 <code>elf</code>。</p>
+<p><img src="elf.png" alt="elf.png"></p>
+<p><img src="elf1.png" alt="elf1.png"></p>
+<p><code>elf header</code> 数据类型如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+/* Type for a 16-bit quantity.  */
+typedef uint16_t Elf32_Half;
+typedef uint16_t Elf64_Half;
+
+/* Types for signed and unsigned 32-bit quantities.  */
+typedef uint32_t Elf32_Word;
+typedef    int32_t  Elf32_Sword;
+typedef uint32_t Elf64_Word;
+typedef    int32_t  Elf64_Sword;
+
+/* Types for signed and unsigned 64-bit quantities.  */
+typedef uint64_t Elf32_Xword;
+typedef    int64_t  Elf32_Sxword;
+typedef uint64_t Elf64_Xword;
+typedef    int64_t  Elf64_Sxword;
+
+/* Type of addresses.  */
+typedef uint32_t Elf32_Addr;
+typedef uint64_t Elf64_Addr;
+
+/* Type of file offsets.  */
+typedef uint32_t Elf32_Off;
+typedef uint64_t Elf64_Off;
+
+/* Type for section indices, which are 16-bit quantities.  */
+typedef uint16_t Elf32_Section;
+typedef uint16_t Elf64_Section;
+
+/* Type for version symbol information.  */
+typedef Elf32_Half Elf32_Versym;
+typedef Elf64_Half Elf64_Versym;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>elf header</code> 结构如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct
+{
+  unsigned char    e_ident[EI_NIDENT];    /* Magic number and other info */
+  Elf32_Half    e_type;            /* Object file type */
+  Elf32_Half    e_machine;        /* Architecture */
+  Elf32_Word    e_version;        /* Object file version */
+  Elf32_Addr    e_entry;        /* Entry point virtual address */
+  Elf32_Off    e_phoff;        /* Program header table file offset */
+  Elf32_Off    e_shoff;        /* Section header table file offset */
+  Elf32_Word    e_flags;        /* Processor-specific flags */
+  Elf32_Half    e_ehsize;        /* ELF header size in bytes */
+  Elf32_Half    e_phentsize;        /* Program header table entry size */
+  Elf32_Half    e_phnum;        /* Program header table entry count */
+  Elf32_Half    e_shentsize;        /* Section header table entry size */
+  Elf32_Half    e_shnum;        /* Section header table entry count */
+  Elf32_Half    e_shstrndx;        /* Section header string table index */
+} Elf32_Ehdr;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中以下几个字节比较重要：</p>
+<ul>
+<li>Elf32_Addr    e_entry;        /* Entry point virtual address */ 程序入口虚拟地址</li>
+<li>Elf32_Off    e_phoff;        /* Program header table file offset */ 程序头表在文件内的字节偏移量</li>
+<li>Elf32_Half    e_ehsize;        /* ELF header size in bytes */</li>
+<li>Elf32_Half    e_phentsize;        /* Program header table entry size */每个条目的代谢即后面介绍的 struct Elf32_Phdr</li>
+<li>Elf32_Half    e_phnum;        /* Program header table entry count */</li>
+</ul>
+<p><code>struct Elf32_Phdr</code> 用来描述各个段的信息，其功能类似与 GDT 中段描述符。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">/* Program segment header.  */
+
+typedef struct
+{
+  Elf32_Word    p_type;            /* Segment type */
+  Elf32_Off    p_offset;        /* Segment file offset */
+  Elf32_Addr    p_vaddr;        /* Segment virtual address */
+  Elf32_Addr    p_paddr;        /* Segment physical address */
+  Elf32_Word    p_filesz;        /* Segment size in file */
+  Elf32_Word    p_memsz;        /* Segment size in memory */
+  Elf32_Word    p_flags;        /* Segment flags */
+  Elf32_Word    p_align;        /* Segment alignment */
+} Elf32_Phdr;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="elf实例分析"><a href="#elf实例分析" class="headerlink" title="elf实例分析"></a>elf实例分析</h3><p>为了查看 <code>elf</code> 的内部，可以使用 <code>xxd</code> 命令：</p>
+<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">xxd -u -a -g l -s $2 -l $3 $1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其中第一个参数为待查看文件名，第二个为文件的起始字节，第三个参数代表查看的长度。</p>
+<p><img src="elf2.png" alt="elf2.png"></p>
+<p>有兴趣可以逐一分析，不过注意这里结果是 <code>64</code> 环境，所以应该对照 64 位系统的 <code>elf</code>。</p>
+<h2 id="将内核载入内存"><a href="#将内核载入内存" class="headerlink" title="将内核载入内存"></a>将内核载入内存</h2><p>磁盘规划如下图所示：</p>
+<p> <img src="disk.png" alt="disk.png"></p>
+<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">sudo gcc -c -o main.o main.c &amp;&amp;ld main.o -Ttext 0xc0001500 -e main -o kernel.bin &amp;&amp; sudo  dd if=kernel.bin of=/usr/local/bin/hd60M.img bs=512 count=200 seek=9 conv=notrunc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>接下来 <code>loader.S</code> 需要修改两个地方：</p>
+<ul>
+<li>加载内核：将内核文件加载到内核缓冲区</li>
+<li>初始化内核：分页后，将加载进来的 elf 内核文件放置到相应虚拟内存地址，然后跳过去执行</li>
+</ul>
+<p>0x500~0x9fbff 可用内存分布图如下：</p>
+<p> <img src="mem.png" alt="mem.png"></p>
+<pre class="line-numbers language-arm" data-language="arm"><code class="language-arm">%include "boot.inc"
+section loader vstart=LOADER_BASE_ADDR
+;构建gdt及其内部的描述符
+GDT_BASE:   dd    0x00000000
+      dd    0x00000000
+
+CODE_DESC:  dd    0x0000FFFF
+      dd    DESC_CODE_HIGH4
+
+DATA_STACK_DESC:  dd    0x0000FFFF
+      dd    DESC_DATA_HIGH4
+
+VIDEO_DESC: dd    0x80000007           ; limit=(0xbffff-0xb8000)/4k=0x7
+      dd    DESC_VIDEO_HIGH4  ; 此时dpl为0
+
+GDT_SIZE   equ   $ - GDT_BASE
+GDT_LIMIT   equ   GDT_SIZE -    1
+times 60 dq 0                     ; 此处预留60个描述符的空位(slot)
+SELECTOR_CODE equ (0x0001&lt;&lt;3) + TI_GDT + RPL0         ; 相当于(CODE_DESC - GDT_BASE)/8 + TI_GDT + RPL0
+SELECTOR_DATA equ (0x0002&lt;&lt;3) + TI_GDT + RPL0     ; 同上
+SELECTOR_VIDEO equ (0x0003&lt;&lt;3) + TI_GDT + RPL0     ; 同上
+
+; total_mem_bytes用于保存内存容量,以字节为单位,此位置比较好记。
+; 当前偏移loader.bin文件头0x200字节,loader.bin的加载地址是0x900,
+; 故total_mem_bytes内存中的地址是0xb00.将来在内核中咱们会引用此地址
+total_mem_bytes dd 0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;以下是定义gdt的指针，前2字节是gdt界限，后4字节是gdt起始地址
+gdt_ptr  dw  GDT_LIMIT
+   dd  GDT_BASE
+
+;人工对齐:total_mem_bytes4字节+gdt_ptr6字节+ards_buf244字节+ards_nr2,共256字节
+ards_buf times 244 db 0
+ards_nr dw 0              ;用于记录ards结构体数量
+
+loader_start:
+
+;-------  int 15h eax = 0000E820h ,edx = 534D4150h ('SMAP') 获取内存布局  -------
+
+xor ebx, ebx              ;第一次调用时，ebx值要为0
+mov edx, 0x534d4150          ;edx只赋值一次，循环体中不会改变
+mov di, ards_buf          ;ards结构缓冲区
+.e820_mem_get_loop:          ;循环获取每个ARDS内存范围描述结构
+mov eax, 0x0000e820          ;执行int 0x15后,eax值变为0x534d4150,所以每次执行int前都要更新为子功能号。
+mov ecx, 20              ;ARDS地址范围描述符结构大小是20字节
+int 0x15
+jc .e820_failed_so_try_e801   ;若cf位为1则有错误发生，尝试0xe801子功能
+add di, cx              ;使di增加20字节指向缓冲区中新的ARDS结构位置
+inc word [ards_nr]          ;记录ARDS数量
+cmp ebx, 0              ;若ebx为0且cf不为1,这说明ards全部返回，当前已是最后一个
+jnz .e820_mem_get_loop
+
+;在所有ards结构中，找出(base_add_low + length_low)的最大值，即内存的容量。
+mov cx, [ards_nr]          ;遍历每一个ARDS结构体,循环次数是ARDS的数量
+mov ebx, ards_buf
+xor edx, edx              ;edx为最大的内存容量,在此先清0
+.find_max_mem_area:          ;无须判断type是否为1,最大的内存块一定是可被使用
+mov eax, [ebx]          ;base_add_low
+add eax, [ebx+8]          ;length_low
+add ebx, 20              ;指向缓冲区中下一个ARDS结构
+cmp edx, eax              ;冒泡排序，找出最大,edx寄存器始终是最大的内存容量
+jge .next_ards
+mov edx, eax              ;edx为总内存大小
+.next_ards:
+loop .find_max_mem_area
+jmp .mem_get_ok
+
+;------  int 15h ax = E801h 获取内存大小,最大支持4G  ------
+; 返回后, ax cx 值一样,以KB为单位,bx dx值一样,以64KB为单位
+; 在ax和cx寄存器中为低16M,在bx和dx寄存器中为16MB到4G。
+.e820_failed_so_try_e801:
+mov ax,0xe801
+int 0x15
+jc .e801_failed_so_try88   ;若当前e801方法失败,就尝试0x88方法
+
+;1 先算出低15M的内存,ax和cx中是以KB为单位的内存数量,将其转换为以byte为单位
+mov cx,0x400         ;cx和ax值一样,cx用做乘数
+mul cx
+shl edx,16
+and eax,0x0000FFFF
+or edx,eax
+add edx, 0x100000 ;ax只是15MB,故要加1MB
+mov esi,edx         ;先把低15MB的内存容量存入esi寄存器备份
+
+;2 再将16MB以上的内存转换为byte为单位,寄存器bx和dx中是以64KB为单位的内存数量
+xor eax,eax
+mov ax,bx
+mov ecx, 0x10000    ;0x10000十进制为64KB
+mul ecx        ;32位乘法,默认的被乘数是eax,积为64位,高32位存入edx,低32位存入eax.
+add esi,eax        ;由于此方法只能测出4G以内的内存,故32位eax足够了,edx肯定为0,只加eax便可
+mov edx,esi        ;edx为总内存大小
+jmp .mem_get_ok
+
+;-----------------  int 15h ah = 0x88 获取内存大小,只能获取64M之内  ----------
+.e801_failed_so_try88:
+;int 15后，ax存入的是以kb为单位的内存容量
+mov  ah, 0x88
+int  0x15
+jc .error_hlt
+and eax,0x0000FFFF
+
+;16位乘法，被乘数是ax,积为32位.积的高16位在dx中，积的低16位在ax中
+mov cx, 0x400     ;0x400等于1024,将ax中的内存容量换为以byte为单位
+mul cx
+shl edx, 16         ;把dx移到高16位
+or edx, eax         ;把积的低16位组合到edx,为32位的积
+add edx,0x100000  ;0x88子功能只会返回1MB以上的内存,故实际内存大小要加上1MB
+
+.mem_get_ok:
+mov [total_mem_bytes], edx     ;将内存换为byte单位后存入total_mem_bytes处。
+
+
+;-----------------   准备进入保护模式   -------------------
+;1 打开A20
+;2 加载gdt
+;3 将cr0的pe位置1
+
+;-----------------  打开A20  ----------------
+in al,0x92
+or al,0000_0010B
+out 0x92,al
+
+;-----------------  加载GDT  ----------------
+lgdt [gdt_ptr]
+
+;-----------------  cr0第0位置1  ----------------
+mov eax, cr0
+or eax, 0x00000001
+mov cr0, eax
+
+jmp dword SELECTOR_CODE:p_mode_start         ; 刷新流水线，避免分支预测的影响,这种cpu优化策略，最怕jmp跳转，
+            ; 这将导致之前做的预测失效，从而起到了刷新的作用。
+.error_hlt:              ;出错则挂起
+hlt
+
+[bits 32]
+p_mode_start:
+mov ax, SELECTOR_DATA
+mov ds, ax
+mov es, ax
+mov ss, ax
+mov esp,LOADER_STACK_TOP
+mov ax, SELECTOR_VIDEO
+mov gs, ax
+
+; -------------------------   加载kernel  ----------------------
+mov eax, KERNEL_START_SECTOR        ; kernel.bin所在的扇区号
+mov ebx, KERNEL_BIN_BASE_ADDR       ; 从磁盘读出后，写入到ebx指定的地址
+mov ecx, 200                   ; 读入的扇区数
+
+call rd_disk_m_32
+
+; 创建页目录及页表并初始化页内存位图
+call setup_page
+
+;要将描述符表地址及偏移量写入内存gdt_ptr,一会用新地址重新加载
+sgdt [gdt_ptr]          ; 存储到原来gdt所有的位置
+
+;将gdt描述符中视频段描述符中的段基址+0xc0000000
+mov ebx, [gdt_ptr + 2]
+or dword [ebx + 0x18 + 4], 0xc0000000      ;视频段是第3个段描述符,每个描述符是8字节,故0x18。
+             ;段描述符的高4字节的最高位是段基址的31~24位
+
+;将gdt的基址加上0xc0000000使其成为内核所在的高地址
+add dword [gdt_ptr + 2], 0xc0000000
+
+add esp, 0xc0000000        ; 将栈指针同样映射到内核地址
+
+; 把页目录地址赋给cr3
+mov eax, PAGE_DIR_TABLE_POS
+mov cr3, eax
+
+; 打开cr0的pg位(第31位)
+mov eax, cr0
+or eax, 0x80000000
+mov cr0, eax
+
+;在开启分页后,用gdt新的地址重新加载
+lgdt [gdt_ptr]             ; 重新加载
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;  此时不刷新流水线也没问题  ;;;;;;;;;;;;;;;;;;;;;;;;
+;由于一直处在32位下,原则上不需要强制刷新,经过实际测试没有以下这两句也没问题.
+;但以防万一，还是加上啦，免得将来出来莫句奇妙的问题.
+jmp SELECTOR_CODE:enter_kernel      ;强制刷新流水线,更新gdt
+enter_kernel:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+call kernel_init
+mov esp, 0xc009f000
+jmp KERNEL_ENTRY_POINT                 ; 用地址0x1500访问测试，结果ok
+
+
+;-----------------   将kernel.bin中的segment拷贝到编译的地址   -----------
+kernel_init:
+xor eax, eax
+xor ebx, ebx        ;ebx记录程序头表地址
+xor ecx, ecx        ;cx记录程序头表中的program header数量
+xor edx, edx        ;dx 记录program header尺寸,即e_phentsize
+
+mov dx, [KERNEL_BIN_BASE_ADDR + 42]      ; 偏移文件42字节处的属性是e_phentsize,表示program header大小
+mov ebx, [KERNEL_BIN_BASE_ADDR + 28]   ; 偏移文件开始部分28字节的地方是e_phoff,表示第1 个program header在文件中的偏移量
+         ; 其实该值是0x34,不过还是谨慎一点，这里来读取实际值
+add ebx, KERNEL_BIN_BASE_ADDR
+mov cx, [KERNEL_BIN_BASE_ADDR + 44]    ; 偏移文件开始部分44字节的地方是e_phnum,表示有几个program header
+.each_segment:
+cmp byte [ebx + 0], PT_NULL          ; 若p_type等于 PT_NULL,说明此program header未使用。
+je .PTNULL
+
+;为函数memcpy压入参数,参数是从右往左依然压入.函数原型类似于 memcpy(dst,src,size)
+push dword [ebx + 16]          ; program header中偏移16字节的地方是p_filesz,压入函数memcpy的第三个参数:size
+mov eax, [ebx + 4]              ; 距程序头偏移量为4字节的位置是p_offset
+add eax, KERNEL_BIN_BASE_ADDR      ; 加上kernel.bin被加载到的物理地址,eax为该段的物理地址
+push eax                  ; 压入函数memcpy的第二个参数:源地址
+push dword [ebx + 8]              ; 压入函数memcpy的第一个参数:目的地址,偏移程序头8字节的位置是p_vaddr，这就是目的地址
+call mem_cpy                  ; 调用mem_cpy完成段复制
+add esp,12                  ; 清理栈中压入的三个参数
+.PTNULL:
+add ebx, edx                  ; edx为program header大小,即e_phentsize,在此ebx指向下一个program header
+loop .each_segment
+ret
+
+;----------  逐字节拷贝 mem_cpy(dst,src,size) ------------
+;输入:栈中三个参数(dst,src,size)
+;输出:无
+;---------------------------------------------------------
+mem_cpy:
+cld
+push ebp
+mov ebp, esp
+push ecx           ; rep指令用到了ecx，但ecx对于外层段的循环还有用，故先入栈备份
+mov edi, [ebp + 8]       ; dst
+mov esi, [ebp + 12]       ; src
+mov ecx, [ebp + 16]       ; size
+rep movsb           ; 逐字节拷贝
+
+;恢复环境
+pop ecx
+pop ebp
+ret
+
+
+;-------------   创建页目录及页表   ---------------
+setup_page:
+;先把页目录占用的空间逐字节清0
+mov ecx, 4096
+mov esi, 0
+.clear_page_dir:
+mov byte [PAGE_DIR_TABLE_POS + esi], 0
+inc esi
+loop .clear_page_dir
+
+;开始创建页目录项(PDE)
+.create_pde:                     ; 创建Page Directory Entry
+mov eax, PAGE_DIR_TABLE_POS
+add eax, 0x1000                  ; 此时eax为第一个页表的位置及属性
+mov ebx, eax                     ; 此处为ebx赋值，是为.create_pte做准备，ebx为基址。
+
+;   下面将页目录项0和0xc00都存为第一个页表的地址，
+;   一个页表可表示4MB内存,这样0xc03fffff以下的地址和0x003fffff以下的地址都指向相同的页表，
+;   这是为将地址映射为内核地址做准备
+or eax, PG_US_U | PG_RW_W | PG_P         ; 页目录项的属性RW和P位为1,US为1,表示用户属性,所有特权级别都可以访问.
+mov [PAGE_DIR_TABLE_POS + 0x0], eax       ; 第1个目录项,在页目录表中的第1个目录项写入第一个页表的位置(0x101000)及属性(3)
+mov [PAGE_DIR_TABLE_POS + 0xc00], eax     ; 一个页表项占用4字节,0xc00表示第768个页表占用的目录项,0xc00以上的目录项用于内核空间,
+            ; 也就是页表的0xc0000000~0xffffffff共计1G属于内核,0x0~0xbfffffff共计3G属于用户进程.
+sub eax, 0x1000
+mov [PAGE_DIR_TABLE_POS + 4092], eax         ; 使最后一个目录项指向页目录表自己的地址
+
+;下面创建页表项(PTE)
+mov ecx, 256                     ; 1M低端内存 / 每页大小4k = 256
+mov esi, 0
+mov edx, PG_US_U | PG_RW_W | PG_P         ; 属性为7,US=1,RW=1,P=1
+.create_pte:                     ; 创建Page Table Entry
+mov [ebx+esi*4],edx                 ; 此时的ebx已经在上面通过eax赋值为0x101000,也就是第一个页表的地址
+add edx,4096
+inc esi
+loop .create_pte
+
+;创建内核其它页表的PDE
+mov eax, PAGE_DIR_TABLE_POS
+add eax, 0x2000              ; 此时eax为第二个页表的位置
+or eax, PG_US_U | PG_RW_W | PG_P  ; 页目录项的属性RW和P位为1,US为0
+mov ebx, PAGE_DIR_TABLE_POS
+mov ecx, 254                 ; 范围为第769~1022的所有目录项数量
+mov esi, 769
+.create_kernel_pde:
+mov [ebx+esi*4], eax
+inc esi
+add eax, 0x1000
+loop .create_kernel_pde
+ret
+
+
+;-------------------------------------------------------------------------------
+      ;功能:读取硬盘n个扇区
+rd_disk_m_32:
+;-------------------------------------------------------------------------------
+            ; eax=LBA扇区号
+            ; ebx=将数据写入的内存地址
+            ; ecx=读入的扇区数
+   mov esi,eax       ; 备份eax
+   mov di,cx           ; 备份扇区数到di
+;读写硬盘:
+;第1步：设置要读取的扇区数
+   mov dx,0x1f2
+   mov al,cl
+   out dx,al            ;读取的扇区数
+
+   mov eax,esi       ;恢复ax
+
+;第2步：将LBA地址存入0x1f3 ~ 0x1f6
+
+   ;LBA地址7~0位写入端口0x1f3
+   mov dx,0x1f3
+   out dx,al
+
+   ;LBA地址15~8位写入端口0x1f4
+   mov cl,8
+   shr eax,cl
+   mov dx,0x1f4
+   out dx,al
+
+   ;LBA地址23~16位写入端口0x1f5
+   shr eax,cl
+   mov dx,0x1f5
+   out dx,al
+
+   shr eax,cl
+   and al,0x0f       ;lba第24~27位
+   or al,0xe0       ; 设置7～4位为1110,表示lba模式
+   mov dx,0x1f6
+   out dx,al
+
+;第3步：向0x1f7端口写入读命令，0x20
+   mov dx,0x1f7
+   mov al,0x20
+   out dx,al
+
+;;;;;;; 至此,硬盘控制器便从指定的lba地址(eax)处,读出连续的cx个扇区,下面检查硬盘状态,不忙就能把这cx个扇区的数据读出来
+
+;第4步：检测硬盘状态
+.not_ready:           ;测试0x1f7端口(status寄存器)的的BSY位
+   ;同一端口,写时表示写入命令字,读时表示读入硬盘状态
+   nop
+   in al,dx
+   and al,0x88       ;第4位为1表示硬盘控制器已准备好数据传输,第7位为1表示硬盘忙
+   cmp al,0x08
+   jnz .not_ready       ;若未准备好,继续等。
+
+;第5步：从0x1f0端口读数据
+   mov ax, di       ;以下从硬盘端口读数据用insw指令更快捷,不过尽可能多的演示命令使用,
+      ;在此先用这种方法,在后面内容会用到insw和outsw等
+
+   mov dx, 256       ;di为要读取的扇区数,一个扇区有512字节,每次读入一个字,共需di*512/2次,所以di*256
+   mul dx
+   mov cx, ax
+   mov dx, 0x1f0
+.go_on_read:
+   in ax,dx
+   mov [ebx], ax
+   add ebx, 2
+     ; 由于在实模式下偏移地址为16位,所以用bx只会访问到0~FFFFh的偏移。
+     ; loader的栈指针为0x900,bx为指向的数据输出缓冲区,且为16位，
+     ; 超过0xffff后,bx部分会从0开始,所以当要读取的扇区数过大,待写入的地址超过bx的范围时，
+     ; 从硬盘上读出的数据会把0x0000~0xffff的覆盖，
+     ; 造成栈被破坏,所以ret返回时,返回地址被破坏了,已经不是之前正确的地址,
+     ; 故程序出会错,不知道会跑到哪里去。
+     ; 所以改为ebx代替bx指向缓冲区,这样生成的机器码前面会有0x66和0x67来反转。
+     ; 0X66用于反转默认的操作数大小! 0X67用于反转默认的寻址方式.
+     ; cpu处于16位模式时,会理所当然的认为操作数和寻址都是16位,处于32位模式时,
+     ; 也会认为要执行的指令是32位.
+     ; 当我们在其中任意模式下用了另外模式的寻址方式或操作数大小(姑且认为16位模式用16位字节操作数，
+     ; 32位模式下用32字节的操作数)时,编译器会在指令前帮我们加上0x66或0x67，
+     ; 临时改变当前cpu模式到另外的模式下.
+     ; 假设当前运行在16位模式,遇到0X66时,操作数大小变为32位.
+     ; 假设当前运行在32位模式,遇到0X66时,操作数大小变为16位.
+     ; 假设当前运行在16位模式,遇到0X67时,寻址方式变为32位寻址
+     ; 假设当前运行在32位模式,遇到0X67时,寻址方式变为16位寻址.
+
+   loop .go_on_read
+   ret
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上面内存拷贝函数模拟了 <code>memcpy</code> 函数，对应的栈如下图所示：</p>
+<p> <img src="stack.png" alt="stack.png"></p>
+<h2 id="特权级深入浅出"><a href="#特权级深入浅出" class="headerlink" title="特权级深入浅出"></a>特权级深入浅出</h2><p>保护模式的保护主要提现在特权级上，操作系统作为各种计算机资源的管理者，各种各样的第三方程序都会运行在它提供的环境中，为了保证系统的可持续、安全的运行，就要防止恶意程序破坏系统资源。CPU 在这方面为我们从硬件上提供了支持，程序拥有的权限被分成0、1、2、3级，0级最大，3级最小类似一个特权级环：</p>
+<p> <img src="ring.png" alt="ring.png"></p>
+<h3 id="TSS"><a href="#TSS" class="headerlink" title="TSS"></a>TSS</h3><p><code>TSS</code> 是为了在 CPU 内部为了支持多任务的实现方式，如下图示：</p>
+<p> <img src="tss.png" alt="tss.png"></p>
+<p> 可以看到 <code>TSS</code> 有 3 个栈 ss0、esp0、ss1、esp1、ss2、esp2 ，这些栈就是为了任务切换时使用，可以想象，在发送任务切换时，CPU 有可能从低特权级跑到高特权级执行，总不能使用同一个栈吧？所以，不同特权级使用的栈是不一样的。<br> 特权级转移分为两类，一类是由中断门、调用门等使低特权级转向高特权级，另一类则由调用返回指令从高特权级转向低特权级。</p>
+<h3 id="CPL-和-DPL"><a href="#CPL-和-DPL" class="headerlink" title="CPL 和 DPL"></a>CPL 和 DPL</h3><p>对于 CPU 来说任何访问无外乎<code>数据</code>和<code>指令</code>，而在 <code>x86</code> 架构中内存访问是基于<code>段</code>的，所以位于选择子中的<code>RPL</code> 以及描述符中的<code>DPL</code>就至关重要了。<code>CPL</code>即转移后的<code>DPL</code>，<code>CPL</code>代表当前的特权级，而<code>DPL</code>代表受访者的特权级。</p>
+<ul>
+<li>对于受访者为数据段（代码段描述符type字段未有X执行属性），则只有访问者权限大于受访者 DPL，才能访问。</li>
+<li>对于受访者为代码段，则只有访问者权限等于受访者DPL才能访问，即平级访问。你可能想为什么不能降级访问？试想如果能降级访问，CPU在高权限级别时，可能被低权限级别代码引导执行恶意代码。</li>
+<li>低权限级别难道不能提升权限吗？通过一致性代码，可以从低权限级别暂时提升至高权限，即满足数值上，CPL&gt;=一致性代码段的DPL，不过转移后特权级保持不变，所以这种权限提升本质上只是跑到特权级更高的代码段执行指令。常用与数学库的调用。</li>
+</ul>
+<h3 id="门、调用门和RPL"><a href="#门、调用门和RPL" class="headerlink" title="门、调用门和RPL"></a>门、调用门和RPL</h3><p>由于常用的系统调用如磁盘读写、网络服务等都在高特权级，用户代码要使用这些功能该怎么办？答案是通过门结构：</p>
+<p> <img src="call.png" alt="call.png"></p>
+<p>从上面可以看出，门描述符有三个东西值得注意：</p>
+<ul>
+<li>选择子，这里选择子选择的是GDT、LDT和IDT里面内容。</li>
+<li>偏移量，通过选择子确定了段描述符后，还要偏移量才能确定最终的程序地址</li>
+<li>DPL，门描述符里面也有DPL，而选择子对应的 GDT 段描述符也有 DPL。</li>
+</ul>
+<p>门的作用就是让低权限能够转移到高权限，不过访问者权限至少得大于门的DPL，所以满足的条件是：</p>
+<pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">DPL_GATE&gt;=CPL&gt;=DPL_CODE （即访问者 CPL权限至少大于等于门DPL，CPL权限小于目标代码段DPL）<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>通过门实现了“蹦床”的功能：</p>
+<p><img src="bance.png" alt="bance.png"></p>
+<p>门的调用过程如下：</p>
+<p><img src="call1.png" alt="call1.png"></p>
+<h3 id="调用门的过程保护"><a href="#调用门的过程保护" class="headerlink" title="调用门的过程保护"></a>调用门的过程保护</h3><p>门调用涉及两个特权级，所以CPU 可能需要不同的栈，刚刚讲了混用同一个栈，会带来混乱。<br>在门调用过程中，除了特权级的检测外，如果涉及到低特权级向高特权级转移，除了将<code>CS</code>和<code>EIP</code>入栈，还需要将 <code>SS</code>和<code>ESP</code>入栈。如下图示：</p>
+<p><img src="stacksw.png" alt="stacksw.png"></p>
+<p>当处理器执行<code>retf</code>指令返回时，需要回复<code>CS</code>和<code>EIP</code>，以及<code>SS</code>和<code>ESP</code>，同样也要进行特权级检测。</p>
+<p><strong>注意：如果返回时需要改变特权级，将检测<code>DS</code>、<code>ES</code>、<code>FS</code>、<code>GS</code>内容，如果某个寄存器选择子指向的数据段描述符的DPL权限比返回后的CPL（CS.RPL）高，则处理器将 0 填充到相应的段寄存器。</strong></p>
+<p>因为段寄存器填充 0 会触发异常，这样就可以避免恶意操作。</p>
+<h3 id="RPL"><a href="#RPL" class="headerlink" title="RPL"></a>RPL</h3><p>其实特权级最容易混淆的地方就在于 <code>RPL</code>，网上很多文章都没有解释清楚，通过例子就很容易说明白。假设系统调用 <code>syswrite</code>，其定义如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">syswrite(LBA,selector,offset);将LBA地址的内容写入到选择子位selector，偏移量为offset的内存位置<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果仅仅靠刚刚说的公式：<code>DPL_GATE&gt;=CPL&gt;=DPL_CODE</code> ，显然是满足的，当CPU从用户空间陷入内核后，其CPL变成 0 ，现在任意代码和内存位置CPU都是可以执行和访问的，假设恶意用户把<code>selector</code> 和<code>offset</code> 设置到内核区，那么该系统调用将会破坏系统内核！！这种现象叫做<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/36617718/difference-between-dpl-and-rpl-in-x86" title="权限扩大">privilege escalation vulnerability</a>过程如下：</p>
+<p><img src="rpl.png" alt="rpl.png"></p>
+<p>问题出在哪儿呢？其实很简单，我们需要标识谁才是真正的请求者，即<code>RPL</code>。<code>RPL</code> 可能是真正运行的程序，也可能不是，比如上面的系统调用，<code>RPL</code> 是用户程序。这样一来，在作特权级检测时就需要考虑 <code>RPL</code>了。</p>
+<h4 id="对数据段的访问"><a href="#对数据段的访问" class="headerlink" title="对数据段的访问"></a>对数据段的访问</h4><p>对数据段（DS, ES, FS, GS, SS）的访问要作如下检测：</p>
+<ul>
+<li>The CPL (current privilege level).</li>
+<li>The RPL (requestor’s privilege level) of the selector used to specify the target segment.</li>
+<li>The DPL of the descriptor of the target segment.</li>
+</ul>
+<p>数值上，CPL&lt;=DPL&amp;&amp;RPL&lt;=DPL</p>
+<p><img src="data.png" alt="data.png"></p>
+<h4 id="对代码段的访问"><a href="#对代码段的访问" class="headerlink" title="对代码段的访问"></a>对代码段的访问</h4><ul>
+<li>Load a data-segment register with a selector of a nonconforming, readable, executable segment.</li>
+<li>Load a data-segment register with a selector of a conforming, readable, executable segment.</li>
+<li>Use a CS override prefix to read a readable, executable segment whose selector is already loaded in the CS register.</li>
+</ul>
+<p>The same rules as for access to data segments apply to case 1. Case 2 is always valid because the privilege level of a segment whose conforming bit is set is effectively the same as CPL regardless of its DPL. Case 3 always valid because the DPL of the code segment in CS is, by definition, equal to CPL.</p>
+<p>涉及到代码段转移的只有 JMP, CALL, RET, INT, and IRET指令，针对没有使用门结构的情况会检测如下项：</p>
+<ul>
+<li>The CPL (current privilege level).</li>
+<li>The DPL of the descriptor of the target segment.</li>
+</ul>
+<p>JMP 或 CALL 必须满足如下条件，注意（在非一致性代码下，JMP只能平级转移）：<br>DPL of the target is equal to CPL.<br>The conforming bit of the target code-segment descriptor is set, and the DPL of the target is less than or equal to CPL.</p>
+<p><img src="data.png" alt="data.png"></p>
+<p>如果涉及到门调用情况下，权限验证会涉及一下项目：</p>
+<ul>
+<li>The CPL (current privilege level).</li>
+<li>The RPL (requestor’s privilege level) of the selector used to specify the call gate.</li>
+<li>The DPL of the gate descriptor.</li>
+<li>The DPL of the descriptor of the target executable segment.</li>
+</ul>
+<p>For a JMP instruction to a nonconforming segment, both of the following privilege rules must be satisfied; otherwise, a general protection exception results.</p>
+<ul>
+<li>MAX (CPL,RPL) &lt;= gate DPL</li>
+<li>target segment DPL = CPL</li>
+</ul>
+<p>For a CALL instruction (or for a JMP instruction to a conforming segment), both of the following privilege rules must be satisfied; otherwise, a general protection exception results.</p>
+<ul>
+<li>MAX (CPL,RPL) &lt;= gate DPL</li>
+<li>target segment DPL &lt;= CPL</li>
+</ul>
+<p><img src="gate.png" alt="gate.png"></p>
+<p><img src="gate1.png" alt="gate1.png"></p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ul>
+<li>RPL 是历史遗留产物，以前内存访问需要通过多个段切换，而现在都是平坦模型，操作系统会定义一个代码段和内存段给所有程序共享使用。</li>
+<li>RPL 不是必须的，其实当我们系统调用时，操作系统能够通过入栈的 CS 找到对应的特权级，进而进行特权级检测，不过通过RPL更加优雅，对应系统调用中的 RPL 会被强制设置为CPL对应的权限，CPU 提供了专门的指令修改 RPL，用户即使设置高权限的 RPL 也不能欺骗系统。</li>
+<li>现在操作系统都是通过页表访问，所以特权级检查也会在页上进行。</li>
+<li>CPU 的某些指令也是分特权级的，比如停机指令只能在最高特权级执行。</li>
+</ul>
+<h3 id="IO特权级"><a href="#IO特权级" class="headerlink" title="IO特权级"></a>IO特权级</h3><p>保护模式下，处理器的特权级不仅体现在数据和代码访问，还体现在指令以及IO访问中。寄存器的 IOPL 位就是IO特权级，每个任务都有 eflags ，只要数值上CPL&lt;=IOPL ，就可以访问所有 IO 端口，注意是所有端口。那么如果想控制部分端口开放情况咋办呢？毕竟不能所有检查都通过 CPU ，这就有了 IO 图。</p>
+<p><img src="io.png" alt="io.png"></p>
+<p>Intel处理器最大支持 65536 个端口，通过 <code>TSS</code>的 <code>IO图</code>可以控制部分端口打开情况，为什么图中左上角为 <code>oxFF</code>呢？原因有二：</p>
+<ul>
+<li>第一，处理器允许IO图不映射所有端口，即 IO图长度不足 8KB，最后一个字节为 <code>0xFF</code> 刚好可以充当边界的作用。</li>
+<li>第二，由于从一个端口读多个字节，实际上是同时读了连续的多个端口，所以 <code>0xFF</code> 可以避免越界访问。<hr>
+</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">liaoli</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://www.cqull.com/2018/11/13/cao-zuo-xi-tong-she-ji-yu-shi-xian-bao-hu-mo-shi-jin-jie-xu/">http://www.cqull.com/2018/11/13/cao-zuo-xi-tong-she-ji-yu-shi-xian-bao-hu-mo-shi-jin-jie-xu/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">liaoli</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                                    <span class="chip bg-color">操作系统</span>
+                                </a>
+                            
+                                <a href="/tags/linux/">
+                                    <span class="chip bg-color">linux</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2018/12/18/huan-cun-jia-gou/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="缓存架构">
+                        
+                        <span class="card-title">缓存架构</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本笔记主要记录高并发和高可用性场景下缓存架构问题。
+
+####
+
+
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+        
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-12-18
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BC%93%E5%AD%98/" class="post-category">
+                                    缓存
+                                </a>
+                            
+                            <a href="/categories/%E7%BC%93%E5%AD%98/redis/" class="post-category">
+                                    redis
+                                </a>
+                            
+                            <a href="/categories/%E7%BC%93%E5%AD%98/redis/memcache/" class="post-category">
+                                    memcache
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%BC%93%E5%AD%98/">
+                        <span class="chip bg-color">缓存</span>
+                    </a>
+                    
+                    <a href="/tags/redis/">
+                        <span class="chip bg-color">redis</span>
+                    </a>
+                    
+                    <a href="/tags/memcache/">
+                        <span class="chip bg-color">memcache</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/11/12/cao-zuo-xi-tong-she-ji-yu-shi-xian-bao-hu-mo-shi-jin-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="操作系统设计与实现-保护模式进阶">
+                        
+                        <span class="card-title">操作系统设计与实现-保护模式进阶</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本节将接受保护模式下的内存管理和处理器特权级内容。
+
+获取物理内存容量为了获取物理内存容量，可以使用 BIOS 提供的 0x15 号3个子功能：
+
+EAX=0xE820：遍历主机上全部内存
+AX=0xE801：分别检测低 15MB和 16M
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/linux/" class="post-category">
+                                    linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                        <span class="chip bg-color">操作系统</span>
+                    </a>
+                    
+                    <a href="/tags/linux/">
+                        <span class="chip bg-color">linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + 'From: Li的博客<br />'
+            + 'Author: liaoli<br />'
+            + 'Link: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2018</span>
+            <a href="/about" target="_blank">liaoli</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">71.9k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+            <span id="icp"><img src="/medias/icp.png" style="vertical-align: text-bottom;" />
+                <a href="http://www.beian.gov.cn/# 备案链接" target="_blank">渝ICP备20008985号-1# 备案信息</a>
+            </span>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/cquliaoli" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:956168488@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=956168488" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 956168488" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
