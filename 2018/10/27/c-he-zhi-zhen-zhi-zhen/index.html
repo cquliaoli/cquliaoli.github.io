@@ -417,10 +417,10 @@
 <p>比如下图所示：<br><img src="mem2.png" alt="mem2.png"><br>每个地址都有值，为了表示整数用了4个地址。如果都有地址引用肯定不方便，要是能用名字引用就好了，就行平时用人名标识某人一样，比用身份证号码方便多了。<br><img src="mem3.png" alt="mem3.png"><br>记住通过变量关联地址是编译器提供的支持，硬件仍然用地址访问内存。</p>
 <h2 id="值和类型"><a href="#值和类型" class="headerlink" title="值和类型"></a>值和类型</h2><p>对于平时使用的各种变量在内存里面都是一串串 0 1 数字，那么我们怎么判断它的类型呢，其实关键是我们怎么解析和看待它，例如以下内存数据就存在不同的解释：<br><img src="mem4.png" alt="mem4.png"><br>可能的数据类型如下：<br><img src="mem5.png" alt="mem5.png"></p>
 <h2 id="指针变量的内容"><a href="#指针变量的内容" class="headerlink" title="指针变量的内容"></a>指针变量的内容</h2><p>针对如下声明：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int a=112,b=-1;
-float c=3.14;
-int *d=&amp;a;
-float *e=&amp;c;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> a<span class="token operator">=</span><span class="token number">112</span><span class="token punctuation">,</span>b<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword">float</span> c<span class="token operator">=</span><span class="token number">3.14</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">*</span>d<span class="token operator">=</span><span class="token operator">&amp;</span>a<span class="token punctuation">;</span>
+<span class="token keyword">float</span> <span class="token operator">*</span>e<span class="token operator">=</span><span class="token operator">&amp;</span>c<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其内存分布如图所示：<br><img src="pointer.png" alt="pointer"><br>其中 <code>d</code> 和 <code>e</code> 的值比较特殊，刚好是 a 和 c 的地址。</p>
 <h2 id="间接访问操作符"><a href="#间接访问操作符" class="headerlink" title="间接访问操作符"></a>间接访问操作符</h2><p>从上面看出，由于指针变量的内容是其他变量的地址，那么我们是不是可以通过指针变量访问和操作其他变量了呢？答案是肯定的，这个访问过程叫做间接访问或者解引用指针，用单目操作符 <code>*</code> 表示。指针变量和其他变量的关系如下图所示：<br><img src="pointer2.png" alt="pointer2"><br>这里有两点需要注意：</p>
 <ol>
@@ -428,35 +428,35 @@ float *e=&amp;c;<span aria-hidden="true" class="line-numbers-rows"><span></span>
 <li>d 或 e 用的虚线，因为如果不对指针变量进行间接访问操作，<code>d或e</code> 中仅仅是地址值，要想访问地址对应的值，必须要间接访问操作符。</li>
 </ol>
 <h2 id="未初始化和非法的指针"><a href="#未初始化和非法的指针" class="headerlink" title="未初始化和非法的指针"></a>未初始化和非法的指针</h2><p>有如下代码：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int *a
-...
-*a=12;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token operator">*</span>a
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token operator">*</span>a<span class="token operator">=</span><span class="token number">12</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>以上语句的含义是，创建一个名为a的指针变量，并将12 赋值给<strong>a所指向的内存位置</strong>。但是请注意指针变量和其他变量并无区别，如果该指针变量是今天的，则初始化为0，但是变量是自动的，那么根本不会初始化，其值为垃圾值，这种情况下往往会造成“内存错误”、“保护性异常”等，更为严重的是如果这个地址恰巧是合法地址，这可能会引入及其隐蔽的bug。</p>
 <h2 id="NULL-指针"><a href="#NULL-指针" class="headerlink" title="NULL 指针"></a>NULL 指针</h2><p>正是由于上面提到的未初始化指针的危害，标准便定义了 NULL 指针，表明指针未初始化。NULL指针十分有用，比如某个方法正常运行便返回指向某个元素的指针，否则返回NULL指针。不过这儿NULL指针存在“一值多用”的风险，具有两层含义，一是有没有正常运行，二是返回结果。这在软件设计中是个风险，最好的做法是返回一个表明成功或失败的状态值，以及具体结果的值。</p>
 <h2 id="指针、间接访问和左值"><a href="#指针、间接访问和左值" class="headerlink" title="指针、间接访问和左值"></a>指针、间接访问和左值</h2><p>涉及到指针的表达式能不能作为左值呢？其实可以简单判断，如果能够将右值的结果放到左值指定的位置，那么就可以为左值。</p>
 <h2 id="指针、间接访问和变量"><a href="#指针、间接访问和变量" class="headerlink" title="指针、间接访问和变量"></a>指针、间接访问和变量</h2><p>请问如下语句的含义是什么？</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">*&amp;a=25;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token operator">*</span><span class="token operator">&amp;</span>a<span class="token operator">=</span><span class="token number">25</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>让我们分析下，&amp;a 是取变量a的地址，结果是一个指针常量，* 操作符代表访问操作数表示的地址，该地址就是变量a的地址，所以整个式子的意思就是将a赋值为25 与 <code>a=25</code> 等价。</p>
 <h2 id="指针常量"><a href="#指针常量" class="headerlink" title="指针常量"></a>指针常量</h2><p>假设变量a存储于地址100，那么下面的语句作用是什么呢？</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">*100=25<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token operator">*</span><span class="token number">100</span><span class="token operator">=</span><span class="token number">25</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>初看就是将变量a的内容赋值为25，不过语法上间接操作符只能作用于指针类型表达式，那么确实想将25存储于100地址怎么办呢？必须使用强类型转换：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">*(int *)100=25;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token number">100</span><span class="token operator">=</span><span class="token number">25</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>强制将正向转为指向整型的指针，这在语法上是合法的。不过平时极少这么使用，只有在需要通过内存地址访问某个特地位置时会出现。</p>
-<h2 id="指针的指针"><a href="#指针的指针" class="headerlink" title="指针的指针"></a>指针的指针</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c">int a=12;
-int *b=&amp;a;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="指针的指针"><a href="#指针的指针" class="headerlink" title="指针的指针"></a>指针的指针</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> a<span class="token operator">=</span><span class="token number">12</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">*</span>b<span class="token operator">=</span><span class="token operator">&amp;</span>a<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>通过前面的介绍，我们已经很熟悉 b 是指针变量，指向变量a：</p>
 <p><img src="p3.png" alt="p3"></p>
 <p>既然指针也是变量，那有没有可能另一个指针指向b呢？即 <code>c=&amp;b</code></p>
 <p><img src="p4.png" alt="p4"></p>
 <p>这似乎是合理的，不过c的类型是什么呢？显然它也是指针，指向的是什么呢？由于变量b是一个指向整型的指针，那么任何指向b的类型便是“指向整型的指针”的指针，即指针的指针。一般用 <code>int **c</code> 声明变量c，表达式 **c 的类型是int，下面列举了一些表达式：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int a=12;
-int *b=&amp;a;
-int **c=&amp;b;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> a<span class="token operator">=</span><span class="token number">12</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">*</span>b<span class="token operator">=</span><span class="token operator">&amp;</span>a<span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token operator">*</span><span class="token operator">*</span>c<span class="token operator">=</span><span class="token operator">&amp;</span>b<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>我们来分析 <code>int **c</code> ，首先 * 具有右结合性，我们必须<strong>由里向外逐层求值</strong>，*c访问的是c指向的位置，即变量b，第二个间接访问符访问变量b指向的地址即a。对应多级指针，我们只需要逐层分析即可。</p>
 <p><img src="p5.png" alt="p5"></p>
 <h2 id="指针表达式"><a href="#指针表达式" class="headerlink" title="指针表达式"></a>指针表达式</h2><p>我们通过以下语句了解指针表达式的各种情况：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">char ch='a';
-char *p=&amp;ch;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">char</span> ch<span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">;</span>
+<span class="token keyword">char</span> <span class="token operator">*</span>p<span class="token operator">=</span><span class="token operator">&amp;</span>ch<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="p6.png" alt="p6"></p>
 <p>后续使用表格区分其作为左值和右值的情况。</p>
 <p><img src="p7.png" alt="p7"></p>
@@ -1174,12 +1174,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

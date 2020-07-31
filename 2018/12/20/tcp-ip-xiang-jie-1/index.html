@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="详解, 技术分享">
+    <meta name="keywords" content="TCP/IP详解, 技术分享">
     <meta name="description" content="读书笔记、技术文章">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>详解 | Li的博客</title>
+    <title>TCP/IP详解 | Li的博客</title>
     <link rel="icon" type="image/png" href="/medias/blog32.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -224,12 +224,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">详解</h1>
+                    <h1 class="description center-align post-title">TCP/IP详解</h1>
                 </div>
             </div>
         </div>
@@ -394,7 +394,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2018-12-20
+                    2020-07-31
                 </div>
                 
 
@@ -433,10 +433,10 @@
 <li>运输层，由 TCP 和 UDP 组成， TCP 提供可靠传输，将应用层数据分层合适的块交给网络层，确认接收的分组，设置超时时间，总之，TCP 提供可靠的传输；UDP 刚好相反，为应用层提供简单的服务，不保证数据报能到达另一端。</li>
 <li>应用层，包含 <code>Telnet</code>、<code>FTP</code>、<code>SMTP</code>、<code>SNMP</code></li>
 </ol>
-<p><img src="D:\Blog\BlogOnGithub\cquliaoli.github.io\source_posts\TCP-IP详解-1\tcp.png" alt="1545317401054"></p>
+<p><img src="tcp.png" alt="1545317401054"></p>
 <p>TCP/IP 协议最精华的地方就在于分层和抽象，每一层可以看成是独立的，不用关心下一层的实现细节，每一层只需要完成该层的工作，每一层可以有不同的实现方式，是不是和面向接口不谋而合？</p>
 <h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3><p>由于整个协议分层设计，那么当有数据发送时，必然要<code>穿越</code>各个层次，并加上首部，以标识上一层信息。</p>
-<p><img src="D:\Blog\BlogOnGithub\cquliaoli.github.io\source_posts\TCP-IP详解-1\tcp1.png" alt="1545319475650"></p>
+<p><img src="tcp1.png" alt="1545319475650"></p>
 <h3 id="分用"><a href="#分用" class="headerlink" title="分用"></a>分用</h3><p>当主机收到一个以太网帧时，数据重协议栈由底向上升，同时去掉首部，并根据首部检查协议标识，以确定接收数据的上层协议，这个过程叫分用（Demultiplexing）。</p>
 <script>
         document.querySelectorAll('.github-emoji')
@@ -1129,12 +1129,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

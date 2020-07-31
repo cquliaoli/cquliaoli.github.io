@@ -470,13 +470,13 @@
 <h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>变量在内存中占据特定的位置，每个内存位置由一个确定的地址引用，指针便是地址的另一个名字。指针也是变量必然存在于内存中，也有一个地址，故存在指针的指针，正式由于指针的无线级联，使得 C 语言可以实现 tree 和 list 等复杂数据结构。<br>一定记住 <strong>指针=地址+类型</strong>，有了地址加上长度才有意义。</p>
 <h4 id="字符串常量"><a href="#字符串常量" class="headerlink" title="字符串常量"></a>字符串常量</h4><p>C 语言并没有字符串类型，它就是一串以 NULL 结尾的零或者多个字符。能否对字符串常量进行修改，不同的规范存在差异。<br>我们可以将字符串常量赋值给一个“指向字符的指针”，该指针指向字符串的起始地址，以什么结束呢？答案是 ‘\0’ ，不能将字符串常量赋值给字符数组，因为字符串常量的直接值是一个指针，而非字符本身。</p>
 <h2 id="基本声明"><a href="#基本声明" class="headerlink" title="基本声明"></a>基本声明</h2><h4 id="指针声明"><a href="#指针声明" class="headerlink" title="指针声明"></a>指针声明</h4><p>平时声明指针变量时，我们是怎么写的呢？</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int *a 还是 int* a ？<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token operator">*</span>a 还是 <span class="token keyword">int</span><span class="token operator">*</span> a ？<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p> int *a 表明 *a 产生的结果是 int ，但是 int* 也可以理解为 a 是 int* 的指针，不过这可能引起误解：<br>int* a,b,c 表明仅有a 是指针，b和c 是 int。</p>
 <h2 id="typedef"><a href="#typedef" class="headerlink" title="typedef"></a>typedef</h2><p>typedef 作用：</p>
 <ul>
 <li>使得声明更加简短</li>
-<li>便于维护和易读<br>应该使用 typedef 而不是 #define 创建新的类型名，因为：<pre class="line-numbers language-c" data-language="c"><code class="language-c">#define d_ptr_to_char char *
-d_ptr_to_char a,b //b被声明为一个字符<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<li>便于维护和易读<br>应该使用 typedef 而不是 #define 创建新的类型名，因为：<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">define</span> d_ptr_to_char char *</span>
+d_ptr_to_char a<span class="token punctuation">,</span>b <span class="token comment">//b被声明为一个字符</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 </li>
 </ul>
@@ -488,36 +488,36 @@ d_ptr_to_char a,b //b被声明为一个字符<span aria-hidden="true" class="lin
 <li>int const * const pci;//指针和它指向的值都不能修改</li>
 </ol>
 <p><strong>const 修饰啥，啥就是常量。</strong></p>
-<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><h3 id="代码块作用域"><a href="#代码块作用域" class="headerlink" title="代码块作用域"></a>代码块作用域</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c">int a;//文件作用域
-int b(int c);//c 具有原型作用域
-int d(int e){
-  int f;
-  int g(int h);
-  ...
-  {
-    int f,g,i //函数作用域
-  }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><h3 id="代码块作用域"><a href="#代码块作用域" class="headerlink" title="代码块作用域"></a>代码块作用域</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> a<span class="token punctuation">;</span><span class="token comment">//文件作用域</span>
+<span class="token keyword">int</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token keyword">int</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//c 具有原型作用域</span>
+<span class="token keyword">int</span> <span class="token function">d</span><span class="token punctuation">(</span><span class="token keyword">int</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">int</span> f<span class="token punctuation">;</span>
+  <span class="token keyword">int</span> <span class="token function">g</span><span class="token punctuation">(</span><span class="token keyword">int</span> h<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> f<span class="token punctuation">,</span>g<span class="token punctuation">,</span>i <span class="token comment">//函数作用域</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="链接属性"><a href="#链接属性" class="headerlink" title="链接属性"></a>链接属性</h2><p>一个程序的不同的源文件的同一个标识符是代表同一个实体还是不同的实体呢？标识符的链接属性正是处理不同文件中出现的标识符。标识符的作用域与它的链接属性有关。链接属性有以下3种：</p>
 <ol>
 <li>external–外部，标识符无论被声明多少次，都是同一个实体。</li>
 <li>intern–内部，同一个文件中多次声明都指的同一个实体。</li>
 <li>none–无，总是被当做独立的实体。</li>
 </ol>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef char *a;//external
-int b;   //external
-int c (int d){
-  int e;
-  int f (int g);//external
-  ...
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">char</span> <span class="token operator">*</span>a<span class="token punctuation">;</span><span class="token comment">//external</span>
+<span class="token keyword">int</span> b<span class="token punctuation">;</span>   <span class="token comment">//external</span>
+<span class="token keyword">int</span> <span class="token function">c</span> <span class="token punctuation">(</span><span class="token keyword">int</span> d<span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">int</span> e<span class="token punctuation">;</span>
+  <span class="token keyword">int</span> <span class="token function">f</span> <span class="token punctuation">(</span><span class="token keyword">int</span> g<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//external</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>statc 和 extern 可以修改标识符的链接属性。<br>static 可以将缺省为 external 改为 intern 效果，注意只针对缺省为 external的标识符。例如对上面的变量b static int b; 使得变量 b 为该源文件私有。<br>extern 为一个标识符指定 external链接属性，可以在访问其他任何位置定义的这个实体。注意extern只对标识符第一次声明有效，例如：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">static int i;//为本文件私有
-int func(){
-  int j;
-  extern int k;//k 为其他文件声明的external 变量
-  extern int i;//第二次无效
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">int</span> i<span class="token punctuation">;</span><span class="token comment">//为本文件私有</span>
+<span class="token keyword">int</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">int</span> j<span class="token punctuation">;</span>
+  <span class="token keyword">extern</span> <span class="token keyword">int</span> k<span class="token punctuation">;</span><span class="token comment">//k 为其他文件声明的external 变量</span>
+  <span class="token keyword">extern</span> <span class="token keyword">int</span> i<span class="token punctuation">;</span><span class="token comment">//第二次无效</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="存储类型"><a href="#存储类型" class="headerlink" title="存储类型"></a>存储类型</h2><p>变量的存储类型（storage class）值存储变量的内存类型。便利的存储类型决定了变量何时创建、销毁和能保存多久。有三个地方可以存储变量：普通内存、栈和寄存器。</p>
 <ol>
 <li>变量默认类型取决于声明它的位置。</li>
@@ -534,23 +534,23 @@ int func(){
 <li>函数定义或者代码块之外变量声明，static 用于修饰标识符的链接属性，从 external 改为 internal ，不影响存储类型和<strong>作用域</strong>，只能在声明的源文件访问该标识符。</li>
 <li>代码块内部的变量声明，static 将自动变量修改为静态变量，其链接属性和<strong>作用域</strong>不受影响。变量在程序执行前创建，且执行期间一直存在，代码执行完后销毁。</li>
 </ul>
-<h2 id="作用域、存储类型示例"><a href="#作用域、存储类型示例" class="headerlink" title="作用域、存储类型示例"></a>作用域、存储类型示例</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c">int  a=5; //默认全局变量 external   静态内存
-extern int b; //b 的定义在其他地方，extern非必须   静态内存
-static int c; //external-&gt;internal 仅在本文件能访问  静态内存
-int d(int e){
-  int f=15; //栈中
-  regiester int b;
-  static int g=20;//静态内存，一直存在
-  extern int a; //引用上面的 a
-  {
-    int e;
-    int a;
-    extern int h;//具有external 属性，静态内存中
-  }
-}
-static int i(){ //该函数只能在该文件被访问
-  ...
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="作用域、存储类型示例"><a href="#作用域、存储类型示例" class="headerlink" title="作用域、存储类型示例"></a>作用域、存储类型示例</h2><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span>  a<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">//默认全局变量 external   静态内存</span>
+<span class="token keyword">extern</span> <span class="token keyword">int</span> b<span class="token punctuation">;</span> <span class="token comment">//b 的定义在其他地方，extern非必须   静态内存</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> c<span class="token punctuation">;</span> <span class="token comment">//external-&gt;internal 仅在本文件能访问  静态内存</span>
+<span class="token keyword">int</span> <span class="token function">d</span><span class="token punctuation">(</span><span class="token keyword">int</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">int</span> f<span class="token operator">=</span><span class="token number">15</span><span class="token punctuation">;</span> <span class="token comment">//栈中</span>
+  regiester <span class="token keyword">int</span> b<span class="token punctuation">;</span>
+  <span class="token keyword">static</span> <span class="token keyword">int</span> g<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">;</span><span class="token comment">//静态内存，一直存在</span>
+  <span class="token keyword">extern</span> <span class="token keyword">int</span> a<span class="token punctuation">;</span> <span class="token comment">//引用上面的 a</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> e<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> a<span class="token punctuation">;</span>
+    <span class="token keyword">extern</span> <span class="token keyword">int</span> h<span class="token punctuation">;</span><span class="token comment">//具有external 属性，静态内存中</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">i</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token comment">//该函数只能在该文件被访问</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>具有external 属性的实体等价于其他语言的全局（global）实体，所有源文件函数都可以访问它。</li>
@@ -1268,12 +1268,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

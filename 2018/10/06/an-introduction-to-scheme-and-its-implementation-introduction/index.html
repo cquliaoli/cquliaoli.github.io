@@ -435,8 +435,8 @@
 </ol>
 <p>** <code>scheme</code> 中一切值都是指向对象的指针**。</p>
 <p><code>foo</code> 变量也可以指向过程：</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (foo)
-    15)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">)</span>
+    <span class="token number">15</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="var.png" alt="var"></p>
 <h4 id="Most-Operators-are-Procedures-vs-Special-Forms"><a href="#Most-Operators-are-Procedures-vs-Special-Forms" class="headerlink" title="Most Operators are Procedures vs Special Forms"></a>Most Operators are Procedures vs Special Forms</h4><p>在传统语言中 <code>a+b</code> 是一个表达式，而 <code>scheme</code> 中却是过程调用，由于函数在 <code>scheme</code> 中是一等公民，所以 <code>Scheme</code> 中绝大多数的表达式都是过程组成的。但是有少部分语法是 <code>特殊形式</code> ，如 <code>define</code> <code>set!</code> 等，当解释器看到特殊形式的语法时，会特殊处理。特殊形式包含以下几个方面：</p>
 <ol>
@@ -449,18 +449,18 @@
 <li><code>macros</code></li>
 </ol>
 <h4 id="Control-Structures-are-Expressions"><a href="#Control-Structures-are-Expressions" class="headerlink" title="Control Structures are Expressions"></a>Control Structures are Expressions</h4><p>由于 <code>scheme</code> 中控制结构也是表达式，所以 <code>scheme</code> 没有传统程序的 <code>return</code> 语句，表达式的值作为过程的返回值，如果返回值不需要可以忽略。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int min(int a, int b)
-{
-   if (a &lt; b)
-      return a;
-   else
-      return b;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">min</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span>a <span class="token operator">&lt;</span> b<span class="token punctuation">)</span>
+      <span class="token keyword">return</span> a<span class="token punctuation">;</span>
+   <span class="token keyword">else</span>
+      <span class="token keyword">return</span> b<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
- <pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (min a b)
-  (if (&lt; a b)
+ <pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">min</span> a b<span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">&lt;</span> a b<span class="token punctuation">)</span>
       a
-      b))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+      b<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="The-Boolean-Values-t-and-f"><a href="#The-Boolean-Values-t-and-f" class="headerlink" title="The Boolean Values #t and #f"></a>The Boolean Values #t and #f</h3><p>前面说了在 <code>scheme</code> 中一切值都是指向对象的指针，所以 <code>scheme</code> 提供了两个唯一的对象表示真值和假值。<code>false object</code> 和 <code>c</code> 语言中的 <code>0</code> 是不一样的，也不同于 <code>lisp</code> 中的空指针，它代表一个独一无二的对象。</p>
 <h3 id="Some-Other-Control-Flow-Constructs-cond-and-and-or"><a href="#Some-Other-Control-Flow-Constructs-cond-and-and-or" class="headerlink" title="Some Other Control-Flow Constructs: cond, and, and or"></a>Some Other Control-Flow Constructs: cond, and, and or</h3><p>为了更加方便的写代码，<code>scheme</code> 为我们提供了类似与 <code>switch case</code> 的语法糖 <code>cond</code> ，<code>cond</code> 语法糖可以用 <code>if</code> 语句实现。</p>
@@ -497,11 +497,11 @@
 <h4 id="length"><a href="#length" class="headerlink" title="length"></a>length</h4><p><code>length</code> 返回列表的长度，如 <code>(length '(0 #t #f)) returns 3</code> 。</p>
 <h4 id="list"><a href="#list" class="headerlink" title="list"></a>list</h4><p><code>list</code> 接收一个或者多个参数，构造前面提到的 <code>cdr-linked</code> 列表，每个 <code>pair</code> 的第一个域指向对应的参数。</p>
 <p><code>list</code> 和 <code>cons</code> 都可以构造列表，但是 <code>list</code> 直接用参数构建列表，而 <code>cons</code> 是将新的数据项加入到已有列表中。有一个细节值得注意，构建只有一个数据项的列表，采用 <code>list</code> 是 <code>(list 1)</code> 而用 <code>cons</code> 语法为 <code>(cons 1 '()')</code> 。</p>
-<h4 id="append"><a href="#append" class="headerlink" title="append"></a>append</h4><p><code>append</code> 输入参数为两个或者更多的列表，构建一个新的列表。如 <code>(append '(1 2) '(3 4))</code> 返回 <code>(1 2 3 4)</code> ，但是 <code>(list '(1 2) '(3 4))</code> 返回 <code>((1 2) (3 4))</code> 。注意两者之间的区别， <code>append</code> 要求其参数为列表，将各个列表中的元素组成一个新的列表，而 <code>list</code> 对其元素并无要求。另外值得注意的是， <code>append</code> 只会连接顶层的元素，并不会展平(<code>flatten</code>)嵌套的结构。如<br> </p><pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(append '((1 2) (3 4))
-       '((5 6) (7 8)))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>返回 <code>((1 2) (3 4) (5 6) (7 8))</code> 。此外，<code>append</code> 的元素是共享的，改变其中一个其他会跟着改变，这也是强调 <code>无副作用</code> 计算的原因。<p></p>
+<h4 id="append"><a href="#append" class="headerlink" title="append"></a>append</h4><p><code>append</code> 输入参数为两个或者更多的列表，构建一个新的列表。如 <code>(append '(1 2) '(3 4))</code> 返回 <code>(1 2 3 4)</code> ，但是 <code>(list '(1 2) '(3 4))</code> 返回 <code>((1 2) (3 4))</code> 。注意两者之间的区别， <code>append</code> 要求其参数为列表，将各个列表中的元素组成一个新的列表，而 <code>list</code> 对其元素并无要求。另外值得注意的是， <code>append</code> 只会连接顶层的元素，并不会展平(<code>flatten</code>)嵌套的结构。如<br> </p><pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token builtin">append</span> <span class="token punctuation">'</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+       <span class="token punctuation">'</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">5</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token number">7</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>返回 <code>((1 2) (3 4) (5 6) (7 8))</code> 。此外，<code>append</code> 的元素是共享的，改变其中一个其他会跟着改变，这也是强调 <code>无副作用</code> 计算的原因。<p></p>
 <h4 id="reverse"><a href="#reverse" class="headerlink" title="reverse"></a>reverse</h4><p>和 <code>append</code> 类似，将给定列表反序。</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(reverse '(1 2 3 4)) ;(4 3 2 1)
-(reverse '((1 2) (3 4)));returns ((3 4) (1 2)), not ((4 3) (2 1))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token function">reverse</span> <span class="token punctuation">'</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token number">2</span> <span class="token number">3</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">;(4 3 2 1)</span>
+<span class="token punctuation">(</span><span class="token function">reverse</span> <span class="token punctuation">'</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token comment">;returns ((3 4) (1 2)), not ((4 3) (2 1))</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h4 id="member"><a href="#member" class="headerlink" title="member"></a>member</h4><p>schemeVal x list –&gt;bool<br>传入一个搜索的值和列表，判断列表中是否有该值。</p>
 <h3 id="Recursion-Over-Lists-and-Other-Data-Structures"><a href="#Recursion-Over-Lists-and-Other-Data-Structures" class="headerlink" title="Recursion Over Lists and Other Data Structures"></a>Recursion Over Lists and Other Data Structures</h3><p> <code>scheme</code> 中递归具有举足轻重的地位，用递归过程操作递归数据结构将十分简单。例如我们要深拷贝 <code>pair-tree</code> ，首先 <code>pair-tree</code> 的递归定义如下：</p>
@@ -510,11 +510,11 @@
 <li>a pair whose car and cdr are pair-trees</li>
 </ul>
 <p>第一个规则是基本条件，不需要递归，第二个条件的定义涉及到递归，某个内部节点的 <code>car cdr</code> 也是 <code>pair-trees</code> 。编写对应的递归程序是比较容易的，首先将对应数据结构的递归定义描述清楚，然后用程序按照递归定义遍历数据结构并计算结果。</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (pair-tree-deep-copy thing)
-   (if (not (pair? thing))
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">pair-tree-deep-copy</span> thing<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">not</span> <span class="token punctuation">(</span><span class="token builtin">pair?</span> thing<span class="token punctuation">)</span><span class="token punctuation">)</span>
        thing
-       (cons (pair-tree-deep-copy (car thing))
-             (pair-tree-deep-copy (cdr thing)))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+       <span class="token punctuation">(</span><span class="token builtin">cons</span> <span class="token punctuation">(</span><span class="token function">pair-tree-deep-copy</span> <span class="token punctuation">(</span><span class="token builtin">car</span> thing<span class="token punctuation">)</span><span class="token punctuation">)</span>
+             <span class="token punctuation">(</span><span class="token function">pair-tree-deep-copy</span> <span class="token punctuation">(</span><span class="token builtin">cdr</span> thing<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><code>pair-tree-deep-copy</code> 能够拷贝 <code>pair-tree</code> 但是拷贝 <code>proper list</code> 时就有问题，因为 其 <code>car</code> 并非是一个 <code>pair</code> ，导致 <code>pair-tree-deep-copy</code> 直接使用 <code>car</code> 值，而没有进一步拷贝。  <code>proper list</code> 拷贝定义如下：</p>
 <ul>
@@ -522,12 +522,12 @@
 <li>(if the list is nonempty) a pair whose car value is the same as the car of the original list, and whose cdr value is a copy of the rest of the original list.</li>
 </ul>
 <p>代码如下：</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (list-copy lis)
-   (cond ((null? lis)
-          '())
-         (else
-          (cons (car lis)
-                (list-copy (cdr lis))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">list-copy</span> lis<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">cond</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">null?</span> lis<span class="token punctuation">)</span>
+          <span class="token punctuation">'</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+         <span class="token punctuation">(</span><span class="token keyword">else</span>
+          <span class="token punctuation">(</span><span class="token builtin">cons</span> <span class="token punctuation">(</span><span class="token builtin">car</span> lis<span class="token punctuation">)</span>
+                <span class="token punctuation">(</span><span class="token function">list-copy</span> <span class="token punctuation">(</span><span class="token builtin">cdr</span> lis<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><strong>编写递归的关键是准确定义某个过程返回什么，以及假定该过程确实返回了该结果，然后利用归纳法，将子问题合并得到原过程的结果。</strong></p>
 <h3 id="Type-and-Equality-Predicates"><a href="#Type-and-Equality-Predicates" class="headerlink" title="Type and Equality Predicates"></a>Type and Equality Predicates</h3><p>由于 <code>scheme</code> 的值是指向堆对象的指针，那么其数据类型是什么，决定了能够进行何种操作。</p>
@@ -545,43 +545,43 @@
 <h2 id="Local-Variables-and-Lexical-Scope"><a href="#Local-Variables-and-Lexical-Scope" class="headerlink" title="Local Variables and Lexical Scope"></a>Local Variables and Lexical Scope</h2><p>还记得最前面我们提到， <code>scheme</code> 是支持嵌套作用域块结构的语言。代码块可以嵌套，每个代码块可以定义局部变量，该变量的作用范围为该代码块。</p>
 <p>另一方面 <code>scheme</code> 支持词法作用域，也叫静态作用域，从字面理解，静态是指我们通过阅读代码便可以确定每个变量的作用范围。相反动态作用域指变量的作用范围必须在运行时确定，这会带来很多麻烦，基本已经没有语言采用动态作用域了。</p>
 <h3 id="let"><a href="#let" class="headerlink" title="let"></a>let</h3><p>让我先来看段 <code>c</code> 语言代码：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">{  int x = 10;
-   int y = 20;
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">{</span>  <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+   <span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">;</span>
 
-   foo(x,y);
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+   <span class="token function">foo</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>当进入代码块时，会分配存储空间给本地变量 <code>x y</code> ，并且存储空间会被初始化为 <code>10 20</code> ，以上这个过程我们称为 <code>x y</code> 被绑定了，即绑定是一种 <code>name</code> 到 <code>storage</code> 的关联。当离开代码块时 <code>x y</code> 的绑定消失了，可能在外层 <code>x y</code> 是和其他值绑定的。在 <code>c</code> 语言中局部变量的存储空间一般分配在活动栈上。</p>
 <p><code>scheme</code> 的 <code>let</code> 与上述代码类似：</p>
 <pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">...
-(let ((x 10)
-      (y 20))
-   (foo x y))
+<span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">x</span> <span class="token number">10</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token function">y</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">foo</span> x y<span class="token punctuation">)</span><span class="token punctuation">)</span>
 ...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>有一点需要注意， <code>scheme</code> 的局部变量分配在堆上，那效率是不是很低呢？好的编译器会将其优化存储在寄存器中，所以不用担心效率问题。</p>
 <h3 id="Lexical-Scope"><a href="#Lexical-Scope" class="headerlink" title="Lexical Scope"></a>Lexical Scope</h3><p>刚刚提到，<code>scheme</code> 支持嵌套块结构，那么内部的块可能会重复定义局部变量：</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(let ((x 10)    ; outer binding of x
-      (a 20))   ; binding of a
-   (foo x)
-   (let ((x (bar))       ; inner binding of x
-         (b (baz x x)))  ; binding of b
-      (quux x a)
-      (quux y b))
-   (baz x a)  ; refers to outer x (and a)
-   (baz x b)) ; illegal?<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">x</span> <span class="token number">10</span><span class="token punctuation">)</span>    <span class="token comment">; outer binding of x</span>
+      <span class="token punctuation">(</span><span class="token function">a</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">; binding of a</span>
+   <span class="token punctuation">(</span><span class="token function">foo</span> x<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">x</span> <span class="token punctuation">(</span><span class="token function">bar</span><span class="token punctuation">)</span><span class="token punctuation">)</span>       <span class="token comment">; inner binding of x</span>
+         <span class="token punctuation">(</span><span class="token function">b</span> <span class="token punctuation">(</span><span class="token function">baz</span> x x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">; binding of b</span>
+      <span class="token punctuation">(</span><span class="token function">quux</span> x a<span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token function">quux</span> y b<span class="token punctuation">)</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">baz</span> x a<span class="token punctuation">)</span>  <span class="token comment">; refers to outer x (and a)</span>
+   <span class="token punctuation">(</span><span class="token function">baz</span> x b<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">; illegal?</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>首先声明一个概念 <code>bingding environment</code> ，绑定环境就是名称集合到存储位置的映射。在程序执行的每个点能够 <code>看得到</code> 的绑定关系就是程序执行的环境。最外层是全局绑定关系，当进入一个新的块时，会生成一个新的绑定关系，同时链接到上层环境中，如果存在同名变量，内层变量会覆盖外层变量绑定。当需要查找某个变量的绑定关系时，由内向外依次查找。块结构和作用域可以用轮廓图清晰的表示：</p>
 <p><img src="blockstructure.png" alt="blockstructure"></p>
 <p>从图中可以看出， <code>let</code> 前面定义的变量对后续变量莱索是不可见的。如果需要可见需要用 <code>let*</code> 。</p>
 <h3 id="let-1"><a href="#let-1" class="headerlink" title="let*"></a>let*</h3><p>前面说了， <code>let</code> 前面定义的变量对后续变量不可见，为了达到可见的效果我们可以嵌套 <code>let</code> :</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(let ((a-structure (some-procedure)))
-   (let ((a-substructure (get-some-subpart a-structure)))
-      (let ((a-subsubstructure (get-another-subpart a-substructure)))
-         (foo a-substructure))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">a-structure</span> <span class="token punctuation">(</span><span class="token function">some-procedure</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">a-substructure</span> <span class="token punctuation">(</span><span class="token function">get-some-subpart</span> a-structure<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">a-subsubstructure</span> <span class="token punctuation">(</span><span class="token function">get-another-subpart</span> a-substructure<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+         <span class="token punctuation">(</span><span class="token function">foo</span> a-substructure<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>需求是满足了，如果变量太多，这样写起来肯定不优雅，所以 <code>scheme</code> 提供了 <code>let*</code> 语法糖：</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(let* ((a-structure (some-procedure))
-       (a-substructure (get-some-subpart a-structure))
-       (a-subsubstructure (get-another-subpart a-substructure)))
-   (foo a-substructure))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">let*</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">a-structure</span> <span class="token punctuation">(</span><span class="token function">some-procedure</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+       <span class="token punctuation">(</span><span class="token function">a-substructure</span> <span class="token punctuation">(</span><span class="token function">get-some-subpart</span> a-structure<span class="token punctuation">)</span><span class="token punctuation">)</span>
+       <span class="token punctuation">(</span><span class="token function">a-subsubstructure</span> <span class="token punctuation">(</span><span class="token function">get-another-subpart</span> a-substructure<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">foo</span> a-substructure<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="letstar.png" alt="letstar"></p>
 <h2 id="Procedures"><a href="#Procedures" class="headerlink" title="Procedures"></a>Procedures</h2><h3 id="Procedures-are-First-Class"><a href="#Procedures-are-First-Class" class="headerlink" title="Procedures are First Class"></a>Procedures are First Class</h3><p>在  <code>scheme</code> 中，procedure 是一等的，可以将 <code>procedure</code> 作为参数或者返回值。对应表达式 <code>(+ a b)</code> ，<code>scheme</code> 会做一下事情：</p>
 <ol>
@@ -591,108 +591,108 @@
 </ol>
 <p>注意 <code>procedure</code> 不仅仅只能以 <code>name</code> 提供，如果该表达式的值是一个 <code>procedure</code> 也是可以的。如 <code>((look-up-appropriate-procedure key) foo bar)</code> 。</p>
 <h3 id="Anonymous-Procedures-and-lambda"><a href="#Anonymous-Procedures-and-lambda" class="headerlink" title="Anonymous Procedures and lambda"></a>Anonymous Procedures and lambda</h3><p>在 <code>scheme</code> 中用 <code>lambda</code> 代表匿名过程，使用 <code>define</code> 定义过程不过是 <code>lambda</code> 的语法糖。</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (double x)
-   (+ x x))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">double</span> x<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token operator">+</span> x x<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>等价于</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define double (lambda (x)
-                  (+ x x)))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> double <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token function">x</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">(</span><span class="token operator">+</span> x x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <h3 id="lambda-and-Lexical-Scope"><a href="#lambda-and-Lexical-Scope" class="headerlink" title="lambda and Lexical Scope"></a>lambda and Lexical Scope</h3><p>前面介绍过 <code>scheme</code> 是词法作用域，那么在定义 <code>lambda</code> 过程时，应该创建哪些东西呢？首先 <code>lambda</code> 包含形式参数和函数体，这里有一个概念 <code>自由变量</code> 指函数体中不包含形参的变量，可以这么理解，那些在函数体中和形式参数同名的变量被约束了，其他的变量是自由的。当 <code>lambda</code> 被执行时自由变量应该在哪儿找它的绑定呢？答案是 <code>lambda</code> 的环境，所以创建 <code>lambda</code> 时需要记录过程所在环境。包含 <code>lambda</code> 形参、函数体以及所在环境的整体叫做 <code>闭包</code> 。</p>
 <h3 id="Local-Definitions"><a href="#Local-Definitions" class="headerlink" title="Local Definitions"></a>Local Definitions</h3><p>如果某些过程只在特定的范围有效，可以使用局部定义，而不用定义成全局的。</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (quadruple x)
-   (let ((double (lambda (x)
-                    (+ x x))))
-      (double (double x))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">quadruple</span> x<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">double</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token function">x</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">(</span><span class="token operator">+</span> x x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token function">double</span> <span class="token punctuation">(</span><span class="token function">double</span> x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>局部过程也遵守词法作用域。</p>
 <h3 id="Recursive-Local-Procedures-and-letrec"><a href="#Recursive-Local-Procedures-and-letrec" class="headerlink" title="Recursive Local Procedures and letrec"></a>Recursive Local Procedures and letrec</h3><p>根据前面的描述，可以利用 <code>let</code> 和 <code>lambda</code> 来定义本地过程，但是怎么定义递归过程呢？<br>尝试：</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (foo x)
-   (let ((local-proc (lambda (y)
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">foo</span> x<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">local-proc</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token function">y</span><span class="token punctuation">)</span>
                         ...
-                        (local-proc ...)   ; recursive call?  No.
-                        ...)))
+                        <span class="token punctuation">(</span><span class="token function">local-proc</span> ...<span class="token punctuation">)</span>   <span class="token comment">; recursive call?  No.</span>
+                        ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
       ...
-      (local-proc x)
-      ...)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      <span class="token punctuation">(</span><span class="token function">local-proc</span> x<span class="token punctuation">)</span>
+      ...<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>上述代码的问题是，local-proc 对于其函数体不可见，其作用域范围如下图所示：<br><img src="letrec.png" alt="letrec"></p>
 <p>这正是 <code>letrec</code> 解决的事， <code>letrec</code> 先声明所有变量，分配存储空间，但是并未赋值。 <code>letrec</code> 保证所有变量都是可见的。其作用域如下图所示：<br><img src="letrec2.png" alt="letrec"></p>
 <p><code>letrec</code> 对互递归也能很好的支持：</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (my-proc)
-   (letrec ((local-proc-1 (lambda ()
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">my-proc</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">letrec</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">local-proc-1</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
                              ...
-                             (local-proc-2)
-                             ...))
-            (local-proc-2 (lambda ()
+                             <span class="token punctuation">(</span><span class="token function">local-proc-2</span><span class="token punctuation">)</span>
+                             ...<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">(</span><span class="token function">local-proc-2</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
                              ...
-                             (local-proc-1)
-                             ...)))
-      (local-proc-1))) ; start off mutual recursion by calling local-proc-1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                             <span class="token punctuation">(</span><span class="token function">local-proc-1</span><span class="token punctuation">)</span>
+                             ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token function">local-proc-1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">; start off mutual recursion by calling local-proc-1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="letrec3.png" alt="letrec"></p>
 <h3 id="Multiple-defines-are-like-a-letrec"><a href="#Multiple-defines-are-like-a-letrec" class="headerlink" title="Multiple defines are like a letrec"></a>Multiple defines are like a letrec</h3><p>有了 <code>letrec</code> 我们可以解释 <code>define</code> 的工作机制了。</p>
 <pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">...
 
-(define (foo)
-   (... (bar) ...))
+<span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">bar</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-(define (bar)
-   (... (baz) ...))
+<span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">bar</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">baz</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-(define (baz)
-   (... (quux) ...))
+<span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">baz</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">quux</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span>
 ...
-(foo)
+<span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">)</span>
 ...
-;等价于
+<span class="token comment">;等价于</span>
 ...
 
-(define foo
-        (lambda ()
-           (... (bar) ...)))
+<span class="token punctuation">(</span><span class="token keyword">define</span> foo
+        <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+           <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">bar</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-(define bar
-        (lambda ()
-           (... (baz) ...)))
+<span class="token punctuation">(</span><span class="token keyword">define</span> bar
+        <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+           <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">baz</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-(define baz
-        (lambda ()
-           (... (foo) ...)))
+<span class="token punctuation">(</span><span class="token keyword">define</span> baz
+        <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+           <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 ...
-(foo)
+<span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">)</span>
 ...
-;等价于
-(letrec (...
+<span class="token comment">;等价于</span>
+<span class="token punctuation">(</span><span class="token keyword">letrec</span> <span class="token punctuation">(</span><span class="token function">...</span>
 
-         (foo (lambda ()
-                 (... (bar) ...)))
-         (bar (lambda ()
-                 (... (baz) ...)))
-         (baz (lambda ()
-                 (... (foo) ...)))
-         ...)
+         <span class="token punctuation">(</span><span class="token function">foo</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">bar</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+         <span class="token punctuation">(</span><span class="token function">bar</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">baz</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+         <span class="token punctuation">(</span><span class="token function">baz</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">(</span><span class="token function">...</span> <span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+         ...<span class="token punctuation">)</span>
  ...
- (foo)
- ...)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+ <span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">)</span>
+ ...<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>同样的局部过程也可以用 <code>letrec</code> 去糖：</p>
-<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme">(define (my-proc)
-   (define (local-proc-1)
-      ...)
-   (define (local-proc-2)
-      ...)
-   (local-proc-1)
-   (local-proc-1))
+<pre class="line-numbers language-scheme" data-language="scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">my-proc</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">local-proc-1</span><span class="token punctuation">)</span>
+      ...<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">local-proc-2</span><span class="token punctuation">)</span>
+      ...<span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">local-proc-1</span><span class="token punctuation">)</span>
+   <span class="token punctuation">(</span><span class="token function">local-proc-1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-;等价于
-(define (my-proc)
-  (letrec ((local-proc-1 (lambda () ...))
-           (local-proc-2 (lambda () ...)))
-    (local-proc-1)
-    (local-proc-2)))
-;去糖
-(define my-proc
-  (lambda ()
-    (letrec ((local-proc-1 (lambda () ...))
-             (local-proc-2 (lambda () ...)))
-      (local-proc-1)
-      (local-proc-2))))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">;等价于</span>
+<span class="token punctuation">(</span><span class="token keyword">define</span> <span class="token punctuation">(</span><span class="token function">my-proc</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token keyword">letrec</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">local-proc-1</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span>
+           <span class="token punctuation">(</span><span class="token function">local-proc-2</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">(</span><span class="token function">local-proc-1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">(</span><span class="token function">local-proc-2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">;去糖</span>
+<span class="token punctuation">(</span><span class="token keyword">define</span> my-proc
+  <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">(</span><span class="token keyword">letrec</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">local-proc-1</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span>
+             <span class="token punctuation">(</span><span class="token function">local-proc-2</span> <span class="token punctuation">(</span><span class="token keyword">lambda</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> ...<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token function">local-proc-1</span><span class="token punctuation">)</span>
+      <span class="token punctuation">(</span><span class="token function">local-proc-2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <hr>
 <script>
         document.querySelectorAll('.github-emoji')
@@ -1399,12 +1399,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

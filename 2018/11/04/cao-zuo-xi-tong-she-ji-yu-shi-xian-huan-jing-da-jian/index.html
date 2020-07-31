@@ -426,65 +426,65 @@
 <li>make 编译构建工具</li>
 </ul>
 <h2 id="Bochs虚拟机"><a href="#Bochs虚拟机" class="headerlink" title="Bochs虚拟机"></a>Bochs虚拟机</h2><h3 id="bochs环境安装"><a href="#bochs环境安装" class="headerlink" title="bochs环境安装"></a>bochs环境安装</h3><p>bochs最新版本为 <a target="_blank" rel="noopener" href="http://bochs.sourceforge.net/">bochs-2.6.9</a> ，配置信息如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">//先安装 g++ libx11 等软件包
-./configure --with-x11 --with-wx --enable-debugger --enable-disasm --enable-all-optimizations --enable-readline --enable-long-phy-address --enable-ltdl-install --enable-idle-hack  --enable-a20-pin --enable-x86-64 --enable-smp --enable-cpu-level=6 --enable-large-ramfile --enable-repeat-speedups --enable-fast-function-calls  --enable-handlers-chaining  --enable-trace-linking --enable-configurable-msrs --enable-show-ips --enable-cpp --enable-debugger-gui --enable-iodebug --enable-logging --enable-assert-checks --enable-fpu --enable-vmx=2 --enable-svm --enable-3dnow --enable-alignment-check  --enable-monitor-mwait --enable-avx  --enable-evex --enable-x86-debugger --enable-pci --enable-usb --enable-voodoo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//先安装 g++ libx11 等软件包</span>
+<span class="token punctuation">.</span><span class="token operator">/</span>configure <span class="token operator">--</span>with<span class="token operator">-</span>x11 <span class="token operator">--</span>with<span class="token operator">-</span>wx <span class="token operator">--</span>enable<span class="token operator">-</span>debugger <span class="token operator">--</span>enable<span class="token operator">-</span>disasm <span class="token operator">--</span>enable<span class="token operator">-</span>all<span class="token operator">-</span>optimizations <span class="token operator">--</span>enable<span class="token operator">-</span>readline <span class="token operator">--</span>enable<span class="token operator">-</span><span class="token keyword">long</span><span class="token operator">-</span>phy<span class="token operator">-</span>address <span class="token operator">--</span>enable<span class="token operator">-</span>ltdl<span class="token operator">-</span>install <span class="token operator">--</span>enable<span class="token operator">-</span>idle<span class="token operator">-</span>hack  <span class="token operator">--</span>enable<span class="token operator">-</span>a20<span class="token operator">-</span>pin <span class="token operator">--</span>enable<span class="token operator">-</span>x86<span class="token operator">-</span><span class="token number">64</span> <span class="token operator">--</span>enable<span class="token operator">-</span>smp <span class="token operator">--</span>enable<span class="token operator">-</span>cpu<span class="token operator">-</span>level<span class="token operator">=</span><span class="token number">6</span> <span class="token operator">--</span>enable<span class="token operator">-</span>large<span class="token operator">-</span>ramfile <span class="token operator">--</span>enable<span class="token operator">-</span>repeat<span class="token operator">-</span>speedups <span class="token operator">--</span>enable<span class="token operator">-</span>fast<span class="token operator">-</span>function<span class="token operator">-</span>calls  <span class="token operator">--</span>enable<span class="token operator">-</span>handlers<span class="token operator">-</span>chaining  <span class="token operator">--</span>enable<span class="token operator">-</span>trace<span class="token operator">-</span>linking <span class="token operator">--</span>enable<span class="token operator">-</span>configurable<span class="token operator">-</span>msrs <span class="token operator">--</span>enable<span class="token operator">-</span>show<span class="token operator">-</span>ips <span class="token operator">--</span>enable<span class="token operator">-</span>cpp <span class="token operator">--</span>enable<span class="token operator">-</span>debugger<span class="token operator">-</span>gui <span class="token operator">--</span>enable<span class="token operator">-</span>iodebug <span class="token operator">--</span>enable<span class="token operator">-</span>logging <span class="token operator">--</span>enable<span class="token operator">-</span>assert<span class="token operator">-</span>checks <span class="token operator">--</span>enable<span class="token operator">-</span>fpu <span class="token operator">--</span>enable<span class="token operator">-</span>vmx<span class="token operator">=</span><span class="token number">2</span> <span class="token operator">--</span>enable<span class="token operator">-</span>svm <span class="token operator">--</span>enable<span class="token operator">-</span><span class="token number">3</span>dnow <span class="token operator">--</span>enable<span class="token operator">-</span>alignment<span class="token operator">-</span>check  <span class="token operator">--</span>enable<span class="token operator">-</span>monitor<span class="token operator">-</span>mwait <span class="token operator">--</span>enable<span class="token operator">-</span>avx  <span class="token operator">--</span>enable<span class="token operator">-</span>evex <span class="token operator">--</span>enable<span class="token operator">-</span>x86<span class="token operator">-</span>debugger <span class="token operator">--</span>enable<span class="token operator">-</span>pci <span class="token operator">--</span>enable<span class="token operator">-</span>usb <span class="token operator">--</span>enable<span class="token operator">-</span>voodoo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>注意 bochs <code>--enable-plugins</code> 选项有 <code>bug</code> ，所以取消了该配置项。在 <code>make</code> 过程中可能有错误，比如找不到以 <code>.cpp</code> 为后缀的文件，需要将其改为 <code>.cc</code> 后缀。在 <code>/usr/local/bin</code> 路径下执行 <code>bochs</code>：</p>
 <p><img src="bochs.png" alt="bochs.png"></p>
 <h3 id="Bochs-运行环境配置"><a href="#Bochs-运行环境配置" class="headerlink" title="Bochs 运行环境配置"></a>Bochs 运行环境配置</h3><p>安装好 Bochs 后，还需要一个硬件环境让Bochs去模拟，所以还需要配置虚拟平台环境：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"># 配置1  软盘模式
-# configuration file generated by Bochs
-plugin_ctrl: unmapped=1, biosdev=1, speaker=1, extfpuirq=1, parallel=1, serial=1, iodebug=1
-config_interface: textconfig
-display_library: x
-#memory: host=2048, guest=2048
-romimage: file="/usr/local/share/bochs/BIOS-bochs-latest"
-vgaromimage: file="/usr/local/share/bochs/VGABIOS-lgpl-latest"
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"># 配置<span class="token number">1</span>  软盘模式
+<span class="token macro property"># configuration file generated by Bochs</span>
+plugin_ctrl<span class="token operator">:</span> unmapped<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> biosdev<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> speaker<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> extfpuirq<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> parallel<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> serial<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> iodebug<span class="token operator">=</span><span class="token number">1</span>
+config_interface<span class="token operator">:</span> textconfig
+display_library<span class="token operator">:</span> x
+<span class="token macro property">#memory: host=2048, guest=2048</span>
+romimage<span class="token operator">:</span> file<span class="token operator">=</span><span class="token string">"/usr/local/share/bochs/BIOS-bochs-latest"</span>
+vgaromimage<span class="token operator">:</span> file<span class="token operator">=</span><span class="token string">"/usr/local/share/bochs/VGABIOS-lgpl-latest"</span>
 # 启动方式可以是软盘或者硬盘
-boot: floppy
-floppy_bootsig_check: disabled=0
-floppya: type=1_44, 1_44="boot.img", status=inserted, write_protected=0
-# no floppyb
-ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
-ata0-master: type=none
-ata0-slave: type=none
-ata1: enabled=1, ioaddr1=0x170, ioaddr2=0x370, irq=15
-ata1-master: type=none
-ata1-slave: type=none
-ata2: enabled=0
-ata3: enabled=0
-pci: enabled=1, chipset=i440fx
-vga: extension=vbe, update_freq=5
+boot<span class="token operator">:</span> floppy
+floppy_bootsig_check<span class="token operator">:</span> disabled<span class="token operator">=</span><span class="token number">0</span>
+floppya<span class="token operator">:</span> type<span class="token operator">=</span><span class="token number">1</span>_44<span class="token punctuation">,</span> <span class="token number">1</span>_44<span class="token operator">=</span><span class="token string">"boot.img"</span><span class="token punctuation">,</span> status<span class="token operator">=</span>inserted<span class="token punctuation">,</span> write_protected<span class="token operator">=</span><span class="token number">0</span>
+<span class="token macro property"># no floppyb</span>
+ata0<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> ioaddr1<span class="token operator">=</span><span class="token number">0x1f0</span><span class="token punctuation">,</span> ioaddr2<span class="token operator">=</span><span class="token number">0x3f0</span><span class="token punctuation">,</span> irq<span class="token operator">=</span><span class="token number">14</span>
+ata0<span class="token operator">-</span>master<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata0<span class="token operator">-</span>slave<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata1<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> ioaddr1<span class="token operator">=</span><span class="token number">0x170</span><span class="token punctuation">,</span> ioaddr2<span class="token operator">=</span><span class="token number">0x370</span><span class="token punctuation">,</span> irq<span class="token operator">=</span><span class="token number">15</span>
+ata1<span class="token operator">-</span>master<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata1<span class="token operator">-</span>slave<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata2<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+ata3<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+pci<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> chipset<span class="token operator">=</span>i440fx
+vga<span class="token operator">:</span> extension<span class="token operator">=</span>vbe<span class="token punctuation">,</span> update_freq<span class="token operator">=</span><span class="token number">5</span>
 # 模拟的cpu
-cpu: count=1:1:1, ips=4000000, quantum=16, model=corei7_haswell_4770, reset_on_triple_fault=1, cpuid_limit_winnt=0, ignore_bad_msrs=1, mwait_is_nop=0, msrs="msrs.def"
+cpu<span class="token operator">:</span> count<span class="token operator">=</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span> ips<span class="token operator">=</span><span class="token number">4000000</span><span class="token punctuation">,</span> quantum<span class="token operator">=</span><span class="token number">16</span><span class="token punctuation">,</span> model<span class="token operator">=</span>corei7_haswell_4770<span class="token punctuation">,</span> reset_on_triple_fault<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> cpuid_limit_winnt<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> ignore_bad_msrs<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> mwait_is_nop<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> msrs<span class="token operator">=</span><span class="token string">"msrs.def"</span>
 
-cpuid: x86_64=1,level=6, mmx=1, sep=1, simd=avx512, aes=1, movbe=1, xsave=1,apic=x2apic,sha=1,movbe=1,adx=1,xsaveopt=1,avx_f16c=1,avx_fma=1,bmi=bmi2,1g_pages=1,pcid=1,fsgsbase=1,smep=1,smap=1,mwait=1,vmx=1
-cpuid: family=6, model=0x1a, stepping=5, vendor_string="GenuineIntel", brand_string="Intel(R) Core(TM) i7-4770 CPU (Haswell)"
+cpuid<span class="token operator">:</span> x86_64<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>level<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span> mmx<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> sep<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> simd<span class="token operator">=</span>avx512<span class="token punctuation">,</span> aes<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> movbe<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> xsave<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>apic<span class="token operator">=</span>x2apic<span class="token punctuation">,</span>sha<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>movbe<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>adx<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>xsaveopt<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>avx_f16c<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>avx_fma<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>bmi<span class="token operator">=</span>bmi2<span class="token punctuation">,</span><span class="token number">1</span>g_pages<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>pcid<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>fsgsbase<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>smep<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>smap<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>mwait<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>vmx<span class="token operator">=</span><span class="token number">1</span>
+cpuid<span class="token operator">:</span> family<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span> model<span class="token operator">=</span><span class="token number">0x1a</span><span class="token punctuation">,</span> stepping<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> vendor_string<span class="token operator">=</span><span class="token string">"GenuineIntel"</span><span class="token punctuation">,</span> brand_string<span class="token operator">=</span><span class="token string">"Intel(R) Core(TM) i7-4770 CPU (Haswell)"</span>
 
-print_timestamps: enabled=0
-debugger_log: -
-magic_break: enabled=0
-port_e9_hack: enabled=0
-private_colormap: enabled=0
-clock: sync=none, time0=local, rtc_sync=0
-# no cmosimage
-# no loader
-log: -
-logprefix: %t%e%d
-debug: action=ignore
-info: action=report
-error: action=report
-panic: action=ask
-keyboard: type=mf, serial_delay=250, paste_delay=100000, user_shortcut=none
-mouse: type=ps2, enabled=0, toggle=ctrl+mbutton
-speaker: enabled=1, mode=system
-parport1: enabled=1, file=none
-parport2: enabled=0
-com1: enabled=1, mode=null
-com2: enabled=0
-com3: enabled=0
-com4: enabled=0
-//内存
-megs: 256
+print_timestamps<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+debugger_log<span class="token operator">:</span> <span class="token operator">-</span>
+magic_break<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+port_e9_hack<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+private_colormap<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+clock<span class="token operator">:</span> sync<span class="token operator">=</span>none<span class="token punctuation">,</span> time0<span class="token operator">=</span>local<span class="token punctuation">,</span> rtc_sync<span class="token operator">=</span><span class="token number">0</span>
+<span class="token macro property"># no cmosimage</span>
+<span class="token macro property"># no loader</span>
+log<span class="token operator">:</span> <span class="token operator">-</span>
+logprefix<span class="token operator">:</span> <span class="token operator">%</span>t<span class="token operator">%</span>e<span class="token operator">%</span>d
+debug<span class="token operator">:</span> action<span class="token operator">=</span>ignore
+info<span class="token operator">:</span> action<span class="token operator">=</span>report
+error<span class="token operator">:</span> action<span class="token operator">=</span>report
+panic<span class="token operator">:</span> action<span class="token operator">=</span>ask
+keyboard<span class="token operator">:</span> type<span class="token operator">=</span>mf<span class="token punctuation">,</span> serial_delay<span class="token operator">=</span><span class="token number">250</span><span class="token punctuation">,</span> paste_delay<span class="token operator">=</span><span class="token number">100000</span><span class="token punctuation">,</span> user_shortcut<span class="token operator">=</span>none
+mouse<span class="token operator">:</span> type<span class="token operator">=</span>ps2<span class="token punctuation">,</span> enabled<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> toggle<span class="token operator">=</span>ctrl<span class="token operator">+</span>mbutton
+speaker<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> mode<span class="token operator">=</span>system
+parport1<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> file<span class="token operator">=</span>none
+parport2<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+com1<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> mode<span class="token operator">=</span>null
+com2<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+com3<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+com4<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+<span class="token comment">//内存</span>
+megs<span class="token operator">:</span> <span class="token number">256</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>将上述配置保存到 <code>/usr/local/bin</code> 下的 <code>bochsrc</code> 下，然后输入 <code>bochs -f bochsrc</code> ：</p>
 <p><img src="bochs2.png" alt="bochs2.png"></p>
@@ -493,66 +493,66 @@ megs: 256
 <p><img src="bochs4.png" alt="bochs4.png"></p>
 <p>提示 <code>无启动设备</code>，那是因为在上面配置中 <code>floppya: type=1_44, 1_44="boot.img", status=inserted, write_protected=0</code> 我们指定了 <code>boot.img</code> 但是还没有生成，后续章节将制作启动盘。</p>
 <p>除了上面提到的软盘模式，我们还可以以硬盘作为启动盘：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">#配置2 硬盘启动
-# configuration file generated by Bochs
-plugin_ctrl: unmapped=1, biosdev=1, speaker=1, extfpuirq=1, parallel=1, serial=1, iodebug=1
-config_interface: textconfig
-display_library: x
-#memory: host=2048, guest=2048
-romimage: file="/usr/local/share/bochs/BIOS-bochs-latest"
-vgaromimage: file="/usr/local/share/bochs/VGABIOS-lgpl-latest"
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">#配置<span class="token number">2</span> 硬盘启动
+<span class="token macro property"># configuration file generated by Bochs</span>
+plugin_ctrl<span class="token operator">:</span> unmapped<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> biosdev<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> speaker<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> extfpuirq<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> parallel<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> serial<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> iodebug<span class="token operator">=</span><span class="token number">1</span>
+config_interface<span class="token operator">:</span> textconfig
+display_library<span class="token operator">:</span> x
+<span class="token macro property">#memory: host=2048, guest=2048</span>
+romimage<span class="token operator">:</span> file<span class="token operator">=</span><span class="token string">"/usr/local/share/bochs/BIOS-bochs-latest"</span>
+vgaromimage<span class="token operator">:</span> file<span class="token operator">=</span><span class="token string">"/usr/local/share/bochs/VGABIOS-lgpl-latest"</span>
 # 硬盘启动
-boot: disk
-#floppy_bootsig_check: disabled=0
-#floppya: type=1_44, 1_44="boot.img", status=inserted, write_protected=0
-# no floppyb
-ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
-ata0-master: type=none
-ata0-slave: type=none
-ata1: enabled=1, ioaddr1=0x170, ioaddr2=0x370, irq=15
-ata1-master: type=none
-ata1-slave: type=none
-ata2: enabled=0
-ata3: enabled=0
-pci: enabled=1, chipset=i440fx
-vga: extension=vbe, update_freq=5
+boot<span class="token operator">:</span> disk
+<span class="token macro property">#floppy_bootsig_check: disabled=0</span>
+<span class="token macro property">#floppya: type=1_44, 1_44="boot.img", status=inserted, write_protected=0</span>
+<span class="token macro property"># no floppyb</span>
+ata0<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> ioaddr1<span class="token operator">=</span><span class="token number">0x1f0</span><span class="token punctuation">,</span> ioaddr2<span class="token operator">=</span><span class="token number">0x3f0</span><span class="token punctuation">,</span> irq<span class="token operator">=</span><span class="token number">14</span>
+ata0<span class="token operator">-</span>master<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata0<span class="token operator">-</span>slave<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata1<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> ioaddr1<span class="token operator">=</span><span class="token number">0x170</span><span class="token punctuation">,</span> ioaddr2<span class="token operator">=</span><span class="token number">0x370</span><span class="token punctuation">,</span> irq<span class="token operator">=</span><span class="token number">15</span>
+ata1<span class="token operator">-</span>master<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata1<span class="token operator">-</span>slave<span class="token operator">:</span> type<span class="token operator">=</span>none
+ata2<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+ata3<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+pci<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> chipset<span class="token operator">=</span>i440fx
+vga<span class="token operator">:</span> extension<span class="token operator">=</span>vbe<span class="token punctuation">,</span> update_freq<span class="token operator">=</span><span class="token number">5</span>
 
-cpu: count=1:1:1, ips=4000000, quantum=16, model=corei7_haswell_4770, reset_on_triple_fault=1, cpuid_limit_winnt=0, ignore_bad_msrs=1, mwait_is_nop=0, msrs="msrs.def"
+cpu<span class="token operator">:</span> count<span class="token operator">=</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span> ips<span class="token operator">=</span><span class="token number">4000000</span><span class="token punctuation">,</span> quantum<span class="token operator">=</span><span class="token number">16</span><span class="token punctuation">,</span> model<span class="token operator">=</span>corei7_haswell_4770<span class="token punctuation">,</span> reset_on_triple_fault<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> cpuid_limit_winnt<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> ignore_bad_msrs<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> mwait_is_nop<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> msrs<span class="token operator">=</span><span class="token string">"msrs.def"</span>
 
-cpuid: x86_64=1,level=6, mmx=1, sep=1, simd=avx512, aes=1, movbe=1, xsave=1,apic=x2apic,sha=1,movbe=1,adx=1,xsaveopt=1,avx_f16c=1,avx_fma=1,bmi=bmi2,1g_pages=1,pcid=1,fsgsbase=1,smep=1,smap=1,mwait=1,vmx=1
-cpuid: family=6, model=0x1a, stepping=5, vendor_string="GenuineIntel", brand_string="Intel(R) Core(TM) i7-4770 CPU (Haswell)"
+cpuid<span class="token operator">:</span> x86_64<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>level<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span> mmx<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> sep<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> simd<span class="token operator">=</span>avx512<span class="token punctuation">,</span> aes<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> movbe<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> xsave<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>apic<span class="token operator">=</span>x2apic<span class="token punctuation">,</span>sha<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>movbe<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>adx<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>xsaveopt<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>avx_f16c<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>avx_fma<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>bmi<span class="token operator">=</span>bmi2<span class="token punctuation">,</span><span class="token number">1</span>g_pages<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>pcid<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>fsgsbase<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>smep<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>smap<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>mwait<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>vmx<span class="token operator">=</span><span class="token number">1</span>
+cpuid<span class="token operator">:</span> family<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span> model<span class="token operator">=</span><span class="token number">0x1a</span><span class="token punctuation">,</span> stepping<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> vendor_string<span class="token operator">=</span><span class="token string">"GenuineIntel"</span><span class="token punctuation">,</span> brand_string<span class="token operator">=</span><span class="token string">"Intel(R) Core(TM) i7-4770 CPU (Haswell)"</span>
 
-print_timestamps: enabled=0
-debugger_log: -
-magic_break: enabled=0
-port_e9_hack: enabled=0
-private_colormap: enabled=0
-clock: sync=none, time0=local, rtc_sync=0
-# no cmosimage
-# no loader
-log: -
-logprefix: %t%e%d
-debug: action=ignore
-info: action=report
-error: action=report
-panic: action=ask
-keyboard: type=mf, serial_delay=250, paste_delay=100000, user_shortcut=none
-mouse: type=ps2, enabled=0, toggle=ctrl+mbutton
-speaker: enabled=1, mode=system
-parport1: enabled=1, file=none
-parport2: enabled=0
-com1: enabled=1, mode=null
-com2: enabled=0
-com3: enabled=0
-com4: enabled=0
+print_timestamps<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+debugger_log<span class="token operator">:</span> <span class="token operator">-</span>
+magic_break<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+port_e9_hack<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+private_colormap<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+clock<span class="token operator">:</span> sync<span class="token operator">=</span>none<span class="token punctuation">,</span> time0<span class="token operator">=</span>local<span class="token punctuation">,</span> rtc_sync<span class="token operator">=</span><span class="token number">0</span>
+<span class="token macro property"># no cmosimage</span>
+<span class="token macro property"># no loader</span>
+log<span class="token operator">:</span> <span class="token operator">-</span>
+logprefix<span class="token operator">:</span> <span class="token operator">%</span>t<span class="token operator">%</span>e<span class="token operator">%</span>d
+debug<span class="token operator">:</span> action<span class="token operator">=</span>ignore
+info<span class="token operator">:</span> action<span class="token operator">=</span>report
+error<span class="token operator">:</span> action<span class="token operator">=</span>report
+panic<span class="token operator">:</span> action<span class="token operator">=</span>ask
+keyboard<span class="token operator">:</span> type<span class="token operator">=</span>mf<span class="token punctuation">,</span> serial_delay<span class="token operator">=</span><span class="token number">250</span><span class="token punctuation">,</span> paste_delay<span class="token operator">=</span><span class="token number">100000</span><span class="token punctuation">,</span> user_shortcut<span class="token operator">=</span>none
+mouse<span class="token operator">:</span> type<span class="token operator">=</span>ps2<span class="token punctuation">,</span> enabled<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> toggle<span class="token operator">=</span>ctrl<span class="token operator">+</span>mbutton
+speaker<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> mode<span class="token operator">=</span>system
+parport1<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> file<span class="token operator">=</span>none
+parport2<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+com1<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> mode<span class="token operator">=</span>null
+com2<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+com3<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
+com4<span class="token operator">:</span> enabled<span class="token operator">=</span><span class="token number">0</span>
 
-megs: 256<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+megs<span class="token operator">:</span> <span class="token number">256</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然后我们使用 <code>sudo bximage</code> 命令制作硬盘，按照其提示选择 <code>hd  flat </code> 输入硬盘大小和名称，最后显示：</p>
 <p><img src="bochs5.png" alt="bochs5.png"></p>
 <p>将对应语句加上配置文件中：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">...
-ata0-master:type=disk,path="hd60M.img",mode=flat
-...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+ata0<span class="token operator">-</span>master<span class="token operator">:</span>type<span class="token operator">=</span>disk<span class="token punctuation">,</span>path<span class="token operator">=</span><span class="token string">"hd60M.img"</span><span class="token punctuation">,</span>mode<span class="token operator">=</span>flat
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>再次运行命令 <code>bochs -f bochsrc.disk</code></p>
 <p><img src="bochs6.png" alt="bochs6.png"></p>
 <p><code>bin</code> 目录下文件如图所示：</p>
@@ -1243,12 +1243,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

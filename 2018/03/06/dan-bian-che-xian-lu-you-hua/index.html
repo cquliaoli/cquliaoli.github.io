@@ -427,189 +427,189 @@
 </ol>
 <p><strong>说明：</strong><br>优化输出结果按照规则分类，例如 rule1： 2016120001+2016120002 表示将单边车线路ID编码为 2016120001 和 2016120002 按照规则 1 合并优化。</p>
 <h2 id="解法一"><a href="#解法一" class="headerlink" title="解法一"></a>解法一</h2><p>首先直接想到的解法是通过循环判断，针对规则 1 ,两层 <code>for</code> 循环即可，时间复杂度为 $O(n^2)$ ，针对规则 2，需要使用三层 <code>for</code> 循环，时间复杂度未 $O(n^3)$ ，针对规则 3 ，需要两层 <code>for</code> 循环，时间复杂度也为  $O(n^2)$ 。三个规则如下：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">/**
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
  * 单边车数据对象
- */
-public static class UnilateralLine {
-    private String id;
-    private String sCen;//出发分拨
-    private String sPro;//出发省
-    private String eCen;//到达分拨
-    private String ePro;//到达省
-    //9.6m/17.5m
-    private String tType;//车型
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">UnilateralLine</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> sCen<span class="token punctuation">;</span><span class="token comment">//出发分拨</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> sPro<span class="token punctuation">;</span><span class="token comment">//出发省</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> eCen<span class="token punctuation">;</span><span class="token comment">//到达分拨</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> ePro<span class="token punctuation">;</span><span class="token comment">//到达省</span>
+    <span class="token comment">//9.6m/17.5m</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> tType<span class="token punctuation">;</span><span class="token comment">//车型</span>
 
-    public UnilateralLine(String id, String sCen,
-        String sPro, String eCen, String ePro, String tType) {
-        this.id = id;
-        this.sCen = sCen;
-        this.sPro = sPro;
-        this.eCen = eCen;
-        this.ePro = ePro;
-        this.tType = tType;
-    }
+    <span class="token keyword">public</span> <span class="token class-name">UnilateralLine</span><span class="token punctuation">(</span><span class="token class-name">String</span> id<span class="token punctuation">,</span> <span class="token class-name">String</span> sCen<span class="token punctuation">,</span>
+        <span class="token class-name">String</span> sPro<span class="token punctuation">,</span> <span class="token class-name">String</span> eCen<span class="token punctuation">,</span> <span class="token class-name">String</span> ePro<span class="token punctuation">,</span> <span class="token class-name">String</span> tType<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>sCen <span class="token operator">=</span> sCen<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>sPro <span class="token operator">=</span> sPro<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>eCen <span class="token operator">=</span> eCen<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>ePro <span class="token operator">=</span> ePro<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>tType <span class="token operator">=</span> tType<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public String getId() {
-        return id;
-    }
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setId</span><span class="token punctuation">(</span><span class="token class-name">String</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public String getSCen() {
-        return sCen;
-    }
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getSCen</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> sCen<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public void setSCen(String ePro) {
-        this.ePro = ePro;
-    }
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setSCen</span><span class="token punctuation">(</span><span class="token class-name">String</span> ePro<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>ePro <span class="token operator">=</span> ePro<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public String getSPro() {
-        return sPro;
-    }
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getSPro</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> sPro<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public void setSPro(String sPro) {
-        this.sPro = sPro;
-    }
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setSPro</span><span class="token punctuation">(</span><span class="token class-name">String</span> sPro<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>sPro <span class="token operator">=</span> sPro<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public String getECen() {
-        return eCen;
-    }
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getECen</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> eCen<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public void setECen(String eCen) {
-        this.eCen = eCen;
-    }
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setECen</span><span class="token punctuation">(</span><span class="token class-name">String</span> eCen<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>eCen <span class="token operator">=</span> eCen<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public String getEPro() {
-        return ePro;
-    }
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getEPro</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> ePro<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public void setEPro(String ePro) {
-        this.ePro = ePro;
-    }
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setEPro</span><span class="token punctuation">(</span><span class="token class-name">String</span> ePro<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>ePro <span class="token operator">=</span> ePro<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public String getTType() {
-        return tType;
-    }
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getTType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> tType<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public void setTType(String tType) {
-        this.tType = tType;
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setTType</span><span class="token punctuation">(</span><span class="token class-name">String</span> tType<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>tType <span class="token operator">=</span> tType<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">/**
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
  * 规则1
  *
  * @param lineList 单边车数据列表
  * @return 结果
- */
-public static List&lt;String&gt; unilateralOptRule1(
-        List&lt;UnilateralLine&gt; lineList) {
-    List&lt;String&gt; result = new ArrayList&lt;String&gt;();
-    if (lineList.size() &lt; 2)
-        return result;
-    for (int i = 0; i &lt; lineList.size(); i++) {
-        for (int j = 1; j &lt; lineList.size(); j++) {
-            //A-&gt;B B-&gt;A
-            if (lineList.get(i).sCen == lineList.get(j).eCen
-                    &amp;&amp; lineList.get(i).eCen == lineList.get(j).sCen
-                    &amp;&amp; lineList.get(i).tType == lineList.get(j).tType) {
-                result.set(i, (lineList.get(i).id + lineList.get(j).id));
-                lineList.remove(i);
-                lineList.remove(j);
-            }
-        }
-    }
-    return result;
-}
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">unilateralOptRule1</span><span class="token punctuation">(</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">UnilateralLine</span><span class="token punctuation">&gt;</span></span> lineList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">2</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">//A-&gt;B B-&gt;A</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>sCen <span class="token operator">==</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>eCen
+                    <span class="token operator">&amp;&amp;</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>eCen <span class="token operator">==</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>sCen
+                    <span class="token operator">&amp;&amp;</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>tType <span class="token operator">==</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>tType<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                result<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>id <span class="token operator">+</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                lineList<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                lineList<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">/**
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
   * 规则 2
   * @param lineList 单边车数据列表
   * @return
-  */
- public static List&lt;String&gt;unilateralOptRule2(List&lt;UnilateralLine&gt; lineList){
-     List&lt;String&gt; result = new ArrayList&lt;String&gt;();
-     if (lineList.size() &lt; 3)
-         return result;
-     for (int i = 0; i &lt; lineList.size(); i++)
-     {
-         for(int j=1;j&lt;lineList.size();j++)
-         {
-             if(lineList.get(i).eCen == lineList.get(j).sCen){
-                 for (int k=2;k&lt;lineList.size();k++)
-                 {
-                     //A-&gt;B B-&gt;C C-&gt;A, 形成环且满足车型规则
-                     if(lineList.get(i).sCen==lineList.get(k).eCen
-                             &amp;&amp;lineList.get(j).eCen==lineList.get(k).sCen
-                             &amp;&amp;typeCheck(lineList.get(i).tType
-                             ,lineList.get(k).tType
-                             ,lineList.get(k).tType)){
-                         result.set(i, (lineList.get(i).id + lineList.get(j).id + lineList.get(k).id));
-                         lineList.remove(i);
-                         lineList.remove(k);
-                         lineList.remove(j);
-                     }
-                 }
-             }
+  */</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token function">unilateralOptRule2</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">UnilateralLine</span><span class="token punctuation">&gt;</span></span> lineList<span class="token punctuation">)</span><span class="token punctuation">{</span>
+     <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span>
+         <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+     <span class="token punctuation">{</span>
+         <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> j<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span>j<span class="token operator">&lt;</span>lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>j<span class="token operator">++</span><span class="token punctuation">)</span>
+         <span class="token punctuation">{</span>
+             <span class="token keyword">if</span><span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>eCen <span class="token operator">==</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>sCen<span class="token punctuation">)</span><span class="token punctuation">{</span>
+                 <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> k<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">;</span>k<span class="token operator">&lt;</span>lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>k<span class="token operator">++</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">{</span>
+                     <span class="token comment">//A-&gt;B B-&gt;C C-&gt;A, 形成环且满足车型规则</span>
+                     <span class="token keyword">if</span><span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>sCen<span class="token operator">==</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">.</span>eCen
+                             <span class="token operator">&amp;&amp;</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>eCen<span class="token operator">==</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">.</span>sCen
+                             <span class="token operator">&amp;&amp;</span><span class="token function">typeCheck</span><span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>tType
+                             <span class="token punctuation">,</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">.</span>tType
+                             <span class="token punctuation">,</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">.</span>tType<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                         result<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>id <span class="token operator">+</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>id <span class="token operator">+</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                         lineList<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                         lineList<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                         lineList<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     <span class="token punctuation">}</span>
+                 <span class="token punctuation">}</span>
+             <span class="token punctuation">}</span>
 
-         }
-     }
-     return result;
- }
-    /**
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+     <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+    <span class="token comment">/**
      * 判断是否满足合并规则
      * @param type1
      * @param type2
      * @param type3
      * @return
-     */
-    public static boolean typeCheck(String type1,String type2,String type3){
-        String a = "9.6m";
-        if (type1 == type2 &amp;&amp; type2 == type3) {
-            return true;
-        } else {
-            if (type1 == type2 &amp;&amp; type1.equals(a)) {
-                return true;
-            }
-            if (type1 == type3 &amp;&amp; type1.equals(a)) {
-                return true;
-            }
-            if (type2 == type3 &amp;&amp; type2.equals(a)) {
-                return true;
-            }
-        }
-        return false;
-    }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">typeCheck</span><span class="token punctuation">(</span><span class="token class-name">String</span> type1<span class="token punctuation">,</span><span class="token class-name">String</span> type2<span class="token punctuation">,</span><span class="token class-name">String</span> type3<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">String</span> a <span class="token operator">=</span> <span class="token string">"9.6m"</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>type1 <span class="token operator">==</span> type2 <span class="token operator">&amp;&amp;</span> type2 <span class="token operator">==</span> type3<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>type1 <span class="token operator">==</span> type2 <span class="token operator">&amp;&amp;</span> type1<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>type1 <span class="token operator">==</span> type3 <span class="token operator">&amp;&amp;</span> type1<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>type2 <span class="token operator">==</span> type3 <span class="token operator">&amp;&amp;</span> type2<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">/**
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
   * 规则 3
   * @param lineList 单边车数据列表
   * @return
-  */
- public static List&lt;String&gt;unilateralOptRule3(List&lt;UnilateralLine&gt; lineList)
- {
-     List&lt;String&gt; result = new ArrayList&lt;String&gt;();
-     if (lineList.size() &lt; 2)
-         return result;
-     for (int i = 0; i &lt; lineList.size(); i++) {
-         for (int j = 1; j &lt; lineList.size(); j++) {
-             //A-&gt;B C-&gt;A, B C同省，同车型
-             if (lineList.get(i).sCen == lineList.get(j).eCen
-                     &amp;&amp; lineList.get(j).ePro == lineList.get(i).sPro
-                     &amp;&amp;lineList.get(i).tType==lineList.get(j).tType) {
-                 result.set(i, (lineList.get(i).id + lineList.get(j).id));
-                 lineList.remove(i);
-                 lineList.remove(j);
-             }
-         }
-     }
-     return result;
- }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  */</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token function">unilateralOptRule3</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">UnilateralLine</span><span class="token punctuation">&gt;</span></span> lineList<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+     <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">2</span><span class="token punctuation">)</span>
+         <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> lineList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+             <span class="token comment">//A-&gt;B C-&gt;A, B C同省，同车型</span>
+             <span class="token keyword">if</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>sCen <span class="token operator">==</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>eCen
+                     <span class="token operator">&amp;&amp;</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>ePro <span class="token operator">==</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>sPro
+                     <span class="token operator">&amp;&amp;</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>tType<span class="token operator">==</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>tType<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                 result<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token punctuation">(</span>lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>id <span class="token operator">+</span> lineList<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                 lineList<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                 lineList<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token punctuation">}</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+     <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h2><p>从解法一可知，本题的时间复杂度最大为 $O(n^3)$ ，那么能不能降低呢？我们知道往往可以用<strong>空间</strong>换<strong>时间</strong>，所以：</p>
 <ol>
@@ -1305,12 +1305,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

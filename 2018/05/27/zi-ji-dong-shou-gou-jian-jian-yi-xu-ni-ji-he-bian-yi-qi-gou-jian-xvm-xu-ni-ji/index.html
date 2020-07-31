@@ -482,79 +482,79 @@
 <li>The _RetVal Register.</li>
 </ol>
 <h3 id="Runtime-Values"><a href="#Runtime-Values" class="headerlink" title="Runtime Values"></a>Runtime Values</h3><p>由于脚本语言是无类型的，所以不能用类似 C 语言的 int,float 或者 char* 代表运行时值，因为运行过程中可能从一种数据类型转换到另一种数据类型，所以需要用一个结构体代表运行时值（runtime values），结构体如下</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _Value // A runtime value
-{
-  int iType; // Type
-  union // The value
-  {
-    int iIntLiteral; // Integer literal
-    float fFloatLiteral; // Float literal
-    char * pstrStringLiteral; // String literal
-    int iStackIndex; // Stack Index
-    int iInstrIndex; // Instruction index
-    int iFuncIndex; // Function index
-    int iHostAPICallIndex; // Host API Call index
-    int iReg; // Register code
-  };
-  int iOffsetIndex; // Index of the offset
-}
-Value;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Value</span> <span class="token comment">// A runtime value</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iType<span class="token punctuation">;</span> <span class="token comment">// Type</span>
+  <span class="token keyword">union</span> <span class="token comment">// The value</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> iIntLiteral<span class="token punctuation">;</span> <span class="token comment">// Integer literal</span>
+    <span class="token keyword">float</span> fFloatLiteral<span class="token punctuation">;</span> <span class="token comment">// Float literal</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span> pstrStringLiteral<span class="token punctuation">;</span> <span class="token comment">// String literal</span>
+    <span class="token keyword">int</span> iStackIndex<span class="token punctuation">;</span> <span class="token comment">// Stack Index</span>
+    <span class="token keyword">int</span> iInstrIndex<span class="token punctuation">;</span> <span class="token comment">// Instruction index</span>
+    <span class="token keyword">int</span> iFuncIndex<span class="token punctuation">;</span> <span class="token comment">// Function index</span>
+    <span class="token keyword">int</span> iHostAPICallIndex<span class="token punctuation">;</span> <span class="token comment">// Host API Call index</span>
+    <span class="token keyword">int</span> iReg<span class="token punctuation">;</span> <span class="token comment">// Register code</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> iOffsetIndex<span class="token punctuation">;</span> <span class="token comment">// Index of the offset</span>
+<span class="token punctuation">}</span>
+Value<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="指令流-1"><a href="#指令流-1" class="headerlink" title="指令流"></a>指令流</h3><p>指令流的结构和执行文件中指令流的表示方式类似：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _Instr // An instruction
-{
-  int iOpcode; // The opcode
-  int iOpCount; // The number of operands
-  Value * pOpList; // The operand list
-}
-Instr;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Instr</span> <span class="token comment">// An instruction</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iOpcode<span class="token punctuation">;</span> <span class="token comment">// The opcode</span>
+  <span class="token keyword">int</span> iOpCount<span class="token punctuation">;</span> <span class="token comment">// The number of operands</span>
+  Value <span class="token operator">*</span> pOpList<span class="token punctuation">;</span> <span class="token comment">// The operand list</span>
+<span class="token punctuation">}</span>
+Instr<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="instrMemory.png" alt="instrMemory"></p>
 <h3 id="运行时栈-1"><a href="#运行时栈-1" class="headerlink" title="运行时栈"></a>运行时栈</h3><p>运行时栈以栈为基础，栈中元素便是运行时值（runtime values）， c 语言中没有现成的栈实现，不过可以用数组配合一个索引模拟栈，栈结构如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _RuntimeStack // A runtime stack
-{
-  Value * pElmnts; // The stack elements
-  int iSize; // The number of elements in the stack
-  int iTopIndex; // The top index
-  int iFrameIndex; // Index of the top of the current
-  // stack frame.
-}
-RuntimeStack;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_RuntimeStack</span> <span class="token comment">// A runtime stack</span>
+<span class="token punctuation">{</span>
+  Value <span class="token operator">*</span> pElmnts<span class="token punctuation">;</span> <span class="token comment">// The stack elements</span>
+  <span class="token keyword">int</span> iSize<span class="token punctuation">;</span> <span class="token comment">// The number of elements in the stack</span>
+  <span class="token keyword">int</span> iTopIndex<span class="token punctuation">;</span> <span class="token comment">// The top index</span>
+  <span class="token keyword">int</span> iFrameIndex<span class="token punctuation">;</span> <span class="token comment">// Index of the top of the current</span>
+  <span class="token comment">// stack frame.</span>
+<span class="token punctuation">}</span>
+RuntimeStack<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Frame-Index"><a href="#Frame-Index" class="headerlink" title="Frame Index"></a>Frame Index</h3><p>为什么会存在 <code>iFrameIndex</code> 呢？，还记得栈帧中所有的本地变量和参数都是相对于<code>栈顶</code>引用的，此处的 <code>栈顶</code> 可能会因 <code>push</code> 指令发生改变，所以需要将最初的<code>栈顶</code> 记录下来，即存入 <code>iFrameIndex</code> 中，这样无论栈顶如何变化，本地变量和参数引用都不会发生变化。</p>
 <h3 id="Function-Table"><a href="#Function-Table" class="headerlink" title="Function Table"></a>Function Table</h3><p>由于 XVM 需要访问函数的信息，不过这些信息都是只读的，所以可以用如下结构表示：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _Func // Function table element
-{
-  int iEntryPoint; // The entry point
-  int iParamCount; // Number of parameters to expect
-  int iLocalDataSize; // Total size of all local data
-  int iStackFrameSize; // Total size of the stack frame
-}
-Func;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Func</span> <span class="token comment">// Function table element</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iEntryPoint<span class="token punctuation">;</span> <span class="token comment">// The entry point</span>
+  <span class="token keyword">int</span> iParamCount<span class="token punctuation">;</span> <span class="token comment">// Number of parameters to expect</span>
+  <span class="token keyword">int</span> iLocalDataSize<span class="token punctuation">;</span> <span class="token comment">// Total size of all local data</span>
+  <span class="token keyword">int</span> iStackFrameSize<span class="token punctuation">;</span> <span class="token comment">// Total size of the stack frame</span>
+<span class="token punctuation">}</span>
+Func<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中 <code>iStackFrameSize</code> 为 <code>iParamCount+iLocalDataSize+1</code> ，虽然可以实时计算出该值，不过在虚拟机执行过程中会高频计算该值，所以提前用一个字段保存能提高性能。</p>
 <p><img src="functionTable.png" alt="functionTable"></p>
 <h3 id="Host-API-Call-Table"><a href="#Host-API-Call-Table" class="headerlink" title="Host API Call Table"></a>Host API Call Table</h3><p>Host API Call Table 中包含调用表和数量。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _HostAPICallTable // A host API call table
-{
-  char ** ppstrCalls; // Pointer to the call array
-  int iSize; // The number of calls in the array
-}
-HostAPICallTable;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_HostAPICallTable</span> <span class="token comment">// A host API call table</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span> ppstrCalls<span class="token punctuation">;</span> <span class="token comment">// Pointer to the call array</span>
+  <span class="token keyword">int</span> iSize<span class="token punctuation">;</span> <span class="token comment">// The number of calls in the array</span>
+<span class="token punctuation">}</span>
+HostAPICallTable<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="脚本运行时数据结构"><a href="#脚本运行时数据结构" class="headerlink" title="脚本运行时数据结构"></a>脚本运行时数据结构</h3><p>综合前面各个数据结构，便可以得到脚本运行时的数据结构：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _Script // Encapsulates a full script
-{
-  // Header data
-  int iGlobalDataSize; // The size of the script's global
-  // data
-  int iIsMainFuncPresent; // Is _Main () present?
-  int iMainFuncIndex; // _Main ()'s function index
-  int iIsPaused; // Is the script currently paused?
-  int iPauseEndTime; // If so, when should it resume?
-  // Register file
-  Value _RetVal; // The _RetVal register
-  // Script data
-  InstrStream InstrStream; // The instruction stream
-  RuntimeStack Stack; // The runtime stack
-  Func * pFuncTable; // The function table
-  HostAPICallTable HostAPICallTable; // The host API call table
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Script</span> <span class="token comment">// Encapsulates a full script</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Header data</span>
+  <span class="token keyword">int</span> iGlobalDataSize<span class="token punctuation">;</span> <span class="token comment">// The size of the script's global</span>
+  <span class="token comment">// data</span>
+  <span class="token keyword">int</span> iIsMainFuncPresent<span class="token punctuation">;</span> <span class="token comment">// Is _Main () present?</span>
+  <span class="token keyword">int</span> iMainFuncIndex<span class="token punctuation">;</span> <span class="token comment">// _Main ()'s function index</span>
+  <span class="token keyword">int</span> iIsPaused<span class="token punctuation">;</span> <span class="token comment">// Is the script currently paused?</span>
+  <span class="token keyword">int</span> iPauseEndTime<span class="token punctuation">;</span> <span class="token comment">// If so, when should it resume?</span>
+  <span class="token comment">// Register file</span>
+  Value _RetVal<span class="token punctuation">;</span> <span class="token comment">// The _RetVal register</span>
+  <span class="token comment">// Script data</span>
+  InstrStream InstrStream<span class="token punctuation">;</span> <span class="token comment">// The instruction stream</span>
+  RuntimeStack Stack<span class="token punctuation">;</span> <span class="token comment">// The runtime stack</span>
+  Func <span class="token operator">*</span> pFuncTable<span class="token punctuation">;</span> <span class="token comment">// The function table</span>
+  HostAPICallTable HostAPICallTable<span class="token punctuation">;</span> <span class="token comment">// The host API call table</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="构建-XVM-原型"><a href="#构建-XVM-原型" class="headerlink" title="构建 XVM 原型"></a>构建 XVM 原型</h2><p>XVM 原型包含以下几个阶段：</p>
 <ol>
@@ -564,42 +564,42 @@ HostAPICallTable;<span aria-hidden="true" class="line-numbers-rows"><span></span
 </ol>
 <h3 id="加载-XSE-可执行文件"><a href="#加载-XSE-可执行文件" class="headerlink" title="加载 .XSE 可执行文件"></a>加载 .XSE 可执行文件</h3><p>.XSE 格式回顾</p>
 <h4 id="XSE-Main-Header"><a href="#XSE-Main-Header" class="headerlink" title=".XSE Main Header"></a>.XSE Main Header</h4><p><img src="mainHeader.png" alt="mainHeader"></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">// Create a buffer to hold the file's ID string
-// (4 bytes + 1 null terminator = 5)
-char * pstrIDString;
-pstrIDString = ( char * ) malloc ( 5 );
-// Read the string (4 bytes) and append a null terminator
-fread ( pstrIDString, 4, 1, pScriptFile );
-pstrIDString [ strlen ( XSE_ID_STRING ) ] = '\0';
-// Compare the data read from the file to the ID string and exit on an error
-// if they don't match
-if ( strcmp ( pstrIDString, XSE_ID_STRING ) != 0 )
-  return LOAD_ERROR_INVALID_XSE;
-// Free the buffer
-free ( pstrIDString );
-// Read the script version (2 bytes total)
-int iMajorVersion = 0,
-iMinorVersion = 0;
-fread ( &amp; iMajorVersion, 1, 1, pScriptFile );
-fread ( &amp; iMinorVersion, 1, 1, pScriptFile );
-// Validate the version, since this prototype only supports version 0.4 scripts
-if ( iMajorVersion != 0 || iMinorVersion != 4 )
-  return LOAD_ERROR_UNSUPPORTED_VERS;
-// Read the stack size (4 bytes)
-fread ( &amp; g_Script.Stack.iSize, 4, 1, pScriptFile );
-// Check for a default stack size request
-if ( g_Script.Stack.iSize == 0 )
-  g_Script.Stack.iSize = DEF_STACK_SIZE;
-// Allocate the runtime stack
-int iStackSize = g_Script.Stack.iSize;
-g_Script.Stack.pElmnts = ( Value * )
-malloc ( iStackSize * sizeof ( Value ) );
-// Read the global data size (4 bytes)
-fread ( &amp; g_Script.iGlobalDataSize, 4, 1, pScriptFile );
-// Check for presence of _Main () (1 byte)
-fread ( &amp; g_Script.iIsMainFuncPresent, 1, 1, pScriptFile );
-// Read _Main ()'s function index (4 bytes)
-fread ( &amp; g_Script.iMainFuncIndex, 4, 1, pScriptFile );<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Create a buffer to hold the file's ID string</span>
+<span class="token comment">// (4 bytes + 1 null terminator = 5)</span>
+<span class="token keyword">char</span> <span class="token operator">*</span> pstrIDString<span class="token punctuation">;</span>
+pstrIDString <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token number">5</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Read the string (4 bytes) and append a null terminator</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> pstrIDString<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+pstrIDString <span class="token punctuation">[</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> XSE_ID_STRING <span class="token punctuation">)</span> <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'\0'</span><span class="token punctuation">;</span>
+<span class="token comment">// Compare the data read from the file to the ID string and exit on an error</span>
+<span class="token comment">// if they don't match</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> pstrIDString<span class="token punctuation">,</span> XSE_ID_STRING <span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+  <span class="token keyword">return</span> LOAD_ERROR_INVALID_XSE<span class="token punctuation">;</span>
+<span class="token comment">// Free the buffer</span>
+<span class="token function">free</span> <span class="token punctuation">(</span> pstrIDString <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Read the script version (2 bytes total)</span>
+<span class="token keyword">int</span> iMajorVersion <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+iMinorVersion <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> iMajorVersion<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> iMinorVersion<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Validate the version, since this prototype only supports version 0.4 scripts</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span> iMajorVersion <span class="token operator">!=</span> <span class="token number">0</span> <span class="token operator">||</span> iMinorVersion <span class="token operator">!=</span> <span class="token number">4</span> <span class="token punctuation">)</span>
+  <span class="token keyword">return</span> LOAD_ERROR_UNSUPPORTED_VERS<span class="token punctuation">;</span>
+<span class="token comment">// Read the stack size (4 bytes)</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_Script<span class="token punctuation">.</span>Stack<span class="token punctuation">.</span>iSize<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Check for a default stack size request</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span> g_Script<span class="token punctuation">.</span>Stack<span class="token punctuation">.</span>iSize <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+  g_Script<span class="token punctuation">.</span>Stack<span class="token punctuation">.</span>iSize <span class="token operator">=</span> DEF_STACK_SIZE<span class="token punctuation">;</span>
+<span class="token comment">// Allocate the runtime stack</span>
+<span class="token keyword">int</span> iStackSize <span class="token operator">=</span> g_Script<span class="token punctuation">.</span>Stack<span class="token punctuation">.</span>iSize<span class="token punctuation">;</span>
+g_Script<span class="token punctuation">.</span>Stack<span class="token punctuation">.</span>pElmnts <span class="token operator">=</span> <span class="token punctuation">(</span> Value <span class="token operator">*</span> <span class="token punctuation">)</span>
+<span class="token function">malloc</span> <span class="token punctuation">(</span> iStackSize <span class="token operator">*</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> Value <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Read the global data size (4 bytes)</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_Script<span class="token punctuation">.</span>iGlobalDataSize<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Check for presence of _Main () (1 byte)</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_Script<span class="token punctuation">.</span>iIsMainFuncPresent<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Read _Main ()'s function index (4 bytes)</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_Script<span class="token punctuation">.</span>iMainFuncIndex<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -607,204 +607,204 @@ fread ( &amp; g_Script.iMainFuncIndex, 4, 1, pScriptFile );<span aria-hidden="tr
 <p><img src="instructionStruct.png" alt="instructionStruct"></p>
 <p><img src="opStream.png" alt="opStream"></p>
 <p><img src="opStruct.png" alt="opStruct"></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">for ( int iCurrInstrIndex = 0;
-iCurrInstrIndex &lt; g_Script.InstrStream.iSize;
-++ iCurrInstrIndex )
-{
-  // Read the opcode (2 bytes)
-  g_Script.InstrStream.pInstr [ iCurrInstrIndex ].iOpcode = 0;
-  fread ( &amp; g_Script.InstrStream.pInstrs [ iCurrInstrIndex ].iOpcode,
-  2, 1, pScriptFile );
-  // Read the operand count (1 byte)
-  g_Script.InstrStream.pInstr [ iCurrInstrIndex ].iOpCount = 0;
-  fread ( &amp; g_Script.InstrStream.pInstrs [ iCurrInstrIndex ].iOpCount,
-  1, 1, pScriptFile );
-  int iOpCount = g_Script.InstrStream.pInstrs [ iCurrInstrIndex ].iOpCount;
-  // Allocate space for the operand list in a temporary pointer
-  Value * pOpList;
-  pOpList = ( Value * ) malloc ( iOpCount * sizeof ( Value ) );
-  // Read in the operand list (N bytes)
-  for ( int iCurrOpIndex = 0; iCurrOpIndex &lt; iOpCount; ++ iCurrOpIndex )
-  {
-    // Read in the operand type (1 byte)
-    pOpList [ iCurrOpIndex ].iType = 0;
-    fread ( &amp; pOpList [ iCurrOpIndex ].iType, 1, 1, pScriptFile );
-    // Depending on the type, read in the operand data
-    switch ( pOpList [ iCurrOpIndex ].iType )
-    {
-        // Integer literal
-        case OP_TYPE_INT:
-          fread ( &amp; pOpList [ iCurrOpIndex ].iIntLiteral,
-          sizeof ( int ), 1, pScriptFile );
-          break;
-        // Floating-point literal
-        case OP_TYPE_FLOAT:
-          fread ( &amp; pOpList [ iCurrOpIndex ].fFloatLiteral,
-          sizeof ( float ), 1, pScriptFile );
-          break;
-        // String index
-        case OP_TYPE_STRING:
-          // Since there's no field in the Value structure for string
-          // table
-          // indices, read the index into the integer literal field
-          // and set
-          // its type to string index
-          fread ( &amp; pOpList [ iCurrOpIndex ].iIntLiteral, sizeof ( int ),
-          1, pScriptFile );
-          pOpList [ iCurrOpIndex ].iType = OP_TYPE_STRING;
-          break;
-        // Instruction index
-        case OP_TYPE_INSTR_INDEX:
-          fread ( &amp; pOpList [ iCurrOpIndex ].iInstrIndex,
-          sizeof ( int ), 1, pScriptFile );
-          break;
-        // Absolute stack index
-        case OP_TYPE_ABS_STACK_INDEX:
-          fread ( &amp; pOpList [ iCurrOpIndex ].iStackIndex,
-          sizeof ( int ), 1, pScriptFile );
-          break;
-        // Relative stack index
-        case OP_TYPE_REL_STACK_INDEX:
-          fread ( &amp; pOpList [ iCurrOpIndex ].iStackIndex, sizeof ( int ),
-          1, pScriptFile );
-          fread ( &amp; pOpList [ iCurrOpIndex ].iOffsetIndex,
-          sizeof ( int ), 1, pScriptFile );
-          break;
-        // Function index
-        case OP_TYPE_FUNC_INDEX:
-          fread ( &amp; pOpList [ iCurrOpIndex ].iFuncIndex, sizeof ( int ),
-          1, pScriptFile );
-          break;
-        // Host API call index
-        case OP_TYPE_HOST_API_CALL_INDEX:
-          fread ( &amp; pOpList [ iCurrOpIndex ].iHostAPICallIndex,
-          sizeof ( int ), 1, pScriptFile );
-          break;
-        // Register
-        case OP_TYPE_REG:
-          fread ( &amp; pOpList [ iCurrOpIndex ].iReg, sizeof ( int ),
-          1, pScriptFile );
-          break;
-  }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrInstrIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+iCurrInstrIndex <span class="token operator">&lt;</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>iSize<span class="token punctuation">;</span>
+<span class="token operator">++</span> iCurrInstrIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Read the opcode (2 bytes)</span>
+  g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>pInstr <span class="token punctuation">[</span> iCurrInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpcode <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>pInstrs <span class="token punctuation">[</span> iCurrInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpcode<span class="token punctuation">,</span>
+  <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read the operand count (1 byte)</span>
+  g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>pInstr <span class="token punctuation">[</span> iCurrInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>pInstrs <span class="token punctuation">[</span> iCurrInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpCount<span class="token punctuation">,</span>
+  <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> iOpCount <span class="token operator">=</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>pInstrs <span class="token punctuation">[</span> iCurrInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpCount<span class="token punctuation">;</span>
+  <span class="token comment">// Allocate space for the operand list in a temporary pointer</span>
+  Value <span class="token operator">*</span> pOpList<span class="token punctuation">;</span>
+  pOpList <span class="token operator">=</span> <span class="token punctuation">(</span> Value <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> iOpCount <span class="token operator">*</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> Value <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read in the operand list (N bytes)</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrOpIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrOpIndex <span class="token operator">&lt;</span> iOpCount<span class="token punctuation">;</span> <span class="token operator">++</span> iCurrOpIndex <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// Read in the operand type (1 byte)</span>
+    pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iType <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iType<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Depending on the type, read in the operand data</span>
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iType <span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token comment">// Integer literal</span>
+        <span class="token keyword">case</span> OP_TYPE_INT<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iIntLiteral<span class="token punctuation">,</span>
+          <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// Floating-point literal</span>
+        <span class="token keyword">case</span> OP_TYPE_FLOAT<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>fFloatLiteral<span class="token punctuation">,</span>
+          <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">float</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// String index</span>
+        <span class="token keyword">case</span> OP_TYPE_STRING<span class="token operator">:</span>
+          <span class="token comment">// Since there's no field in the Value structure for string</span>
+          <span class="token comment">// table</span>
+          <span class="token comment">// indices, read the index into the integer literal field</span>
+          <span class="token comment">// and set</span>
+          <span class="token comment">// its type to string index</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iIntLiteral<span class="token punctuation">,</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iType <span class="token operator">=</span> OP_TYPE_STRING<span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// Instruction index</span>
+        <span class="token keyword">case</span> OP_TYPE_INSTR_INDEX<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iInstrIndex<span class="token punctuation">,</span>
+          <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// Absolute stack index</span>
+        <span class="token keyword">case</span> OP_TYPE_ABS_STACK_INDEX<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iStackIndex<span class="token punctuation">,</span>
+          <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// Relative stack index</span>
+        <span class="token keyword">case</span> OP_TYPE_REL_STACK_INDEX<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iStackIndex<span class="token punctuation">,</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOffsetIndex<span class="token punctuation">,</span>
+          <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// Function index</span>
+        <span class="token keyword">case</span> OP_TYPE_FUNC_INDEX<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iFuncIndex<span class="token punctuation">,</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// Host API call index</span>
+        <span class="token keyword">case</span> OP_TYPE_HOST_API_CALL_INDEX<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iHostAPICallIndex<span class="token punctuation">,</span>
+          <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token comment">// Register</span>
+        <span class="token keyword">case</span> OP_TYPE_REG<span class="token operator">:</span>
+          <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iReg<span class="token punctuation">,</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>读取过程如下：</p>
 <p><img src="readingInstr.png" alt="readingInstr"></p>
 <h4 id="String-Table"><a href="#String-Table" class="headerlink" title="String Table"></a>String Table</h4><p><img src="stringTable.png" alt="stringTable"><br><img src="stringStruct.png" alt="stringStruct"></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">// Run through each operand in the instruction stream and assign copies
-// of string operands' corresponding string literals
-for ( int iCurrInstrIndex = 0; iCurrInstrIndex &lt; g_Script.InstrStream.iSize;
-++ iCurrInstrIndex )
-{
-  // Get the instruction's operand count and a copy of its operand list
-  int iOpCount = g_Script.InstrStream.pInstrs [ iCurrInstrIndex ].iOpCount;
-  Value * pOpList = g_Script.InstrStream.pInstrs [ iCurrInstrIndex ].pOpList;
-  // Loop through each operand
-  for ( int iCurrOpIndex = 0; iCurrOpIndex &lt; iOpCount; ++ iCurrOpIndex )
-  {
-    // If the operand is a string index, make a local copy of
-    // its corresponding string in the table
-    if ( pOpList [ iCurrOpIndex ].iType == OP_TYPE_STRING )
-    {
-      // Get the string index from the operand's integer literal field
-      int iStringIndex = pOpList [ iCurrOpIndex ].iIntLiteral;
-      // Allocate a new string to hold a copy of the one in the table
-      char * pstrStringCopy;
-      pstrStringCopy = ( char * )
-      malloc ( strlen ( ppstrStringTable [ iStringIndex ] ) + 1 );
-      // Make a copy of the string
-      strcpy ( pstrStringCopy, ppstrStringTable [ iStringIndex ] );
-      // Save the string pointer in the operand list
-      pOpList [ iCurrOpIndex ].pstrStringLiteral = pstrStringCopy;
-    }
-  }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Run through each operand in the instruction stream and assign copies</span>
+<span class="token comment">// of string operands' corresponding string literals</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrInstrIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrInstrIndex <span class="token operator">&lt;</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>iSize<span class="token punctuation">;</span>
+<span class="token operator">++</span> iCurrInstrIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Get the instruction's operand count and a copy of its operand list</span>
+  <span class="token keyword">int</span> iOpCount <span class="token operator">=</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>pInstrs <span class="token punctuation">[</span> iCurrInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpCount<span class="token punctuation">;</span>
+  Value <span class="token operator">*</span> pOpList <span class="token operator">=</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>pInstrs <span class="token punctuation">[</span> iCurrInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>pOpList<span class="token punctuation">;</span>
+  <span class="token comment">// Loop through each operand</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrOpIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrOpIndex <span class="token operator">&lt;</span> iOpCount<span class="token punctuation">;</span> <span class="token operator">++</span> iCurrOpIndex <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// If the operand is a string index, make a local copy of</span>
+    <span class="token comment">// its corresponding string in the table</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iType <span class="token operator">==</span> OP_TYPE_STRING <span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token comment">// Get the string index from the operand's integer literal field</span>
+      <span class="token keyword">int</span> iStringIndex <span class="token operator">=</span> pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iIntLiteral<span class="token punctuation">;</span>
+      <span class="token comment">// Allocate a new string to hold a copy of the one in the table</span>
+      <span class="token keyword">char</span> <span class="token operator">*</span> pstrStringCopy<span class="token punctuation">;</span>
+      pstrStringCopy <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token punctuation">)</span>
+      <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> ppstrStringTable <span class="token punctuation">[</span> iStringIndex <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// Make a copy of the string</span>
+      <span class="token function">strcpy</span> <span class="token punctuation">(</span> pstrStringCopy<span class="token punctuation">,</span> ppstrStringTable <span class="token punctuation">[</span> iStringIndex <span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// Save the string pointer in the operand list</span>
+      pOpList <span class="token punctuation">[</span> iCurrOpIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>pstrStringLiteral <span class="token operator">=</span> pstrStringCopy<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在读取字符串表时，我们会直接将字符串拷贝到指令流中：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">// Loop through each instruction in the stream
-for ( int CurrInstr = 0; CurrInstr &lt; g_Script.InstrCount; ++ CurrInstr )
-{
-  // Get the instruction's operand count
-  int OpCount = g_Script.InstrStream.Instrs [ CurrInstr ].OpCount;
-  // Loop through each operand in the instruction
-  for ( int CurrOp = 0; CurrOp &lt; OpCount; ++ CurrOp )
-  {
-      // Get the current operand type
-    int OpType = g_Script.InstrStream.Instrs \
-    [ CurrInstr ].OpList [ CurrOp ].Type;
-    // Is this a string operand?
-    if ( OpType == OP_TYPE_STRING )
-    {
-      // The string index is in the IntLiteral field
-      int StringIndex = g_Script.InstrStream \
-      [ CurrInstr ].OpList [ CurrOp ].IntLiteral;
-      // Get the string from the table
-      string StringOp = StringTable [ StringIndex ];
-      // Save the string value in the operand
-      g_Script.InstrStream.Instrs [ CurrInstr ].OpList \
-      [ CurrOp ].StringLiteral = OP_TYPE_STRING;
-    }
-  }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Loop through each instruction in the stream</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> CurrInstr <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> CurrInstr <span class="token operator">&lt;</span> g_Script<span class="token punctuation">.</span>InstrCount<span class="token punctuation">;</span> <span class="token operator">++</span> CurrInstr <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Get the instruction's operand count</span>
+  <span class="token keyword">int</span> OpCount <span class="token operator">=</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>Instrs <span class="token punctuation">[</span> CurrInstr <span class="token punctuation">]</span><span class="token punctuation">.</span>OpCount<span class="token punctuation">;</span>
+  <span class="token comment">// Loop through each operand in the instruction</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> CurrOp <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> CurrOp <span class="token operator">&lt;</span> OpCount<span class="token punctuation">;</span> <span class="token operator">++</span> CurrOp <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+      <span class="token comment">// Get the current operand type</span>
+    <span class="token keyword">int</span> OpType <span class="token operator">=</span> g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>Instrs \
+    <span class="token punctuation">[</span> CurrInstr <span class="token punctuation">]</span><span class="token punctuation">.</span>OpList <span class="token punctuation">[</span> CurrOp <span class="token punctuation">]</span><span class="token punctuation">.</span>Type<span class="token punctuation">;</span>
+    <span class="token comment">// Is this a string operand?</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> OpType <span class="token operator">==</span> OP_TYPE_STRING <span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token comment">// The string index is in the IntLiteral field</span>
+      <span class="token keyword">int</span> StringIndex <span class="token operator">=</span> g_Script<span class="token punctuation">.</span>InstrStream \
+      <span class="token punctuation">[</span> CurrInstr <span class="token punctuation">]</span><span class="token punctuation">.</span>OpList <span class="token punctuation">[</span> CurrOp <span class="token punctuation">]</span><span class="token punctuation">.</span>IntLiteral<span class="token punctuation">;</span>
+      <span class="token comment">// Get the string from the table</span>
+      string StringOp <span class="token operator">=</span> StringTable <span class="token punctuation">[</span> StringIndex <span class="token punctuation">]</span><span class="token punctuation">;</span>
+      <span class="token comment">// Save the string value in the operand</span>
+      g_Script<span class="token punctuation">.</span>InstrStream<span class="token punctuation">.</span>Instrs <span class="token punctuation">[</span> CurrInstr <span class="token punctuation">]</span><span class="token punctuation">.</span>OpList \
+      <span class="token punctuation">[</span> CurrOp <span class="token punctuation">]</span><span class="token punctuation">.</span>StringLiteral <span class="token operator">=</span> OP_TYPE_STRING<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>读取完字符串表后，要记得释放原先的字符串表资源：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">// Free the original strings
-for ( iCurrStringIndex = 0; iCurrStringIndex &lt; iStringTableSize;
-++ iCurrStringIndex )
-  free ( ppstrStringTable [ iCurrStringIndex ] );
-// Free the string table itself
-free ( ppstrStringTable );<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Free the original strings</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span> iCurrStringIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrStringIndex <span class="token operator">&lt;</span> iStringTableSize<span class="token punctuation">;</span>
+<span class="token operator">++</span> iCurrStringIndex <span class="token punctuation">)</span>
+  <span class="token function">free</span> <span class="token punctuation">(</span> ppstrStringTable <span class="token punctuation">[</span> iCurrStringIndex <span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Free the string table itself</span>
+<span class="token function">free</span> <span class="token punctuation">(</span> ppstrStringTable <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="Function-Table-Structure"><a href="#Function-Table-Structure" class="headerlink" title="Function Table Structure"></a>Function Table Structure</h4><p><img src="funcTable.png" alt="funcTable"><br><img src="funcTableStruct.png" alt="funcTableStruct"></p>
 <p>读取函数表比较直接：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c">
-// Read the function count (4 bytes)
-int iFuncTableSize;
-fread ( &amp; iFuncTableSize, 4, 1, pScriptFile );
-// Allocate the table
-g_Script.pFuncTable = ( Func * ) malloc ( iFuncTableSize * sizeof ( Func ) )
+<span class="token comment">// Read the function count (4 bytes)</span>
+<span class="token keyword">int</span> iFuncTableSize<span class="token punctuation">;</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> iFuncTableSize<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Allocate the table</span>
+g_Script<span class="token punctuation">.</span>pFuncTable <span class="token operator">=</span> <span class="token punctuation">(</span> Func <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> iFuncTableSize <span class="token operator">*</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> Func <span class="token punctuation">)</span> <span class="token punctuation">)</span>
 
-// Read each function
-for ( int iCurrFuncIndex = 0; iCurrFuncIndex &lt; iFuncTableSize;
-++ iCurrFuncIndex )
-{
-  // Read the entry point (4 bytes)
-  int iEntryPoint;
-  fread ( &amp; iEntryPoint, 4, 1, pScriptFile );
-  // Read the parameter count (1 byte)
-  int iParamCount = 0;
-  fread ( &amp; iParamCount, 1, 1, pScriptFile );
-  // Read the local data size (4 bytes)
-  int iLocalDataSize;
-  fread ( &amp; iLocalDataSize, 4, 1, pScriptFile );
-  // Calculate the stack size
-  int iStackFrameSize = iParamCount + 1 + iLocalDataSize;
-  // Write everything to the function table
-  g_Script.pFuncTable [ iCurrFuncIndex ].iEntryPoint = iEntryPoint;
-  g_Script.pFuncTable [ iCurrFuncIndex ].iParamCount = iParamCount;
-  g_Script.pFuncTable [ iCurrFuncIndex ].iLocalDataSize = iLocalDataSize;
-  g_Script.pFuncTable [ iCurrFuncIndex ].iStackFrameSize = iStackFrameSize;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">// Read each function</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrFuncIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrFuncIndex <span class="token operator">&lt;</span> iFuncTableSize<span class="token punctuation">;</span>
+<span class="token operator">++</span> iCurrFuncIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Read the entry point (4 bytes)</span>
+  <span class="token keyword">int</span> iEntryPoint<span class="token punctuation">;</span>
+  <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> iEntryPoint<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read the parameter count (1 byte)</span>
+  <span class="token keyword">int</span> iParamCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> iParamCount<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read the local data size (4 bytes)</span>
+  <span class="token keyword">int</span> iLocalDataSize<span class="token punctuation">;</span>
+  <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> iLocalDataSize<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Calculate the stack size</span>
+  <span class="token keyword">int</span> iStackFrameSize <span class="token operator">=</span> iParamCount <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">+</span> iLocalDataSize<span class="token punctuation">;</span>
+  <span class="token comment">// Write everything to the function table</span>
+  g_Script<span class="token punctuation">.</span>pFuncTable <span class="token punctuation">[</span> iCurrFuncIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iEntryPoint <span class="token operator">=</span> iEntryPoint<span class="token punctuation">;</span>
+  g_Script<span class="token punctuation">.</span>pFuncTable <span class="token punctuation">[</span> iCurrFuncIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iParamCount <span class="token operator">=</span> iParamCount<span class="token punctuation">;</span>
+  g_Script<span class="token punctuation">.</span>pFuncTable <span class="token punctuation">[</span> iCurrFuncIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iLocalDataSize <span class="token operator">=</span> iLocalDataSize<span class="token punctuation">;</span>
+  g_Script<span class="token punctuation">.</span>pFuncTable <span class="token punctuation">[</span> iCurrFuncIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iStackFrameSize <span class="token operator">=</span> iStackFrameSize<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="Host-API-Call-Table-Structure"><a href="#Host-API-Call-Table-Structure" class="headerlink" title="Host API Call Table Structure"></a>Host API Call Table Structure</h4><p><img src="hostAPICallTable.png" alt="hostAPICallTable"><br><img src="hostAPICallStructure.png" alt="hostAPICallStructure"></p>
 <p>读取 Host API 也比较直接：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">// Read the host API call count
-fread ( &amp; g_Script.HostAPICallTable.iSize, 4, 1, pScriptFile );
-// Allocate the table
-g_Script.HostAPICallTable.ppstrCalls = ( char ** )
-malloc ( g_Script.HostAPICallTable.iSize * sizeof ( char * ) );
-for ( int iCurrCallIndex = 0; iCurrCallIndex &lt; g_Script.HostAPICallTable.iSize;
-++ iCurrCallIndex )
-{
-  // Read the host API call string size (1 byte)
-  int iCallLength = 0;
-  fread ( &amp; iCallLength, 1, 1, pScriptFile );
-  // Allocate space for the string plus the null terminator in a
-  // temporary pointer
-  char * pstrCurrCall;
-  pstrCurrCall = ( char * ) malloc ( iCallLength + 1 );
-  // Read the host API call string data and append the null terminator
-  fread ( pstrCurrCall, iCallLength, 1, pScriptFile );
-  pstrCurrCall [ iCallLength ] = '\0';
-  // Assign the temporary pointer to the table
-  g_Script.HostAPICallTable.ppstrCalls [ iCurrCallIndex ] = pstrCurrCall;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Read the host API call count</span>
+<span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_Script<span class="token punctuation">.</span>HostAPICallTable<span class="token punctuation">.</span>iSize<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Allocate the table</span>
+g_Script<span class="token punctuation">.</span>HostAPICallTable<span class="token punctuation">.</span>ppstrCalls <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span> <span class="token punctuation">)</span>
+<span class="token function">malloc</span> <span class="token punctuation">(</span> g_Script<span class="token punctuation">.</span>HostAPICallTable<span class="token punctuation">.</span>iSize <span class="token operator">*</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrCallIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrCallIndex <span class="token operator">&lt;</span> g_Script<span class="token punctuation">.</span>HostAPICallTable<span class="token punctuation">.</span>iSize<span class="token punctuation">;</span>
+<span class="token operator">++</span> iCurrCallIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Read the host API call string size (1 byte)</span>
+  <span class="token keyword">int</span> iCallLength <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token function">fread</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> iCallLength<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Allocate space for the string plus the null terminator in a</span>
+  <span class="token comment">// temporary pointer</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span> pstrCurrCall<span class="token punctuation">;</span>
+  pstrCurrCall <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> iCallLength <span class="token operator">+</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read the host API call string data and append the null terminator</span>
+  <span class="token function">fread</span> <span class="token punctuation">(</span> pstrCurrCall<span class="token punctuation">,</span> iCallLength<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pScriptFile <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  pstrCurrCall <span class="token punctuation">[</span> iCallLength <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'\0'</span><span class="token punctuation">;</span>
+  <span class="token comment">// Assign the temporary pointer to the table</span>
+  g_Script<span class="token punctuation">.</span>HostAPICallTable<span class="token punctuation">.</span>ppstrCalls <span class="token punctuation">[</span> iCurrCallIndex <span class="token punctuation">]</span> <span class="token operator">=</span> pstrCurrCall<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <hr>
@@ -1502,12 +1502,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

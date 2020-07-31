@@ -424,22 +424,22 @@
 <h2 id="ADT-和黑盒"><a href="#ADT-和黑盒" class="headerlink" title="ADT 和黑盒"></a>ADT 和黑盒</h2><p>ADT 指抽象数据类型（abstract data type），它可以让程序更加模块化，提高程序的通用性。我们在使用数据结构时，只需要知道其接口即可，至于其中的实现方式可以看做一个黑盒，这样将数据的实现和使用分离，极大提高了程序通用性、独立性和抽象性。</p>
 <h2 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h2><p>初学者往往容易被递归搞得晕头转向，原因是我们总是想去理解其执行过程，人脑的执行栈哪有计算机这么深，结果越陷越深，迷失在一层层递归调用中。其实，我们只需要<strong>假设递归函数能够正确返回</strong>，每个步骤和限制条件都是对的，每次调用递归后都能接近限制条件，那么递归函数总是能够正确完成，<strong>不要纠缠于它的执行过程</strong>，这是我们阅读和编写递归函数的精髓。如果实在不放心可以用数学归纳法证明。</p>
 <h2 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h2><p>函数的参数个数往往是不能确定的，所以 C 语言提供了 stdarg 宏支持可变参数列表。下面以计算平均值为例：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">#include &lt;stdarg.h&gt;
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdarg.h&gt;</span></span>
 
-float average (int n_values,...){
-  va_list var_arg;
-  int count;
-  float sum=0;
-  //准备访问可变参数,使用va_start宏，第一个参数是va_list类型，
-  //第二个参数是可变参数前的第一个参数
-  va_start(var_arg,n_values);
-  for(count=0;count&lt;n_values;count++){
-    //使用va_arg访问参数，第一个参数是va_list类型,第二个参数是可变参数类型
-    sum+va_arg(var_arg,int);
-  }
-  va_end(var_arg);
-  return sum/n_values;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">float</span> <span class="token function">average</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n_values<span class="token punctuation">,</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  va_list var_arg<span class="token punctuation">;</span>
+  <span class="token keyword">int</span> count<span class="token punctuation">;</span>
+  <span class="token keyword">float</span> sum<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token comment">//准备访问可变参数,使用va_start宏，第一个参数是va_list类型，</span>
+  <span class="token comment">//第二个参数是可变参数前的第一个参数</span>
+  <span class="token function">va_start</span><span class="token punctuation">(</span>var_arg<span class="token punctuation">,</span>n_values<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span><span class="token punctuation">(</span>count<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>count<span class="token operator">&lt;</span>n_values<span class="token punctuation">;</span>count<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment">//使用va_arg访问参数，第一个参数是va_list类型,第二个参数是可变参数类型</span>
+    sum<span class="token operator">+</span><span class="token function">va_arg</span><span class="token punctuation">(</span>var_arg<span class="token punctuation">,</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token function">va_end</span><span class="token punctuation">(</span>var_arg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> sum<span class="token operator">/</span>n_values<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可变参数宏有两个限制：</p>
 <ul>
 <li>这些宏无法判断实际存在的参数数量。</li>
@@ -1109,12 +1109,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

@@ -418,10 +418,10 @@
                 <p>本节介绍内核加载和特权级相关内容。</p>
 <a id="more"></a>
 <h2 id="内核加载"><a href="#内核加载" class="headerlink" title="内核加载"></a>内核加载</h2><p>前面我们直接使用汇编语言编写代码，不过越是底层的语言，开发效率越低，后续开发内核大部分功能肯定还是要使用 C 语言，汇编语言编写代码编译后直接就是可执行二进制文件了，C 语言编写的代码却要经过编译、汇编到目标代码，然后由连接器链接后才变成可执行文件。如下代码：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int main(void){
-  while (1) ;
-  return 0;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>只对其编译和汇编成目标代码：</p>
 <pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">gcc -c -o main.o main.c
 file main.o
@@ -452,57 +452,57 @@ nm kernel.bin
 <p><img src="elf1.png" alt="elf1.png"></p>
 <p><code>elf header</code> 数据类型如下：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c">
-/* Type for a 16-bit quantity.  */
-typedef uint16_t Elf32_Half;
-typedef uint16_t Elf64_Half;
+<span class="token comment">/* Type for a 16-bit quantity.  */</span>
+<span class="token keyword">typedef</span> uint16_t Elf32_Half<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> uint16_t Elf64_Half<span class="token punctuation">;</span>
 
-/* Types for signed and unsigned 32-bit quantities.  */
-typedef uint32_t Elf32_Word;
-typedef    int32_t  Elf32_Sword;
-typedef uint32_t Elf64_Word;
-typedef    int32_t  Elf64_Sword;
+<span class="token comment">/* Types for signed and unsigned 32-bit quantities.  */</span>
+<span class="token keyword">typedef</span> uint32_t Elf32_Word<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span>    int32_t  Elf32_Sword<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> uint32_t Elf64_Word<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span>    int32_t  Elf64_Sword<span class="token punctuation">;</span>
 
-/* Types for signed and unsigned 64-bit quantities.  */
-typedef uint64_t Elf32_Xword;
-typedef    int64_t  Elf32_Sxword;
-typedef uint64_t Elf64_Xword;
-typedef    int64_t  Elf64_Sxword;
+<span class="token comment">/* Types for signed and unsigned 64-bit quantities.  */</span>
+<span class="token keyword">typedef</span> uint64_t Elf32_Xword<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span>    int64_t  Elf32_Sxword<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> uint64_t Elf64_Xword<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span>    int64_t  Elf64_Sxword<span class="token punctuation">;</span>
 
-/* Type of addresses.  */
-typedef uint32_t Elf32_Addr;
-typedef uint64_t Elf64_Addr;
+<span class="token comment">/* Type of addresses.  */</span>
+<span class="token keyword">typedef</span> uint32_t Elf32_Addr<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> uint64_t Elf64_Addr<span class="token punctuation">;</span>
 
-/* Type of file offsets.  */
-typedef uint32_t Elf32_Off;
-typedef uint64_t Elf64_Off;
+<span class="token comment">/* Type of file offsets.  */</span>
+<span class="token keyword">typedef</span> uint32_t Elf32_Off<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> uint64_t Elf64_Off<span class="token punctuation">;</span>
 
-/* Type for section indices, which are 16-bit quantities.  */
-typedef uint16_t Elf32_Section;
-typedef uint16_t Elf64_Section;
+<span class="token comment">/* Type for section indices, which are 16-bit quantities.  */</span>
+<span class="token keyword">typedef</span> uint16_t Elf32_Section<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> uint16_t Elf64_Section<span class="token punctuation">;</span>
 
-/* Type for version symbol information.  */
-typedef Elf32_Half Elf32_Versym;
-typedef Elf64_Half Elf64_Versym;
+<span class="token comment">/* Type for version symbol information.  */</span>
+<span class="token keyword">typedef</span> Elf32_Half Elf32_Versym<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> Elf64_Half Elf64_Versym<span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><code>elf header</code> 结构如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct
-{
-  unsigned char    e_ident[EI_NIDENT];    /* Magic number and other info */
-  Elf32_Half    e_type;            /* Object file type */
-  Elf32_Half    e_machine;        /* Architecture */
-  Elf32_Word    e_version;        /* Object file version */
-  Elf32_Addr    e_entry;        /* Entry point virtual address */
-  Elf32_Off    e_phoff;        /* Program header table file offset */
-  Elf32_Off    e_shoff;        /* Section header table file offset */
-  Elf32_Word    e_flags;        /* Processor-specific flags */
-  Elf32_Half    e_ehsize;        /* ELF header size in bytes */
-  Elf32_Half    e_phentsize;        /* Program header table entry size */
-  Elf32_Half    e_phnum;        /* Program header table entry count */
-  Elf32_Half    e_shentsize;        /* Section header table entry size */
-  Elf32_Half    e_shnum;        /* Section header table entry count */
-  Elf32_Half    e_shstrndx;        /* Section header string table index */
-} Elf32_Ehdr;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">char</span>    e_ident<span class="token punctuation">[</span>EI_NIDENT<span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment">/* Magic number and other info */</span>
+  Elf32_Half    e_type<span class="token punctuation">;</span>            <span class="token comment">/* Object file type */</span>
+  Elf32_Half    e_machine<span class="token punctuation">;</span>        <span class="token comment">/* Architecture */</span>
+  Elf32_Word    e_version<span class="token punctuation">;</span>        <span class="token comment">/* Object file version */</span>
+  Elf32_Addr    e_entry<span class="token punctuation">;</span>        <span class="token comment">/* Entry point virtual address */</span>
+  Elf32_Off    e_phoff<span class="token punctuation">;</span>        <span class="token comment">/* Program header table file offset */</span>
+  Elf32_Off    e_shoff<span class="token punctuation">;</span>        <span class="token comment">/* Section header table file offset */</span>
+  Elf32_Word    e_flags<span class="token punctuation">;</span>        <span class="token comment">/* Processor-specific flags */</span>
+  Elf32_Half    e_ehsize<span class="token punctuation">;</span>        <span class="token comment">/* ELF header size in bytes */</span>
+  Elf32_Half    e_phentsize<span class="token punctuation">;</span>        <span class="token comment">/* Program header table entry size */</span>
+  Elf32_Half    e_phnum<span class="token punctuation">;</span>        <span class="token comment">/* Program header table entry count */</span>
+  Elf32_Half    e_shentsize<span class="token punctuation">;</span>        <span class="token comment">/* Section header table entry size */</span>
+  Elf32_Half    e_shnum<span class="token punctuation">;</span>        <span class="token comment">/* Section header table entry count */</span>
+  Elf32_Half    e_shstrndx<span class="token punctuation">;</span>        <span class="token comment">/* Section header string table index */</span>
+<span class="token punctuation">}</span> Elf32_Ehdr<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中以下几个字节比较重要：</p>
 <ul>
 <li>Elf32_Addr    e_entry;        /* Entry point virtual address */ 程序入口虚拟地址</li>
@@ -512,19 +512,19 @@ typedef Elf64_Half Elf64_Versym;
 <li>Elf32_Half    e_phnum;        /* Program header table entry count */</li>
 </ul>
 <p><code>struct Elf32_Phdr</code> 用来描述各个段的信息，其功能类似与 GDT 中段描述符。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">/* Program segment header.  */
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* Program segment header.  */</span>
 
-typedef struct
-{
-  Elf32_Word    p_type;            /* Segment type */
-  Elf32_Off    p_offset;        /* Segment file offset */
-  Elf32_Addr    p_vaddr;        /* Segment virtual address */
-  Elf32_Addr    p_paddr;        /* Segment physical address */
-  Elf32_Word    p_filesz;        /* Segment size in file */
-  Elf32_Word    p_memsz;        /* Segment size in memory */
-  Elf32_Word    p_flags;        /* Segment flags */
-  Elf32_Word    p_align;        /* Segment alignment */
-} Elf32_Phdr;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span>
+<span class="token punctuation">{</span>
+  Elf32_Word    p_type<span class="token punctuation">;</span>            <span class="token comment">/* Segment type */</span>
+  Elf32_Off    p_offset<span class="token punctuation">;</span>        <span class="token comment">/* Segment file offset */</span>
+  Elf32_Addr    p_vaddr<span class="token punctuation">;</span>        <span class="token comment">/* Segment virtual address */</span>
+  Elf32_Addr    p_paddr<span class="token punctuation">;</span>        <span class="token comment">/* Segment physical address */</span>
+  Elf32_Word    p_filesz<span class="token punctuation">;</span>        <span class="token comment">/* Segment size in file */</span>
+  Elf32_Word    p_memsz<span class="token punctuation">;</span>        <span class="token comment">/* Segment size in memory */</span>
+  Elf32_Word    p_flags<span class="token punctuation">;</span>        <span class="token comment">/* Segment flags */</span>
+  Elf32_Word    p_align<span class="token punctuation">;</span>        <span class="token comment">/* Segment alignment */</span>
+<span class="token punctuation">}</span> Elf32_Phdr<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="elf实例分析"><a href="#elf实例分析" class="headerlink" title="elf实例分析"></a>elf实例分析</h3><p>为了查看 <code>elf</code> 的内部，可以使用 <code>xxd</code> 命令：</p>
 <pre class="line-numbers language-sh" data-language="sh"><code class="language-sh">xxd -u -a -g l -s $2 -l $3 $1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>其中第一个参数为待查看文件名，第二个为文件的起始字节，第三个参数代表查看的长度。</p>
@@ -955,7 +955,7 @@ rd_disk_m_32:
 <p><strong>注意：如果返回时需要改变特权级，将检测<code>DS</code>、<code>ES</code>、<code>FS</code>、<code>GS</code>内容，如果某个寄存器选择子指向的数据段描述符的DPL权限比返回后的CPL（CS.RPL）高，则处理器将 0 填充到相应的段寄存器。</strong></p>
 <p>因为段寄存器填充 0 会触发异常，这样就可以避免恶意操作。</p>
 <h3 id="RPL"><a href="#RPL" class="headerlink" title="RPL"></a>RPL</h3><p>其实特权级最容易混淆的地方就在于 <code>RPL</code>，网上很多文章都没有解释清楚，通过例子就很容易说明白。假设系统调用 <code>syswrite</code>，其定义如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">syswrite(LBA,selector,offset);将LBA地址的内容写入到选择子位selector，偏移量为offset的内存位置<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">syswrite</span><span class="token punctuation">(</span>LBA<span class="token punctuation">,</span>selector<span class="token punctuation">,</span>offset<span class="token punctuation">)</span><span class="token punctuation">;</span>将LBA地址的内容写入到选择子位selector，偏移量为offset的内存位置<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>如果仅仅靠刚刚说的公式：<code>DPL_GATE&gt;=CPL&gt;=DPL_CODE</code> ，显然是满足的，当CPU从用户空间陷入内核后，其CPL变成 0 ，现在任意代码和内存位置CPU都是可以执行和访问的，假设恶意用户把<code>selector</code> 和<code>offset</code> 设置到内核区，那么该系统调用将会破坏系统内核！！这种现象叫做<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/36617718/difference-between-dpl-and-rpl-in-x86" title="权限扩大">privilege escalation vulnerability</a>过程如下：</p>
 <p><img src="rpl.png" alt="rpl.png"></p>
 <p>问题出在哪儿呢？其实很简单，我们需要标识谁才是真正的请求者，即<code>RPL</code>。<code>RPL</code> 可能是真正运行的程序，也可能不是，比如上面的系统调用，<code>RPL</code> 是用户程序。这样一来，在作特权级检测时就需要考虑 <code>RPL</code>了。</p>
@@ -1710,12 +1710,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

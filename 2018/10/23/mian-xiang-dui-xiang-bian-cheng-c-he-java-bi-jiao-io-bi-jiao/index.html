@@ -426,321 +426,321 @@
                 <p>本章以 C 语言为背景以及 C++ 和 Java的基础结构建立联系。</p>
 <a id="more"></a>
 <h2 id="简单程序：对一个整型数组求和"><a href="#简单程序：对一个整型数组求和" class="headerlink" title="简单程序：对一个整型数组求和"></a>简单程序：对一个整型数组求和</h2><p>c 程序如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">/*AddArray1.c*/
-#include&lt;stdio.h&gt;
-int addArray(int[], int);
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/*AddArray1.c*/</span>
+<span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token keyword">int</span> <span class="token function">addArray</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-int main(int argc, char* argv[])
-{
-    int data[] = { 4,3,2,1,0,5,6,7,8,9 };
-    //size 返回数组大小，在32位机器为4，为了可移植性
-    const int size = sizeof(data) / sizeof(data[0]);
-    //data 为数组名，传递的是地址
-    printf("sum of %d\n", addArray(data, size));
-    getchar();
-}
-/**
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> data<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">4</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">9</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token comment">//size 返回数组大小，在32位机器为4，为了可移植性</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> size <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//data 为数组名，传递的是地址</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"sum of %d\n"</span><span class="token punctuation">,</span> <span class="token function">addArray</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment">/**
  * 对数组a求和
- */
-int addArray(int a[], int n)
-{
-    int sum = 0;
-    for(int i = 0;i&lt;n;i++)
-    {
-        sum += a[i];
-    }
-    return sum;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+ */</span>
+<span class="token keyword">int</span> <span class="token function">addArray</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span>n<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        sum <span class="token operator">+=</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> sum<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>addArray 函数采用指针方式和数组本质上是等价的，如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">/*AddArray2.c*/
-#include&lt;stdio.h&gt;
-int addArray2(int *a, int);
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/*AddArray2.c*/</span>
+<span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token keyword">int</span> <span class="token function">addArray2</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-int main(int argc, char* argv[])
-{
-    int data[] = { 4,3,2,1,0,5,6,7,8,9 };
-    //size 返回数组大小，在32位机器为4，为了可移植性
-    const int size = sizeof(data) / sizeof(data[0]);
-    //data 为指针，传递的是地址
-    printf("sum of %d\n", addArray2(data, size));
-    getchar();
-}
-/**
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> data<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">4</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">9</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token comment">//size 返回数组大小，在32位机器为4，为了可移植性</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> size <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//data 为指针，传递的是地址</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"sum of %d\n"</span><span class="token punctuation">,</span> <span class="token function">addArray2</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment">/**
 * 对数组a求和
-*/
-int addArray2(int *a, int n)
-{
-    int sum = 0;
-    for (int i = 0; i&lt;n; i++)
-    {
-        sum += *a++;
-    }
-    return sum;
-}
+*/</span>
+<span class="token keyword">int</span> <span class="token function">addArray2</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        sum <span class="token operator">+=</span> <span class="token operator">*</span>a<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> sum<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>相同版本的 C++ 程序如下：</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">//AddArray.cc
-#include &lt;iostream&gt;
-//命名空间
-using namespace std;
-int addArray3(int *, int);
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//AddArray.cc</span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<span class="token comment">//命名空间</span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">addArray3</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-int  main_AddArray(int argc, char* argv[])
-{
-    int data[] = { 4,3,2,1,0,5,6,7,8,9 };
-    //size 返回数组大小，在32位机器为4，为了可移植性
-    const int size = sizeof(data) / sizeof(data[0]);
-    cout &lt;&lt; "c++ version:sum is "
-        &lt;&lt; addArray3(data, size) &lt;&lt; endl;
-    cin.get();
-    return 0;
-}
-int addArray3(int* a, int n)
-{
-    int sum = 0;
-    for (int i = 0; i &lt; n; i++)
-        sum += *a++;
-    return sum;
+<span class="token keyword">int</span>  <span class="token function">main_AddArray</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> data<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">4</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">9</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token comment">//size 返回数组大小，在32位机器为4，为了可移植性</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> size <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"c++ version:sum is "</span>
+        <span class="token operator">&lt;&lt;</span> <span class="token function">addArray3</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> size<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    cin<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">addArray3</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">*</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        sum <span class="token operator">+=</span> <span class="token operator">*</span>a<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> sum<span class="token punctuation">;</span>
 
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>相同版本的 java 程序：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">package ll.chapter02;
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">ll<span class="token punctuation">.</span>chapter02</span><span class="token punctuation">;</span>
 
-/**
+<span class="token comment">/**
  * Created by liaoli
  * date: 2018/10/23
  * time: 19:31
- */
-public class AddArray {
-    public static void main(String[] args) {
-        int[]data={0,2,3,4,6,4,5,45,4,54,5};
-        System.out.println("The sum of data is "+addArray(data));
-    }
-    public static int addArray(int[]a){
-        int sum=0;
-        for(int i=0;i&lt;a.length;i++){
-            sum+=a[i];
-        }
-        return sum;
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AddArray</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span>data<span class="token operator">=</span><span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">45</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">54</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"The sum of data is "</span><span class="token operator">+</span><span class="token function">addArray</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">addArray</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span>a<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">int</span> sum<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span>a<span class="token punctuation">.</span>length<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            sum<span class="token operator">+=</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> sum<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="简单程序：终端IO"><a href="#简单程序：终端IO" class="headerlink" title="简单程序：终端IO"></a>简单程序：终端IO</h2><p>用户输入数字序列，用程序求序列和，如下序列：</p>
 <p>####4####45###44######6#45Enter</p>
 <p>c 程序如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">//termio.c
-#include&lt;stdio.h&gt;
-int  main_TermIO(int argc, char* argv[])
-{
-    int i = 0;
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//termio.c</span>
+<span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token keyword">int</span>  <span class="token function">main_TermIO</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 
-    char ch;
-    printf("Enter a sequence of integers: ");
-    int sum = 0;
-    while (scanf_s("%d", &amp;i) == 1)
-    {
-        sum += i;
-        while ((ch=getchar())==' ')
-            ;
-        if (ch == '\n')break;
-        ungetc(ch, stdin);
-    }
-    printf("The sum of the integers is:%d\n", sum);
-    getchar();
-    return 0;
-}
+    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Enter a sequence of integers: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">scanf_s</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>i<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        sum <span class="token operator">+=</span> i<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>ch<span class="token operator">=</span><span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token string">' '</span><span class="token punctuation">)</span>
+            <span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>ch <span class="token operator">==</span> <span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token function">ungetc</span><span class="token punctuation">(</span>ch<span class="token punctuation">,</span> <span class="token constant">stdin</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"The sum of the integers is:%d\n"</span><span class="token punctuation">,</span> sum<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>c 语言输入格式化函数 <code>scanf</code> 使用比较繁琐，细节较多且易出错。一定要掌握其原理，scanf 工作过程是键盘输入首先进入键盘缓冲区，当输入enter时，再将键盘缓存区内容输入到stdin流的内部缓存区，scanf 从内部缓存区根据格式解析数据，输入队列中都是字符；%c 逐字符解析 %s 以空白为分割;可以用getchar或者fflush清空缓冲区。</p>
 <p>对应的 c++ 程序如下：</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;iostream&gt;
-using namespace std;
-int main_TermIO2()
-{
-    int sum = 0;
-    cout &lt;&lt; "Enter a sequence of integers:";
-    int i;
-    while (cin&gt;&gt;i)
-    {
-        sum += i;
-        while (cin.peek()==' ')
-        {
-            cin.get();
-        }
-        if(cin.peek()=='\n')break;
-    }
-    cout &lt;&lt; "SUM IS " &lt;&lt; sum &lt;&lt; endl;
-    cin.get();
-    return 0;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">main_TermIO2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Enter a sequence of integers:"</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>cin<span class="token operator">&gt;&gt;</span>i<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        sum <span class="token operator">+=</span> i<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>cin<span class="token punctuation">.</span><span class="token function">peek</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token string">' '</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            cin<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>cin<span class="token punctuation">.</span><span class="token function">peek</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"SUM IS "</span> <span class="token operator">&lt;&lt;</span> sum <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    cin<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可以看出 c++ 输入模块更加简单、易用。<br>相应的 java 版本：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">package ll.chapter02;
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">ll<span class="token punctuation">.</span>chapter02</span><span class="token punctuation">;</span>
 
-/**
+<span class="token comment">/**
  * Created by liaoli
  * date: 2018/10/23
  * time: 19:40
- */
-public class TermIO {
-    static boolean newline;
-    public static void main(String[] args) {
-        int sum=0;
-        System.out.println("Enter a sequence of integer:");
-        while (newline==false){
-            String str=readString();
-            if(str!=null){
-                int i=Integer.parseInt(str);
-                sum+=i;
-            }
-        }
-        System.out.println("Sum of the numbers is "+sum);
-    }
-    public static String readString(){
-        String word="";
-        try {
-            int ch;
-            while ((ch=System.in.read())==' ')
-                ;
-            if(ch=='\n'){
-                newline=true;
-                return null;
-            }
-            word+=(char)ch;
-            while ((ch=System.in.read())!=' '&amp;&amp;
-                ch!='\n'){
-                word+=(char)ch;
-            }
-            if(ch=='\n')newline=true;
-        }catch (Exception e){
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TermIO</span> <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> <span class="token keyword">boolean</span> newline<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> sum<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Enter a sequence of integer:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>newline<span class="token operator">==</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token class-name">String</span> str<span class="token operator">=</span><span class="token function">readString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>str<span class="token operator">!=</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                <span class="token keyword">int</span> i<span class="token operator">=</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                sum<span class="token operator">+=</span>i<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Sum of the numbers is "</span><span class="token operator">+</span>sum<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">readString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">String</span> word<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> ch<span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>ch<span class="token operator">=</span><span class="token class-name">System</span><span class="token punctuation">.</span>in<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token string">' '</span><span class="token punctuation">)</span>
+                <span class="token punctuation">;</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>ch<span class="token operator">==</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                newline<span class="token operator">=</span><span class="token boolean">true</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            word<span class="token operator">+=</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span>ch<span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>ch<span class="token operator">=</span><span class="token class-name">System</span><span class="token punctuation">.</span>in<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">!=</span><span class="token string">' '</span><span class="token operator">&amp;&amp;</span>
+                ch<span class="token operator">!=</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                word<span class="token operator">+=</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span>ch<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>ch<span class="token operator">==</span><span class="token string">'\n'</span><span class="token punctuation">)</span>newline<span class="token operator">=</span><span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
 
-        }
-        return word;
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> word<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="简单程序：IO文件"><a href="#简单程序：IO文件" class="headerlink" title="简单程序：IO文件"></a>简单程序：IO文件</h2><p>现在实现将一个文件拷贝到另一个文件，文件可以是文本文件也可以是二进制文件。<br>c 语言版本如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">#define _CRT_SECURE_NO_WARNINGS
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-int main(int argc, char* argv[])
-{
-    FILE *in, *out;
-    int ch;
-    if(argc!=3)
-    {
-        fprintf(stderr, "usage:copy in_file out_file\n");
-        exit(EXIT_FAILURE);
-    }
-    if((in=fopen(argv[1],"rb"))==NULL)
-    {
-        fprintf(stderr, "can't open %s\n", argv[1]);
-        exit(EXIT_FAILURE);
-    }
-    if((out=fopen(argv[2],"wb"))==NULL)
-    {
-        fprintf(stderr, "can't open %s\n", argv[2]);
-        fclose(in);
-        exit(EXIT_FAILURE);
-    }
-    while ((ch=getc(in))!=EOF)
-    {
-        if(putc(ch,out)==EOF)
-        {
-            break;
-        }
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">define</span> _CRT_SECURE_NO_WARNINGS</span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h&gt;</span></span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    FILE <span class="token operator">*</span>in<span class="token punctuation">,</span> <span class="token operator">*</span>out<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> ch<span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>argc<span class="token operator">!=</span><span class="token number">3</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">fprintf</span><span class="token punctuation">(</span><span class="token constant">stderr</span><span class="token punctuation">,</span> <span class="token string">"usage:copy in_file out_file\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span>EXIT_FAILURE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token punctuation">(</span>in<span class="token operator">=</span><span class="token function">fopen</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token string">"rb"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token constant">NULL</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">fprintf</span><span class="token punctuation">(</span><span class="token constant">stderr</span><span class="token punctuation">,</span> <span class="token string">"can't open %s\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span>EXIT_FAILURE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token punctuation">(</span>out<span class="token operator">=</span><span class="token function">fopen</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token string">"wb"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token constant">NULL</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">fprintf</span><span class="token punctuation">(</span><span class="token constant">stderr</span><span class="token punctuation">,</span> <span class="token string">"can't open %s\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">fclose</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span>EXIT_FAILURE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>ch<span class="token operator">=</span><span class="token function">getc</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">!=</span><span class="token constant">EOF</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">putc</span><span class="token punctuation">(</span>ch<span class="token punctuation">,</span>out<span class="token punctuation">)</span><span class="token operator">==</span><span class="token constant">EOF</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-    }
-    if(ferror(in))
-    {
-        printf("Error while reading source file.\n");
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">ferror</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Error while reading source file.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    }
-    if(ferror(out))
-    {
-        printf("Error while writing into dest file.\n");
-    }
-    fclose(in);
-    fclose(out);
-    return 0;
-}
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">ferror</span><span class="token punctuation">(</span>out<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Error while writing into dest file.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">fclose</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">fclose</span><span class="token punctuation">(</span>out<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>c 语言实现文件拷贝需要警惕打开文件异常以及文件关闭，特别是异常情况下。<br>让我看下 c++ 实现方案：</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;fstream&gt;
-#include &lt;cstdlib&gt;
-#include &lt;iostream&gt;
-using namespace std;
-void print_error(const char*, const char* = "");
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;fstream&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cstdlib&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">print_error</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-int  main(int argc, char* argv[])
-{
-    if(3!=argc)
-    {
-        print_error("usage:copy source dest");
-    }
-    ifstream in(argv[1], ios::binary);
-    if(!in)
-    {
-        print_error("can't open ", argv[1]);
-    }
-    ofstream out(argv[2], ios::binary);
-    if(!out)
-    {
-        print_error("can't open ", argv[2]);
-    }
-    char ch;
-    while (in.get(ch))
-    {
-        out.put(ch);
-    }
-    if(!in.eof())
-    {
-        print_error("something wrong happend");
-    }
-    return 0;
-}
-void print_error(const char* p, const char* p2)
-{
-    cerr &lt;&lt; p &lt;&lt; ' ' &lt;&lt; p2 &lt;&lt; '\n';
-    exit(1);
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">int</span>  <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">!=</span>argc<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">print_error</span><span class="token punctuation">(</span><span class="token string">"usage:copy source dest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    ifstream <span class="token function">in</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ios<span class="token operator">::</span>binary<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>in<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">print_error</span><span class="token punctuation">(</span><span class="token string">"can't open "</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    ofstream <span class="token function">out</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ios<span class="token operator">::</span>binary<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>out<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">print_error</span><span class="token punctuation">(</span><span class="token string">"can't open "</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>in<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        out<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>in<span class="token punctuation">.</span><span class="token function">eof</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">print_error</span><span class="token punctuation">(</span><span class="token string">"something wrong happend"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">void</span> <span class="token function">print_error</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> p<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> p2<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    cerr <span class="token operator">&lt;&lt;</span> p <span class="token operator">&lt;&lt;</span> <span class="token string">' '</span> <span class="token operator">&lt;&lt;</span> p2 <span class="token operator">&lt;&lt;</span> <span class="token string">'\n'</span><span class="token punctuation">;</span>
+    <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>c++ 相对于 c 来说，免去了手动关闭文件流的操作，当流对象离开作用域后，将调用析构函数自动释放资源。<br>下面是相应的 java 程序：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">package ll.chapter02;
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">ll<span class="token punctuation">.</span>chapter02</span><span class="token punctuation">;</span>
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io</span><span class="token punctuation">.</span><span class="token class-name">FileInputStream</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io</span><span class="token punctuation">.</span><span class="token class-name">FileNotFoundException</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io</span><span class="token punctuation">.</span><span class="token class-name">FileOutputStream</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io</span><span class="token punctuation">.</span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
 
-/**
+<span class="token comment">/**
  * Created by liaoli
  * date: 2018/10/23
  * time: 20:39
- */
-public class FileCopy {
-    public static void main(String[] args) {
-        int ch=0;
-        FileInputStream in=null;
-        FileOutputStream out=null;
-        if(args.length!=2){
-            System.err.println("usage: java FileCopy source dest");
-            System.exit(0);
-        }
-        try {
-            in=new FileInputStream(args[0]);
-            out=new FileOutputStream(args[1]);
-            while (true){
-                ch=in.read();
-                if(ch==-1)break;
-                out.write(ch);
-            }
-            out.close();
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FileCopy</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> ch<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token class-name">FileInputStream</span> in<span class="token operator">=</span><span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token class-name">FileOutputStream</span> out<span class="token operator">=</span><span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span>length<span class="token operator">!=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"usage: java FileCopy source dest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            in<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            out<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+                ch<span class="token operator">=</span>in<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span><span class="token punctuation">(</span>ch<span class="token operator">==</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token keyword">break</span><span class="token punctuation">;</span>
+                out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            out<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            in<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">FileNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>java 的异常处理能够将正常流程与异常流程清晰的区分开，使得程序逻辑更加清晰，低版本 java 程序任然需要手动关闭流对象，不过 java8 可以使用 try-with-resources 简化文件关闭。</p>
 <hr>
 <script>
@@ -1442,12 +1442,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

@@ -562,32 +562,32 @@ static void ReadFile(string fileName)
     }
 }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在 java 中当finally 有 return 语句时，可能会覆盖 catch 中的返回值</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-public class Main {
-    public static void main(String[] args) {
-        String str = new Main().openFile();
-        System.out.println(str);
-    }
-    public String openFile() {
-        try {
-            FileInputStream inputStream = new FileInputStream("d:/a.txt");
-            int ch = inputStream.read();
-            System.out.println("aaa");
-            return "step1";
-        } catch (FileNotFoundException e) {
-            System.out.println("file not found");
-            return "step2";
-        }catch (IOException e) {
-            System.out.println("io exception");
-            return "step3";
-        }finally{
-            System.out.println("finally block");
-            return "finally";
-        }
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io</span><span class="token punctuation">.</span><span class="token class-name">FileInputStream</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io</span><span class="token punctuation">.</span><span class="token class-name">FileNotFoundException</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io</span><span class="token punctuation">.</span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">openFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">openFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">FileInputStream</span> inputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"d:/a.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> ch <span class="token operator">=</span> inputStream<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"aaa"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token string">"step1"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">FileNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"file not found"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token string">"step2"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"io exception"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token string">"step3"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">finally</span><span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"finally block"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token string">"finally"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>输出为：</p>
 <pre class="line-numbers language-none"><code class="language-none">file not found
 finally block
@@ -609,12 +609,12 @@ finally<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
     statements;
 }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在 java 1.7 中，也提出了类似的 <code>try-with-resources</code> ，相应的资源必须实现 <code>java.lang.AutoCloseable</code></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">static String readFirstLineFromFile(String path) throws IOException {
-    try (BufferedReader br =
-                   new BufferedReader(new FileReader(path))) {
-        return br.readLine();
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">readFirstLineFromFile</span><span class="token punctuation">(</span><span class="token class-name">String</span> path<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">BufferedReader</span> br <span class="token operator">=</span>
+                   <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileReader</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="异常的优点"><a href="#异常的优点" class="headerlink" title="异常的优点"></a>异常的优点</h2><p>异常相对于其他错误处理方法（返回值、全局状态变量、信号）有哪些优点呢？</p>
 <h3 id="分离异常处理代码和正常业务逻辑"><a href="#分离异常处理代码和正常业务逻辑" class="headerlink" title="分离异常处理代码和正常业务逻辑"></a>分离异常处理代码和正常业务逻辑</h3><p>试想以下代码</p>
@@ -823,22 +823,22 @@ void Method1()
 <li>Validate address</li>
 <li>Insert User</li>
 <li>Insert address</li>
-<li>If problem the Rollback everything<h4 id="不要让用户看到不该看到的异常信息"><a href="#不要让用户看到不该看到的异常信息" class="headerlink" title="不要让用户看到不该看到的异常信息"></a>不要让用户看到不该看到的异常信息</h4><img src="extouser.png" alt="extouser"><br>同样的敏感信息也不要呈现给用户：<pre class="line-numbers language-java" data-language="java"><code class="language-java">public class Main {
- public static void main(String[] args) {
-     try {
-         String user = null;
-         String pwd = null;
-         login(user,pwd);
-     } catch (Exception e) {
-         System.out.println(e.getMessage());
-     }
- }
- public static void login(String user,String pwd) {
-     if(user==null||pwd==null)
-         throw new NullPointerException("用户名或者密码为空");
-     //...
- }
-}
+<li>If problem the Rollback everything<h4 id="不要让用户看到不该看到的异常信息"><a href="#不要让用户看到不该看到的异常信息" class="headerlink" title="不要让用户看到不该看到的异常信息"></a>不要让用户看到不该看到的异常信息</h4><img src="extouser.png" alt="extouser"><br>同样的敏感信息也不要呈现给用户：<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">try</span> <span class="token punctuation">{</span>
+         <span class="token class-name">String</span> user <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+         <span class="token class-name">String</span> pwd <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+         <span class="token function">login</span><span class="token punctuation">(</span>user<span class="token punctuation">,</span>pwd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token class-name">String</span> user<span class="token punctuation">,</span><span class="token class-name">String</span> pwd<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">if</span><span class="token punctuation">(</span>user<span class="token operator">==</span><span class="token keyword">null</span><span class="token operator">||</span>pwd<span class="token operator">==</span><span class="token keyword">null</span><span class="token punctuation">)</span>
+         <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token string">"用户名或者密码为空"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token comment">//...</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="将异常抛出在合适的抽象层"><a href="#将异常抛出在合适的抽象层" class="headerlink" title="将异常抛出在合适的抽象层"></a>将异常抛出在合适的抽象层</h4></li>
 </ol>
@@ -868,14 +868,14 @@ throw new FormatException(
 <li>The file is not copied and error message is shown.<br>一定要注意异常安全问题，保证异常发生后程序处于明确的状态。</li>
 </ul>
 <h4 id="只捕获能够处理的异常"><a href="#只捕获能够处理的异常" class="headerlink" title="只捕获能够处理的异常"></a>只捕获能够处理的异常</h4><p><strong>A method should not catch all exceptions – it should only catch the ones it can process correctly.</strong><br>如果不知道怎么处理异常，继续传播吧！</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">catch (NoSuchMethodException e) {
-   throw e; //Avoid this as it doesn't help anything
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">NoSuchMethodException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">throw</span> e<span class="token punctuation">;</span> <span class="token comment">//Avoid this as it doesn't help anything</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>不要为了捕获异常而捕获异常。</p>
-<h4 id="抛出和捕获的异常类型尽量具体"><a href="#抛出和捕获的异常类型尽量具体" class="headerlink" title="抛出和捕获的异常类型尽量具体"></a>抛出和捕获的异常类型尽量具体</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">public void foo() throws Exception { //Incorrect way
-}
-public void foo() throws SpecificException1, SpecificException2 { //Correct way
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="抛出和捕获的异常类型尽量具体"><a href="#抛出和捕获的异常类型尽量具体" class="headerlink" title="抛出和捕获的异常类型尽量具体"></a>抛出和捕获的异常类型尽量具体</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span> <span class="token comment">//Incorrect way</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SpecificException1</span><span class="token punctuation">,</span> <span class="token class-name">SpecificException2</span> <span class="token punctuation">{</span> <span class="token comment">//Correct way</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <pre class="line-numbers language-cs" data-language="cs"><code class="language-cs">try
 {
     ReadFile("CorrectTextFile.txt");
@@ -885,72 +885,72 @@ catch (Exception)
     Console.WriteLine("File not found.");
 }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>试想下当读取文件时，该文件未授权则抛出的是 <code>UnauthorizedAccessException</code> 异常，如果通通用 Exception 捕获，输出的却是 <code>File not found.</code> ，这无疑会误导我们。</p>
-<h4 id="注意不要丢失异常"><a href="#注意不要丢失异常" class="headerlink" title="注意不要丢失异常"></a>注意不要丢失异常</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">catch (NoSuchMethodException e) {
-   throw new MyServiceException("Some information: " + e.getMessage());  //Incorrect way
-}
-catch (NoSuchMethodException e) {
-   throw new MyServiceException("Some information: " , e);  //Correct way
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="避免重复记录异常信息"><a href="#避免重复记录异常信息" class="headerlink" title="避免重复记录异常信息"></a>避免重复记录异常信息</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">catch (NoSuchMethodException e) {
-   LOGGER.error("Some information", e);
-   throw e;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="注意不要丢失异常"><a href="#注意不要丢失异常" class="headerlink" title="注意不要丢失异常"></a>注意不要丢失异常</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">NoSuchMethodException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">MyServiceException</span><span class="token punctuation">(</span><span class="token string">"Some information: "</span> <span class="token operator">+</span> e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//Incorrect way</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">NoSuchMethodException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">MyServiceException</span><span class="token punctuation">(</span><span class="token string">"Some information: "</span> <span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//Correct way</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="避免重复记录异常信息"><a href="#避免重复记录异常信息" class="headerlink" title="避免重复记录异常信息"></a>避免重复记录异常信息</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">NoSuchMethodException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   LOGGER<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Some information"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">throw</span> e<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>同时记录和抛出异常会重复记录异常信息，当我们排查错误时会十分困惑异常发生的真正位置。</p>
-<h4 id="避免在finally里面抛出异常"><a href="#避免在finally里面抛出异常" class="headerlink" title="避免在finally里面抛出异常"></a>避免在finally里面抛出异常</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">try {
-  someMethod();  //Throws exceptionOne
-} finally {
-  cleanUp();    //If finally also threw any exception the exceptionOne will be lost forever
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="避免在finally里面抛出异常"><a href="#避免在finally里面抛出异常" class="headerlink" title="避免在finally里面抛出异常"></a>避免在finally里面抛出异常</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">try</span> <span class="token punctuation">{</span>
+  <span class="token function">someMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//Throws exceptionOne</span>
+<span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+  <span class="token function">cleanUp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">//If finally also threw any exception the exceptionOne will be lost forever</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在finally里面尽量不要抛出异常，如果实在有可能抛出异常，做好日志记录，否则异常会永远丢失。</p>
 <h4 id="不要使用-printStackTrace-类似的方法"><a href="#不要使用-printStackTrace-类似的方法" class="headerlink" title="不要使用 printStackTrace() 类似的方法"></a>不要使用 printStackTrace() 类似的方法</h4><p>首先 printStackTrace() 是将异常输出到 <code>stardard error stream</code> ，在复杂的环境很难判断输出的地方，同时缺乏上下文信息，其他开发人员看到异常信息将无从下手。</p>
-<h4 id="不处理异常就不需要使用catch语句"><a href="#不处理异常就不需要使用catch语句" class="headerlink" title="不处理异常就不需要使用catch语句"></a>不处理异常就不需要使用catch语句</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">try {
-  someMethod();  //Method 2
-} finally {
-  cleanUp();    //do cleanup here
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="不处理异常就不需要使用catch语句"><a href="#不处理异常就不需要使用catch语句" class="headerlink" title="不处理异常就不需要使用catch语句"></a>不处理异常就不需要使用catch语句</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">try</span> <span class="token punctuation">{</span>
+  <span class="token function">someMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//Method 2</span>
+<span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+  <span class="token function">cleanUp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">//do cleanup here</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="Throw-early-catch-late"><a href="#Throw-early-catch-late" class="headerlink" title="Throw early catch late"></a>Throw early catch late</h4><p>尽可能早的抛出异常，有足够信息时才处理异常。即在低层次抛出异常，高层次处理异常。<br>This principle implicitly says that you will be more likely to throw it in the low-level methods, where you will be checking if single values are null or not appropriate. And you will be making the exception climb the stack trace for quite several levels until you reach a sufficient level of abstraction to be able to handle the problem.</p>
-<h4 id="尽量减少异常日志信息"><a href="#尽量减少异常日志信息" class="headerlink" title="尽量减少异常日志信息"></a>尽量减少异常日志信息</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">--------bad-------
-LOGGER.debug("Using cache sector A");
-LOGGER.debug("Using retry sector B");<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">--------good-------
-LOGGER.debug("Using cache sector A, using retry sector B");
+<h4 id="尽量减少异常日志信息"><a href="#尽量减少异常日志信息" class="headerlink" title="尽量减少异常日志信息"></a>尽量减少异常日志信息</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>bad<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+LOGGER<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Using cache sector A"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+LOGGER<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Using retry sector B"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span>good<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+LOGGER<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Using cache sector A, using retry sector B"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h4 id="当线程被中断时，终止线程"><a href="#当线程被中断时，终止线程" class="headerlink" title="当线程被中断时，终止线程"></a>当线程被中断时，终止线程</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">while (true) {
-  try {
-    Thread.sleep(100000);
-  } catch (InterruptedException e) {} //Don't do this
-  doSomethingCool();
-}
+<h4 id="当线程被中断时，终止线程"><a href="#当线程被中断时，终止线程" class="headerlink" title="当线程被中断时，终止线程"></a>当线程被中断时，终止线程</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">100000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token comment">//Don't do this</span>
+  <span class="token function">doSomethingCool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-while (true) {
-  try {
-    Thread.sleep(100000);
-  } catch (InterruptedException e) {
-    break;
-  }
-}
-doSomethingCool();<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">100000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token function">doSomethingCool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="用模板方法代替重复的-try-catch"><a href="#用模板方法代替重复的-try-catch" class="headerlink" title="用模板方法代替重复的 try catch"></a>用模板方法代替重复的 try catch</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">class DBUtil{
-    public static void closeConnection(Connection conn){
-        try{
-            conn.close();
-        } catch(Exception ex){
-            //Log Exception - Cannot close connection
-        }
-    }
-}
+<h4 id="用模板方法代替重复的-try-catch"><a href="#用模板方法代替重复的-try-catch" class="headerlink" title="用模板方法代替重复的 try catch"></a>用模板方法代替重复的 try catch</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">DBUtil</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">closeConnection</span><span class="token punctuation">(</span><span class="token class-name">Connection</span> conn<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span><span class="token punctuation">{</span>
+            conn<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token comment">//Log Exception - Cannot close connection</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-public void dataAccessCode() {
-    Connection conn = null;
-    try{
-        conn = getConnection();
-        ....
-    } finally{
-        DBUtil.closeConnection(conn);
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">dataAccessCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Connection</span> conn <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span><span class="token punctuation">{</span>
+        conn <span class="token operator">=</span> <span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span><span class="token punctuation">{</span>
+        <span class="token class-name">DBUtil</span><span class="token punctuation">.</span><span class="token function">closeConnection</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="为所有异常建立相关的文档"><a href="#为所有异常建立相关的文档" class="headerlink" title="为所有异常建立相关的文档"></a>为所有异常建立相关的文档</h4><p>最好为可能抛出异常的方法建立相关文档说明。</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
@@ -1670,12 +1670,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

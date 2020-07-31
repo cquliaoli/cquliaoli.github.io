@@ -555,14 +555,14 @@ promise<span class="token punctuation">.</span><span class="token function">catc
 <span class="token comment">// carry on [ReferenceError: y is not defined]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="java-异步编程中的-Promise-模式"><a href="#java-异步编程中的-Promise-模式" class="headerlink" title="java 异步编程中的 Promise 模式"></a>java 异步编程中的 Promise 模式</h3><p>在 JDK 1.8 里也引入了类 JavaScript promise 模式的CompletableFuture。这个类提供了大量的异步编程中 Promise 的各种方式。下面例举几个。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">CompletableFuture.supplyAsync(this::findReceiver)
-                 .thenApply(this::sendMsg)
-                 .thenAccept(this::notify);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">CompletableFuture</span><span class="token punctuation">.</span><span class="token function">supplyAsync</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token operator">::</span><span class="token function">findReceiver</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token operator">::</span><span class="token function">sendMsg</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">.</span><span class="token function">thenAccept</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token operator">::</span><span class="token function">notify</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>上面的这个链式处理和 JavaScript 中的then()方法很像，其中的 supplyAsync() 表示执行一个异步方法，而 thenApply() 表示执行成功后再串联另外一个异步方法，最后是 thenAccept() 来处理最终结果。<br>CompletableFuture 异常处理如下</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">CompletableFuture.supplyAsync(Integer::parseInt) // 输入: "ILLEGAL"
-                 .thenApply(r -&gt; r * 2 * Math.PI)
-                 .thenApply(s -&gt; "apply&gt;&gt; " + s)
-                 .exceptionally(ex -&gt; "Error: " + ex.getMessage());<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">CompletableFuture</span><span class="token punctuation">.</span><span class="token function">supplyAsync</span><span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token operator">::</span><span class="token function">parseInt</span><span class="token punctuation">)</span> <span class="token comment">// 输入: "ILLEGAL"</span>
+                 <span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>r <span class="token operator">-&gt;</span> r <span class="token operator">*</span> <span class="token number">2</span> <span class="token operator">*</span> <span class="token class-name">Math</span><span class="token punctuation">.</span>PI<span class="token punctuation">)</span>
+                 <span class="token punctuation">.</span><span class="token function">thenApply</span><span class="token punctuation">(</span>s <span class="token operator">-&gt;</span> <span class="token string">"apply&gt;&gt; "</span> <span class="token operator">+</span> s<span class="token punctuation">)</span>
+                 <span class="token punctuation">.</span><span class="token function">exceptionally</span><span class="token punctuation">(</span>ex <span class="token operator">-&gt;</span> <span class="token string">"Error: "</span> <span class="token operator">+</span> ex<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Go-语言也可以实现类似的-Promise-模式"><a href="#Go-语言也可以实现类似的-Promise-模式" class="headerlink" title="Go 语言也可以实现类似的 Promise 模式"></a>Go 语言也可以实现类似的 Promise 模式</h3><h2 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h2><p>Generator 函数是 ES6 提供的一种异步编程解决方案，语法行为与传统函数完全不同，类似于协程。可以将 <code>Generator</code> 看作一个状态机，内部封装了很多状态。<br>Generator 运行模式如下<br><img src="generator.png" alt="generator"></p>
 <p><code>Generator.prototype.throw()</code> 可以抛出异常，如果 Generator 内部有 catch 语句，则会捕获异常，否则会继续传播到外层函数。</p>
 <pre class="line-numbers language-JavaScript" data-language="JavaScript"><code class="language-JavaScript">var g = function* () {
@@ -1383,12 +1383,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

@@ -561,371 +561,371 @@ TOKEN_TYPE_IDENT<span aria-hidden="true" class="line-numbers-rows"><span></span>
 <h2 id="Assembler-Framework"><a href="#Assembler-Framework" class="headerlink" title="Assembler Framework"></a>Assembler Framework</h2><p>在词法和语法分析的过程中，会产生许多中间信息，比如变量、函数、标签等。我们需要用数据结构将其保存，以供生成机器码时使用。如果使用高级语言，则可以使用高级语言提供的数据结构存储，如 C++ 的 STL ， Java 的集合等。 C 语言则可以使用简单的链表存储各种中间数据。</p>
 <h3 id="源代码表示"><a href="#源代码表示" class="headerlink" title="源代码表示"></a>源代码表示</h3><p>源代码可以用一个二维指针表示，如下图所示：</p>
 <p><img src="sourcecode.png" alt="sourcecode"></p>
-<h3 id="指令流"><a href="#指令流" class="headerlink" title="指令流"></a>指令流</h3><h4 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _Instr          // An instruction
-{
-  int iOpcode;               // Opcode
-  int iOpCount;              // Number of operands
-  Op * pOpList;              // Pointer to operand list
-}
-Instr;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="指令流"><a href="#指令流" class="headerlink" title="指令流"></a>指令流</h3><h4 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Instr</span>          <span class="token comment">// An instruction</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iOpcode<span class="token punctuation">;</span>               <span class="token comment">// Opcode</span>
+  <span class="token keyword">int</span> iOpCount<span class="token punctuation">;</span>              <span class="token comment">// Number of operands</span>
+  Op <span class="token operator">*</span> pOpList<span class="token punctuation">;</span>              <span class="token comment">// Pointer to operand list</span>
+<span class="token punctuation">}</span>
+Instr<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="操作数"><a href="#操作数" class="headerlink" title="操作数"></a>操作数</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _Op             // An assembled operand
-{
-int iType;                 // Type
-union                      // The value
-{
-  int iIntLiteral;       // Integer literal
-  float fFloatLiteral;   // Float literal
-  int iStringTableIndex; // String table index
-  int iStackIndex;       // Stack index
-  int iInstrIndex;       // Instruction index
-  int iFuncIndex;        // Function index
-  int iHostAPICallIndex; // Host API Call index
-  int iReg;              // Register code
-};
-int iOffsetIndex;          // Index of the offset
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="操作数"><a href="#操作数" class="headerlink" title="操作数"></a>操作数</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_Op</span>             <span class="token comment">// An assembled operand</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> iType<span class="token punctuation">;</span>                 <span class="token comment">// Type</span>
+<span class="token keyword">union</span>                      <span class="token comment">// The value</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iIntLiteral<span class="token punctuation">;</span>       <span class="token comment">// Integer literal</span>
+  <span class="token keyword">float</span> fFloatLiteral<span class="token punctuation">;</span>   <span class="token comment">// Float literal</span>
+  <span class="token keyword">int</span> iStringTableIndex<span class="token punctuation">;</span> <span class="token comment">// String table index</span>
+  <span class="token keyword">int</span> iStackIndex<span class="token punctuation">;</span>       <span class="token comment">// Stack index</span>
+  <span class="token keyword">int</span> iInstrIndex<span class="token punctuation">;</span>       <span class="token comment">// Instruction index</span>
+  <span class="token keyword">int</span> iFuncIndex<span class="token punctuation">;</span>        <span class="token comment">// Function index</span>
+  <span class="token keyword">int</span> iHostAPICallIndex<span class="token punctuation">;</span> <span class="token comment">// Host API Call index</span>
+  <span class="token keyword">int</span> iReg<span class="token punctuation">;</span>              <span class="token comment">// Register code</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> iOffsetIndex<span class="token punctuation">;</span>          <span class="token comment">// Index of the offset</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>注意根据 iType 不同，操作数代表的值意义也不一样，故可以用 <code>联合体</code> 表示，其中 <code>iOffsetIndex</code> 是当 <code>union</code> 取 <code>iStackIndex</code> 时才有意义，其中 <code>iStackIndex</code> 代表基地址，iOffsetIndex 代表相对索引。</p>
-<h4 id="脚本头"><a href="#脚本头" class="headerlink" title="脚本头"></a>脚本头</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _ScriptHeader    // Script header data
-{
-  int iStackSize;             // Requested stack size
-  int iGlobalDataSize;        // The size of the script's global data
-  int iIsMainFuncPresent;     // Is _Main () present?
-  int iMainFuncIndex;         // _Main ()'s function index
-}
-ScriptHeader;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="脚本头"><a href="#脚本头" class="headerlink" title="脚本头"></a>脚本头</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_ScriptHeader</span>    <span class="token comment">// Script header data</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iStackSize<span class="token punctuation">;</span>             <span class="token comment">// Requested stack size</span>
+  <span class="token keyword">int</span> iGlobalDataSize<span class="token punctuation">;</span>        <span class="token comment">// The size of the script's global data</span>
+  <span class="token keyword">int</span> iIsMainFuncPresent<span class="token punctuation">;</span>     <span class="token comment">// Is _Main () present?</span>
+  <span class="token keyword">int</span> iMainFuncIndex<span class="token punctuation">;</span>         <span class="token comment">// _Main ()'s function index</span>
+<span class="token punctuation">}</span>
+ScriptHeader<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="链表的简单实现"><a href="#链表的简单实现" class="headerlink" title="链表的简单实现"></a>链表的简单实现</h4><p><img src="linkedlist.png" alt="linkedlist"></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _LinkedListNode  // A linked list node
-{
-  void * pData;               // Pointer to the node's data
-  _LinkedListNode * pNext;    // Pointer to the next node in the list
-}
-LinkedListNode;
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_LinkedListNode</span>  <span class="token comment">// A linked list node</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">void</span> <span class="token operator">*</span> pData<span class="token punctuation">;</span>               <span class="token comment">// Pointer to the node's data</span>
+  _LinkedListNode <span class="token operator">*</span> pNext<span class="token punctuation">;</span>    <span class="token comment">// Pointer to the next node in the list</span>
+<span class="token punctuation">}</span>
+LinkedListNode<span class="token punctuation">;</span>
 
-typedef struct _LinkedList      // A linked list
-{
-  LinkedListNode * pHead,    // Pointer to head node
-  * pTail;    // Pointer to tail node
-  int iNodeCount;            // The number of nodes in the list
-}
-LinkedList;
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_LinkedList</span>      <span class="token comment">// A linked list</span>
+<span class="token punctuation">{</span>
+  LinkedListNode <span class="token operator">*</span> pHead<span class="token punctuation">,</span>    <span class="token comment">// Pointer to head node</span>
+  <span class="token operator">*</span> pTail<span class="token punctuation">;</span>    <span class="token comment">// Pointer to tail node</span>
+  <span class="token keyword">int</span> iNodeCount<span class="token punctuation">;</span>            <span class="token comment">// The number of nodes in the list</span>
+<span class="token punctuation">}</span>
+LinkedList<span class="token punctuation">;</span>
 
-void InitLinkedList ( LinkedList * pList )
-{
-  // Set both the head and tail pointers to null
-  pList-&gt;pHead = NULL;
-  pList-&gt;pTail = NULL;
-  // Set the node count to zero, since the list is currently empty
-  pList-&gt;iNodeCount = 0;
-}
+<span class="token keyword">void</span> <span class="token function">InitLinkedList</span> <span class="token punctuation">(</span> LinkedList <span class="token operator">*</span> pList <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Set both the head and tail pointers to null</span>
+  pList<span class="token operator">-&gt;</span>pHead <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+  pList<span class="token operator">-&gt;</span>pTail <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the node count to zero, since the list is currently empty</span>
+  pList<span class="token operator">-&gt;</span>iNodeCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-int AddNode ( LinkedList * pList, void * pData )
-{
-  // Create a new node
-  LinkedListNode * pNewNode = ( LinkedListNode * )
-  malloc ( sizeof ( LinkedListNode ) );
-  // Set the node's data to the specified pointer
-  pNewNode-&gt;pData = pData;
-  // Set the next pointer to NULL, since nothing will lie beyond it
-  pNewNode-&gt;pNext = NULL;
-  // If the list is currently empty, set both the head and tail pointers
-  // to the new node
-  if ( ! pList-&gt;iNodeCount )
-  {
-    // Point the head and tail of the list at the node
-    pList-&gt;pHead = pNewNode;
-    pList-&gt;pTail = pNewNode;
-  }
-// Otherwise append it to the list and update the tail pointer
-  else
-  {// Alter the tail's next pointer to point to the new node
-    pList-&gt;pTail-&gt;pNext = pNewNode;
-    // Update the list's tail pointer
-    pList-&gt;pTail = pNewNode;
-  }
-  // Increment the node count
-  ++ pList-&gt;iNodeCount;
-  // Return the new size of the linked list - 1, which is the node's index
-  return pList-&gt;iNodeCount - 1;
-}
+<span class="token keyword">int</span> <span class="token function">AddNode</span> <span class="token punctuation">(</span> LinkedList <span class="token operator">*</span> pList<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span> pData <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Create a new node</span>
+  LinkedListNode <span class="token operator">*</span> pNewNode <span class="token operator">=</span> <span class="token punctuation">(</span> LinkedListNode <span class="token operator">*</span> <span class="token punctuation">)</span>
+  <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> LinkedListNode <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the node's data to the specified pointer</span>
+  pNewNode<span class="token operator">-&gt;</span>pData <span class="token operator">=</span> pData<span class="token punctuation">;</span>
+  <span class="token comment">// Set the next pointer to NULL, since nothing will lie beyond it</span>
+  pNewNode<span class="token operator">-&gt;</span>pNext <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+  <span class="token comment">// If the list is currently empty, set both the head and tail pointers</span>
+  <span class="token comment">// to the new node</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span> pList<span class="token operator">-&gt;</span>iNodeCount <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// Point the head and tail of the list at the node</span>
+    pList<span class="token operator">-&gt;</span>pHead <span class="token operator">=</span> pNewNode<span class="token punctuation">;</span>
+    pList<span class="token operator">-&gt;</span>pTail <span class="token operator">=</span> pNewNode<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token comment">// Otherwise append it to the list and update the tail pointer</span>
+  <span class="token keyword">else</span>
+  <span class="token punctuation">{</span><span class="token comment">// Alter the tail's next pointer to point to the new node</span>
+    pList<span class="token operator">-&gt;</span>pTail<span class="token operator">-&gt;</span>pNext <span class="token operator">=</span> pNewNode<span class="token punctuation">;</span>
+    <span class="token comment">// Update the list's tail pointer</span>
+    pList<span class="token operator">-&gt;</span>pTail <span class="token operator">=</span> pNewNode<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">// Increment the node count</span>
+  <span class="token operator">++</span> pList<span class="token operator">-&gt;</span>iNodeCount<span class="token punctuation">;</span>
+  <span class="token comment">// Return the new size of the linked list - 1, which is the node's index</span>
+  <span class="token keyword">return</span> pList<span class="token operator">-&gt;</span>iNodeCount <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-void FreeLinkedList ( LinkedList * pList )
-{
-  // If the list is empty, exit
-  if ( ! pList )
-    return;
-    // If the list is not empty, free each node
-    if ( pList-&gt;iNodeCount )
-    {
-      // Create a pointer to hold each current node and the next node
-      LinkedListNode * pCurrNode,
-      * pNextNode;
-      // Set the current node to the head of the list
-      pCurrNode = pList-&gt;pHead;
-      // Traverse the list
-      while ( TRUE )
-      {
-        // Save the pointer to the next node before freeing the current one
-        pNextNode = pCurrNode-&gt;pNext;
-        // Clear the current node's data
-        if ( pCurrNode-&gt;pData )
-          free ( pCurrNode-&gt;pData );
-        // Clear the node itself
-        if ( pCurrNode )
-          free ( pCurrNode );
-        // Move to the next node if it exists; otherwise, exit the loop
-        if ( pNextNode )
-          pCurrNode = pNextNode;
-        else
-          break;
-      }
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">void</span> <span class="token function">FreeLinkedList</span> <span class="token punctuation">(</span> LinkedList <span class="token operator">*</span> pList <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// If the list is empty, exit</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span> pList <span class="token punctuation">)</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token comment">// If the list is not empty, free each node</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> pList<span class="token operator">-&gt;</span>iNodeCount <span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token comment">// Create a pointer to hold each current node and the next node</span>
+      LinkedListNode <span class="token operator">*</span> pCurrNode<span class="token punctuation">,</span>
+      <span class="token operator">*</span> pNextNode<span class="token punctuation">;</span>
+      <span class="token comment">// Set the current node to the head of the list</span>
+      pCurrNode <span class="token operator">=</span> pList<span class="token operator">-&gt;</span>pHead<span class="token punctuation">;</span>
+      <span class="token comment">// Traverse the list</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span> TRUE <span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        <span class="token comment">// Save the pointer to the next node before freeing the current one</span>
+        pNextNode <span class="token operator">=</span> pCurrNode<span class="token operator">-&gt;</span>pNext<span class="token punctuation">;</span>
+        <span class="token comment">// Clear the current node's data</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> pCurrNode<span class="token operator">-&gt;</span>pData <span class="token punctuation">)</span>
+          <span class="token function">free</span> <span class="token punctuation">(</span> pCurrNode<span class="token operator">-&gt;</span>pData <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// Clear the node itself</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> pCurrNode <span class="token punctuation">)</span>
+          <span class="token function">free</span> <span class="token punctuation">(</span> pCurrNode <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// Move to the next node if it exists; otherwise, exit the loop</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> pNextNode <span class="token punctuation">)</span>
+          pCurrNode <span class="token operator">=</span> pNextNode<span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>切记链表的释放！</p>
 <h4 id="字符串表"><a href="#字符串表" class="headerlink" title="字符串表"></a>字符串表</h4><p>复用刚才的链表即可：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int AddString ( LinkedList * pList, char * pstrString )
-{
-  // ---- First check to see if the string is already in the list
-  // Create a node to traverse the list
-  LinkedListNode * pNode = pList-&gt;pHead;
-  // Loop through each node in the list
-  for ( int iCurrNode = 0; iCurrNode &lt; pList-&gt;iNodeCount; ++ iCurrNode )
-  {
-    // If the current node's string equals the specified string, return
-    // its index
-    if ( strcmp ( ( char * ) pNode-&gt;pData, pstrString ) == 0 )
-      return iCurrNode;
-      // Otherwise move along to the next node
-      pNode = pNode-&gt;pNext;
-    }
-  // ---- Add the new string, since it wasn't added
-  // Create space on the heap for the specified string
-  char * pstrStringNode = ( char * ) malloc ( strlen ( pstrString ) + 1 );
-  strcpy ( pstrStringNode, pstrString );
-  // Add the string to the list and return its index
-  return AddNode ( pList, pstrStringNode );
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">AddString</span> <span class="token punctuation">(</span> LinkedList <span class="token operator">*</span> pList<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrString <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// ---- First check to see if the string is already in the list</span>
+  <span class="token comment">// Create a node to traverse the list</span>
+  LinkedListNode <span class="token operator">*</span> pNode <span class="token operator">=</span> pList<span class="token operator">-&gt;</span>pHead<span class="token punctuation">;</span>
+  <span class="token comment">// Loop through each node in the list</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrNode <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrNode <span class="token operator">&lt;</span> pList<span class="token operator">-&gt;</span>iNodeCount<span class="token punctuation">;</span> <span class="token operator">++</span> iCurrNode <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// If the current node's string equals the specified string, return</span>
+    <span class="token comment">// its index</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token punctuation">)</span> pNode<span class="token operator">-&gt;</span>pData<span class="token punctuation">,</span> pstrString <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+      <span class="token keyword">return</span> iCurrNode<span class="token punctuation">;</span>
+      <span class="token comment">// Otherwise move along to the next node</span>
+      pNode <span class="token operator">=</span> pNode<span class="token operator">-&gt;</span>pNext<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token comment">// ---- Add the new string, since it wasn't added</span>
+  <span class="token comment">// Create space on the heap for the specified string</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span> pstrStringNode <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> pstrString <span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pstrStringNode<span class="token punctuation">,</span> pstrString <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Add the string to the list and return its index</span>
+  <span class="token keyword">return</span> <span class="token function">AddNode</span> <span class="token punctuation">(</span> pList<span class="token punctuation">,</span> pstrStringNode <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="函数表"><a href="#函数表" class="headerlink" title="函数表"></a>函数表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">
-typedef struct _FuncNode        // A function table node
-{
-  int iIndex;                 // Index
-  char pstrName [ MAX_IDENT_SIZE ];    // Name
-  int iEntryPoint;            // Entry point
-  int iParamCount;            // Param count
-  int iLocalDataSize;         // Local data size
-}
-FuncNode;
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_FuncNode</span>        <span class="token comment">// A function table node</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iIndex<span class="token punctuation">;</span>                 <span class="token comment">// Index</span>
+  <span class="token keyword">char</span> pstrName <span class="token punctuation">[</span> MAX_IDENT_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment">// Name</span>
+  <span class="token keyword">int</span> iEntryPoint<span class="token punctuation">;</span>            <span class="token comment">// Entry point</span>
+  <span class="token keyword">int</span> iParamCount<span class="token punctuation">;</span>            <span class="token comment">// Param count</span>
+  <span class="token keyword">int</span> iLocalDataSize<span class="token punctuation">;</span>         <span class="token comment">// Local data size</span>
+<span class="token punctuation">}</span>
+FuncNode<span class="token punctuation">;</span>
 
-int AddFunc ( char * pstrName, int iEntryPoint )
-{
-  // If a function already exists with the specified name, exit and return
-  // an invalid index
-  if ( GetFuncByName ( pstrName ) )
-    return -1;
-  // Create a new function node
-  FuncNode * pNewFunc = ( FuncNode * ) malloc ( sizeof ( FuncNode ) );
-  // Initialize the new function
-  strcpy ( pNewFunc-&gt;pstrName, pstrName );
-  pNewFunc-&gt;iEntryPoint = iEntryPoint;
-  // Add the function to the list and get its index
-  int iIndex = AddNode ( &amp; g_FuncTable, pNewFunc );
-  // Set the function node's index
-  pNewFunc-&gt;iIndex = iIndex;
-  // Return the new function's index
-  return iIndex;
-}
+<span class="token keyword">int</span> <span class="token function">AddFunc</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrName<span class="token punctuation">,</span> <span class="token keyword">int</span> iEntryPoint <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// If a function already exists with the specified name, exit and return</span>
+  <span class="token comment">// an invalid index</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetFuncByName</span> <span class="token punctuation">(</span> pstrName <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token comment">// Create a new function node</span>
+  FuncNode <span class="token operator">*</span> pNewFunc <span class="token operator">=</span> <span class="token punctuation">(</span> FuncNode <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> FuncNode <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Initialize the new function</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pNewFunc<span class="token operator">-&gt;</span>pstrName<span class="token punctuation">,</span> pstrName <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  pNewFunc<span class="token operator">-&gt;</span>iEntryPoint <span class="token operator">=</span> iEntryPoint<span class="token punctuation">;</span>
+  <span class="token comment">// Add the function to the list and get its index</span>
+  <span class="token keyword">int</span> iIndex <span class="token operator">=</span> <span class="token function">AddNode</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_FuncTable<span class="token punctuation">,</span> pNewFunc <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the function node's index</span>
+  pNewFunc<span class="token operator">-&gt;</span>iIndex <span class="token operator">=</span> iIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Return the new function's index</span>
+  <span class="token keyword">return</span> iIndex<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-void SetFuncInfo ( char * pstrName, int iParamCount, int iLocalDataSize )
-{
-  // Based on the function's name, find its node in the list
-  FuncNode * pFunc = GetFuncByName ( pstrName );
-  // Set the remaining fields
-  pFunc-&gt;iParamCount = iParamCount;
-  pFunc-&gt;iLocalDataSize = iLocalDataSize;
-}
+<span class="token keyword">void</span> <span class="token function">SetFuncInfo</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrName<span class="token punctuation">,</span> <span class="token keyword">int</span> iParamCount<span class="token punctuation">,</span> <span class="token keyword">int</span> iLocalDataSize <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Based on the function's name, find its node in the list</span>
+  FuncNode <span class="token operator">*</span> pFunc <span class="token operator">=</span> <span class="token function">GetFuncByName</span> <span class="token punctuation">(</span> pstrName <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the remaining fields</span>
+  pFunc<span class="token operator">-&gt;</span>iParamCount <span class="token operator">=</span> iParamCount<span class="token punctuation">;</span>
+  pFunc<span class="token operator">-&gt;</span>iLocalDataSize <span class="token operator">=</span> iLocalDataSize<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-FuncNode * GetFuncByName ( char * pstrName )
-{
-  // If the table is empty, return a NULL pointer
-  if ( ! g_FuncTable.iNodeCount )
-    return NULL;
-  // Create a pointer to traverse the list
-  LinkedListNode * pCurrNode = g_FuncTable.pHead;
-  // Traverse the list until the matching structure is found
-  for ( int iCurrNode = 0; iCurrNode &lt; g_FuncTable.iNodeCount; ++ iCurrNode )
-  {
-    // Create a pointer to the current function structure
-    FuncNode * pCurrFunc = ( FuncNode * ) pCurrNode-&gt;pData;
-    // If the names match, return the current pointer
-    if ( strcmp ( pCurrFunc-&gt;pstrName, pstrName ) == 0 )
-      return pCurrFunc;
-    // Otherwise move to the next node
-    pCurrNode = pCurrNode-&gt;pNext;
-  }
-  // The structure was not found, so return a NULL pointer
-  return NULL;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+FuncNode <span class="token operator">*</span> <span class="token function">GetFuncByName</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrName <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// If the table is empty, return a NULL pointer</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span> g_FuncTable<span class="token punctuation">.</span>iNodeCount <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+  <span class="token comment">// Create a pointer to traverse the list</span>
+  LinkedListNode <span class="token operator">*</span> pCurrNode <span class="token operator">=</span> g_FuncTable<span class="token punctuation">.</span>pHead<span class="token punctuation">;</span>
+  <span class="token comment">// Traverse the list until the matching structure is found</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iCurrNode <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrNode <span class="token operator">&lt;</span> g_FuncTable<span class="token punctuation">.</span>iNodeCount<span class="token punctuation">;</span> <span class="token operator">++</span> iCurrNode <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// Create a pointer to the current function structure</span>
+    FuncNode <span class="token operator">*</span> pCurrFunc <span class="token operator">=</span> <span class="token punctuation">(</span> FuncNode <span class="token operator">*</span> <span class="token punctuation">)</span> pCurrNode<span class="token operator">-&gt;</span>pData<span class="token punctuation">;</span>
+    <span class="token comment">// If the names match, return the current pointer</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> pCurrFunc<span class="token operator">-&gt;</span>pstrName<span class="token punctuation">,</span> pstrName <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+      <span class="token keyword">return</span> pCurrFunc<span class="token punctuation">;</span>
+    <span class="token comment">// Otherwise move to the next node</span>
+    pCurrNode <span class="token operator">=</span> pCurrNode<span class="token operator">-&gt;</span>pNext<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">// The structure was not found, so return a NULL pointer</span>
+  <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="符号表"><a href="#符号表" class="headerlink" title="符号表"></a>符号表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">
-typedef struct _SymbolNode      // A symbol table node
-{
-  int iIndex;                 // Index
-  char pstrIdent [ MAX_IDENT_SIZE ];    // Identifier
-  int iSize;                  // Size (1 for variables, N for arrays)
-  int iStackIndex;            // The stack index to which the symbol points
-  int iFuncIndex;             // Function in which the symbol resides
-}
-SymbolNode;
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_SymbolNode</span>      <span class="token comment">// A symbol table node</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iIndex<span class="token punctuation">;</span>                 <span class="token comment">// Index</span>
+  <span class="token keyword">char</span> pstrIdent <span class="token punctuation">[</span> MAX_IDENT_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment">// Identifier</span>
+  <span class="token keyword">int</span> iSize<span class="token punctuation">;</span>                  <span class="token comment">// Size (1 for variables, N for arrays)</span>
+  <span class="token keyword">int</span> iStackIndex<span class="token punctuation">;</span>            <span class="token comment">// The stack index to which the symbol points</span>
+  <span class="token keyword">int</span> iFuncIndex<span class="token punctuation">;</span>             <span class="token comment">// Function in which the symbol resides</span>
+<span class="token punctuation">}</span>
+SymbolNode<span class="token punctuation">;</span>
 
-int AddSymbol ( char * pstrIdent, int iSize, int iStackIndex, int iFuncIndex )
-{
-  // If a label already exists
-  if ( GetSymbolByIdent ( pstrIdent, iFuncIndex ) )
-    return -1;
-  // Create a new symbol node
-  SymbolNode * pNewSymbol = ( SymbolNode * )
-  malloc ( sizeof ( SymbolNode ) );
-  // Initialize the new label
-  strcpy ( pNewSymbol-&gt;pstrIdent, pstrIdent );
-  pNewSymbol-&gt;iSize = iSize;
-  pNewSymbol-&gt;iStackIndex = iStackIndex;
-  pNewSymbol-&gt;iFuncIndex = iFuncIndex;
-  // Add the symbol to the list and get its index
-  int iIndex = AddNode ( &amp; g_SymbolTable, pNewSymbol );
-  // Set the symbol node's index
-  pNewSymbol-&gt;iIndex = iIndex;
-  // Return the new symbol's index
-  return iIndex;
-}
+<span class="token keyword">int</span> <span class="token function">AddSymbol</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iSize<span class="token punctuation">,</span> <span class="token keyword">int</span> iStackIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// If a label already exists</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetSymbolByIdent</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iFuncIndex <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token comment">// Create a new symbol node</span>
+  SymbolNode <span class="token operator">*</span> pNewSymbol <span class="token operator">=</span> <span class="token punctuation">(</span> SymbolNode <span class="token operator">*</span> <span class="token punctuation">)</span>
+  <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> SymbolNode <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Initialize the new label</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pNewSymbol<span class="token operator">-&gt;</span>pstrIdent<span class="token punctuation">,</span> pstrIdent <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  pNewSymbol<span class="token operator">-&gt;</span>iSize <span class="token operator">=</span> iSize<span class="token punctuation">;</span>
+  pNewSymbol<span class="token operator">-&gt;</span>iStackIndex <span class="token operator">=</span> iStackIndex<span class="token punctuation">;</span>
+  pNewSymbol<span class="token operator">-&gt;</span>iFuncIndex <span class="token operator">=</span> iFuncIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Add the symbol to the list and get its index</span>
+  <span class="token keyword">int</span> iIndex <span class="token operator">=</span> <span class="token function">AddNode</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_SymbolTable<span class="token punctuation">,</span> pNewSymbol <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the symbol node's index</span>
+  pNewSymbol<span class="token operator">-&gt;</span>iIndex <span class="token operator">=</span> iIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Return the new symbol's index</span>
+  <span class="token keyword">return</span> iIndex<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-SymbolNode * GetSymbolByIdent ( string Ident, int FuncIndex )
-{
-  // Traverse the linked list until a symbol with the proper
-  // identifier and scope is found.
-  // First latch onto the initial node
-  SymbolNode * CurrSymbol = SymbolTable.Head;
-  // Loop through each node in the list
-  for ( CurrIndex = 0; CurrIndex &lt; SymbolTable.SymbolCount; ++ CurrIndex )
-  {
-    // Check to see if the current node matches the specified identifier
-    if ( CurrNode.Ident == Ident )
-    // Now see if their scopes are the same or overlap (global/local)
-    if ( CurrNode.FuncIndex == FuncIndex || CurrNode.StackIndex &gt;= 0 )
-      return CurrNode;
-    // Otherwise move on to the next in the list
-    CurrNode = CurrNode.Next;
-  }
-  // The specified symbol was not found, so return NULL
-  return NULL;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+SymbolNode <span class="token operator">*</span> <span class="token function">GetSymbolByIdent</span> <span class="token punctuation">(</span> string Ident<span class="token punctuation">,</span> <span class="token keyword">int</span> FuncIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Traverse the linked list until a symbol with the proper</span>
+  <span class="token comment">// identifier and scope is found.</span>
+  <span class="token comment">// First latch onto the initial node</span>
+  SymbolNode <span class="token operator">*</span> CurrSymbol <span class="token operator">=</span> SymbolTable<span class="token punctuation">.</span>Head<span class="token punctuation">;</span>
+  <span class="token comment">// Loop through each node in the list</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> CurrIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> CurrIndex <span class="token operator">&lt;</span> SymbolTable<span class="token punctuation">.</span>SymbolCount<span class="token punctuation">;</span> <span class="token operator">++</span> CurrIndex <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// Check to see if the current node matches the specified identifier</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> CurrNode<span class="token punctuation">.</span>Ident <span class="token operator">==</span> Ident <span class="token punctuation">)</span>
+    <span class="token comment">// Now see if their scopes are the same or overlap (global/local)</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> CurrNode<span class="token punctuation">.</span>FuncIndex <span class="token operator">==</span> FuncIndex <span class="token operator">||</span> CurrNode<span class="token punctuation">.</span>StackIndex <span class="token operator">&gt;=</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+      <span class="token keyword">return</span> CurrNode<span class="token punctuation">;</span>
+    <span class="token comment">// Otherwise move on to the next in the list</span>
+    CurrNode <span class="token operator">=</span> CurrNode<span class="token punctuation">.</span>Next<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">// The specified symbol was not found, so return NULL</span>
+  <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>注意条件 <code>if ( CurrNode.FuncIndex == FuncIndex || CurrNode.StackIndex &gt;= 0 )</code> 是因为全局变量 StackIndex 从零开始。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">int GetStackIndexByIdent ( char * pstrIdent, int iFuncIndex )
-{
-  // Get the symbol's information
-  SymbolNode * pSymbol = GetSymbolByIdent ( pstrIdent, iFuncIndex );
-  // Return its stack index
-  return pSymbol-&gt;iStackIndex;
-}
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">GetStackIndexByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Get the symbol's information</span>
+  SymbolNode <span class="token operator">*</span> pSymbol <span class="token operator">=</span> <span class="token function">GetSymbolByIdent</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Return its stack index</span>
+  <span class="token keyword">return</span> pSymbol<span class="token operator">-&gt;</span>iStackIndex<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-int GetSizeByIdent ( char * pstrIdent, int iFuncIndex )
-{
-  // Get the symbol's information
-  SymbolNode * pSymbol = GetSymbolByIdent ( pstrIdent, iFuncIndex );
-  // Return its size
-  return pSymbol-&gt;iSize;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">int</span> <span class="token function">GetSizeByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Get the symbol's information</span>
+  SymbolNode <span class="token operator">*</span> pSymbol <span class="token operator">=</span> <span class="token function">GetSymbolByIdent</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Return its size</span>
+  <span class="token keyword">return</span> pSymbol<span class="token operator">-&gt;</span>iSize<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="标签表"><a href="#标签表" class="headerlink" title="标签表"></a>标签表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _LabelNode       // A label table node
-{
-  int iIndex;                 // Index
-  char pstrIdent [ MAX_IDENT_SIZE ];    // Identifier
-  int iTargetIndex;           // Index of the target instruction
-  int iFuncIndex;             // Function in which the label resides
-}
+<h4 id="标签表"><a href="#标签表" class="headerlink" title="标签表"></a>标签表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_LabelNode</span>       <span class="token comment">// A label table node</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> iIndex<span class="token punctuation">;</span>                 <span class="token comment">// Index</span>
+  <span class="token keyword">char</span> pstrIdent <span class="token punctuation">[</span> MAX_IDENT_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment">// Identifier</span>
+  <span class="token keyword">int</span> iTargetIndex<span class="token punctuation">;</span>           <span class="token comment">// Index of the target instruction</span>
+  <span class="token keyword">int</span> iFuncIndex<span class="token punctuation">;</span>             <span class="token comment">// Function in which the label resides</span>
+<span class="token punctuation">}</span>
 
-int AddLabel ( char * pstrIdent, int iTargetIndex, int iFuncIndex )
-{
-  // If a label already exists, return -1
-  if ( GetLabelByIdent ( pstrIdent, iFuncIndex ) )
-    return -1;
-  // Create a new label node
-  LabelNode * pNewLabel = ( LabelNode * ) malloc ( sizeof ( LabelNode ) );
-  // Initialize the new label
-  strcpy ( pNewLabel-&gt;pstrIdent, pstrIdent );
-  pNewLabel-&gt;iTargetIndex = iTargetIndex;
-  pNewLabel-&gt;iFuncIndex = iFuncIndex;
-  // Add the label to the list and get its index
-  int iIndex = AddNode ( &amp; g_LabelTable, pNewLabel );
-  // Set the index of the label node
-  pNewLabel-&gt;iIndex = iIndex;
-  // Return the new label's index
-  return iIndex;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">int</span> <span class="token function">AddLabel</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iTargetIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// If a label already exists, return -1</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetLabelByIdent</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iFuncIndex <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token comment">// Create a new label node</span>
+  LabelNode <span class="token operator">*</span> pNewLabel <span class="token operator">=</span> <span class="token punctuation">(</span> LabelNode <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> LabelNode <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Initialize the new label</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pNewLabel<span class="token operator">-&gt;</span>pstrIdent<span class="token punctuation">,</span> pstrIdent <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  pNewLabel<span class="token operator">-&gt;</span>iTargetIndex <span class="token operator">=</span> iTargetIndex<span class="token punctuation">;</span>
+  pNewLabel<span class="token operator">-&gt;</span>iFuncIndex <span class="token operator">=</span> iFuncIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Add the label to the list and get its index</span>
+  <span class="token keyword">int</span> iIndex <span class="token operator">=</span> <span class="token function">AddNode</span> <span class="token punctuation">(</span> <span class="token operator">&amp;</span> g_LabelTable<span class="token punctuation">,</span> pNewLabel <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the index of the label node</span>
+  pNewLabel<span class="token operator">-&gt;</span>iIndex <span class="token operator">=</span> iIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Return the new label's index</span>
+  <span class="token keyword">return</span> iIndex<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="Host-API-表"><a href="#Host-API-表" class="headerlink" title="Host API 表"></a>Host API 表</h4><p>复用链表即可。</p>
 <p><code>LinkedList g_HostAPICallTable;</code></p>
-<h4 id="指令集查找表"><a href="#指令集查找表" class="headerlink" title="指令集查找表"></a>指令集查找表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c">typedef struct _InstrLookup     // An instruction lookup
-{
-  char pstrMnemonic [ MAX_INSTR_MNEMONIC_SIZE ];  // Mnemonic string
-  int iOpcode;                // Opcode
-  int iOpCount;               // Number of operands
-  OpTypes * OpList;           // Pointer to operand list
-}
-typedef int OpTypes;
-#define MAX_INSTR_LOOKUP_COUNT      256      // The maximum number of
-                                            // instructions the lookup table
-                                            // will hold
-#define MAX_INSTR_MNEMONIC_SIZE     16       // Maximum size of an instruction
-// mnemonic's string
-InstrLookup g_InstrTable [ MAX_INSTR_LOOKUP_COUNT ];
+<h4 id="指令集查找表"><a href="#指令集查找表" class="headerlink" title="指令集查找表"></a>指令集查找表</h4><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_InstrLookup</span>     <span class="token comment">// An instruction lookup</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">char</span> pstrMnemonic <span class="token punctuation">[</span> MAX_INSTR_MNEMONIC_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// Mnemonic string</span>
+  <span class="token keyword">int</span> iOpcode<span class="token punctuation">;</span>                <span class="token comment">// Opcode</span>
+  <span class="token keyword">int</span> iOpCount<span class="token punctuation">;</span>               <span class="token comment">// Number of operands</span>
+  OpTypes <span class="token operator">*</span> OpList<span class="token punctuation">;</span>           <span class="token comment">// Pointer to operand list</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">typedef</span> <span class="token keyword">int</span> OpTypes<span class="token punctuation">;</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> MAX_INSTR_LOOKUP_COUNT      256      </span><span class="token comment">// The maximum number of</span>
+                                            <span class="token comment">// instructions the lookup table</span>
+                                            <span class="token comment">// will hold</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> MAX_INSTR_MNEMONIC_SIZE     16       </span><span class="token comment">// Maximum size of an instruction</span>
+<span class="token comment">// mnemonic's string</span>
+InstrLookup g_InstrTable <span class="token punctuation">[</span> MAX_INSTR_LOOKUP_COUNT <span class="token punctuation">]</span><span class="token punctuation">;</span>
 
 
-InstrLookup;
+InstrLookup<span class="token punctuation">;</span>
 
-int AddInstrLookup ( char * pstrMnemonic, int iOpcode, int iOpCount )
-{
-  // Just use a simple static int to keep track of the next instruction
-  // index in the table.
-  static int iInstrIndex = 0;
-  // Make sure we haven't run out of instruction indices
-  if ( iInstrIndex &gt;= MAX_INSTR_LOOKUP_COUNT )
-    return -1;
-  // Set the mnemonic, opcode and operand count fields
-  strcpy ( g_InstrTable [ iInstrIndex ].pstrMnemonic, pstrMnemonic );
-  strupr ( g_InstrTable [ iInstrIndex ].pstrMnemonic );
-  g_InstrTable [ iInstrIndex ].iOpcode = iOpcode;
-  g_InstrTable [ iInstrIndex ].iOpCount = iOpCount;
-  // Allocate space for the operand list
-  g_InstrTable [ iInstrIndex ].OpList = ( OpTypes * )
-  malloc ( iOpCount * sizeof ( OpTypes ) );
-  // Copy the instruction index into another variable so it can be returned
-  // to the caller
-  int iReturnInstrIndex = iInstrIndex;
-  // Increment the index for the next instruction
-  ++ iInstrIndex;
-  // Return the used index to the caller
-  return iReturnInstrIndex;
-}
+<span class="token keyword">int</span> <span class="token function">AddInstrLookup</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrMnemonic<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpcode<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpCount <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Just use a simple static int to keep track of the next instruction</span>
+  <span class="token comment">// index in the table.</span>
+  <span class="token keyword">static</span> <span class="token keyword">int</span> iInstrIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token comment">// Make sure we haven't run out of instruction indices</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> iInstrIndex <span class="token operator">&gt;=</span> MAX_INSTR_LOOKUP_COUNT <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the mnemonic, opcode and operand count fields</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> g_InstrTable <span class="token punctuation">[</span> iInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>pstrMnemonic<span class="token punctuation">,</span> pstrMnemonic <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">strupr</span> <span class="token punctuation">(</span> g_InstrTable <span class="token punctuation">[</span> iInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>pstrMnemonic <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  g_InstrTable <span class="token punctuation">[</span> iInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpcode <span class="token operator">=</span> iOpcode<span class="token punctuation">;</span>
+  g_InstrTable <span class="token punctuation">[</span> iInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>iOpCount <span class="token operator">=</span> iOpCount<span class="token punctuation">;</span>
+  <span class="token comment">// Allocate space for the operand list</span>
+  g_InstrTable <span class="token punctuation">[</span> iInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>OpList <span class="token operator">=</span> <span class="token punctuation">(</span> OpTypes <span class="token operator">*</span> <span class="token punctuation">)</span>
+  <span class="token function">malloc</span> <span class="token punctuation">(</span> iOpCount <span class="token operator">*</span> <span class="token keyword">sizeof</span> <span class="token punctuation">(</span> OpTypes <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Copy the instruction index into another variable so it can be returned</span>
+  <span class="token comment">// to the caller</span>
+  <span class="token keyword">int</span> iReturnInstrIndex <span class="token operator">=</span> iInstrIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Increment the index for the next instruction</span>
+  <span class="token operator">++</span> iInstrIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Return the used index to the caller</span>
+  <span class="token keyword">return</span> iReturnInstrIndex<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-void SetOpType ( int iInstrIndex, int iOpIndex, OpTypes iOpType )
-{
-  g_InstrTable [ iInstrIndex ].OpList [ iOpIndex ] = iOpType;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">void</span> <span class="token function">SetOpType</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iInstrIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpIndex<span class="token punctuation">,</span> OpTypes iOpType <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  g_InstrTable <span class="token punctuation">[</span> iInstrIndex <span class="token punctuation">]</span><span class="token punctuation">.</span>OpList <span class="token punctuation">[</span> iOpIndex <span class="token punctuation">]</span> <span class="token operator">=</span> iOpType<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>Operand Type Bitfield Masks 如下：</p>
 <p><img src="bitfieldmask.png" alt="bitfieldmask"></p>
 <p>设置如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">iInstrIndex = AddInstrLookup ( "Mov", 0, 2 );
-SetOpType ( iInstrIndex, 0, OP_FLAG_TYPE_MEM_REF |
-OP_FLAG_TYPE_REG );
-SetOpType ( iInstrIndex, 1, OP_FLAG_TYPE_INT |
-OP_FLAG_TYPE_FLOAT |
-OP_FLAG_TYPE_STRING |
-OP_FLAG_TYPE_MEM_REF |
-OP_FLAG_TYPE_REG );<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">iInstrIndex <span class="token operator">=</span> <span class="token function">AddInstrLookup</span> <span class="token punctuation">(</span> <span class="token string">"Mov"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">SetOpType</span> <span class="token punctuation">(</span> iInstrIndex<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> OP_FLAG_TYPE_MEM_REF <span class="token operator">|</span>
+OP_FLAG_TYPE_REG <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">SetOpType</span> <span class="token punctuation">(</span> iInstrIndex<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> OP_FLAG_TYPE_INT <span class="token operator">|</span>
+OP_FLAG_TYPE_FLOAT <span class="token operator">|</span>
+OP_FLAG_TYPE_STRING <span class="token operator">|</span>
+OP_FLAG_TYPE_MEM_REF <span class="token operator">|</span>
+OP_FLAG_TYPE_REG <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>除了直接将指令 <code>硬编码</code> 以外，我们还可以将指令用一种可解析的格式写入文件，如下：</p>
 <pre class="line-numbers language-arm" data-language="arm"><code class="language-arm">Mov 0 2
 MemRef
@@ -935,39 +935,39 @@ Label<span aria-hidden="true" class="line-numbers-rows"><span></span><span></spa
 <p>通过不同的指令文件，我们的系统就可以解析不同的指令集，使得我们的汇编器扩展性增强。</p>
 <p><img src="instructionSets.png" alt="instructionSets"></p>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>到目前我们的汇编器全局的数据结构如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">// Source code representation
-char ** g_ppstrSourceCode = NULL;
-int g_iSourceCodeSize;
-// The instruction lookup table
-InstrLookup g_InstrTable [ MAX_INSTR_LOOKUP_COUNT ];
-// The assembled instruction stream
-Instr * g_pInstrStream = NULL;
-int g_iInstrStreamSize;
-// The script header
-ScriptHeader g_ScriptHeader;
-// The main tables
-LinkedList g_StringTable;
-LinkedList g_FuncTable;
-LinkedList g_SymbolTable;
-LinkedList g_LabelTable;
-LinkedList g_HostAPICallTable;
-//String table
-int AddString ( LinkedList * pList, char * pstrString );
-//Next up is the function table:
-int AddFunc ( char * pstrName, int iEntryPoint );
-FuncNode * GetFuncByName ( char * pstrName );
-void SetFuncInfo ( char * pstrName, int iParamCount, int iLocalDataSize );
-//Followed by the symbol and label tables:
-int AddSymbol ( char * pstrIdent, int iSize, int iStackIndex, int iFuncIndex );
-SymbolNode * GetSymbolByIdent ( char * pstrIdent, int iFuncIndex );
-int GetStackIndexByIdent ( char * pstrIdent, int iFuncIndex );
-int GetSizeByIdent ( char * pstrIdent, int iFuncIndex );
-int AddLabel ( char * pstrIdent, int iTargetIndex, int iFuncIndex );
-LabelNode * GetLabelByIdent ( char * pstrIdent, int iFuncIndex );
-//Lastly, there’s the instruction lookup table:
-int AddInstrLookup ( char * pstrMnemonic, int iOpcode, int iOpCount );
-void SetOpType ( int iInstrIndex, int iOpIndex, OpTypes iOpType );
-int GetInstrByMnemonic ( char * pstrMnemonic, InstrLookup * pInstr );<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Source code representation</span>
+<span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span> g_ppstrSourceCode <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> g_iSourceCodeSize<span class="token punctuation">;</span>
+<span class="token comment">// The instruction lookup table</span>
+InstrLookup g_InstrTable <span class="token punctuation">[</span> MAX_INSTR_LOOKUP_COUNT <span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token comment">// The assembled instruction stream</span>
+Instr <span class="token operator">*</span> g_pInstrStream <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> g_iInstrStreamSize<span class="token punctuation">;</span>
+<span class="token comment">// The script header</span>
+ScriptHeader g_ScriptHeader<span class="token punctuation">;</span>
+<span class="token comment">// The main tables</span>
+LinkedList g_StringTable<span class="token punctuation">;</span>
+LinkedList g_FuncTable<span class="token punctuation">;</span>
+LinkedList g_SymbolTable<span class="token punctuation">;</span>
+LinkedList g_LabelTable<span class="token punctuation">;</span>
+LinkedList g_HostAPICallTable<span class="token punctuation">;</span>
+<span class="token comment">//String table</span>
+<span class="token keyword">int</span> <span class="token function">AddString</span> <span class="token punctuation">(</span> LinkedList <span class="token operator">*</span> pList<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrString <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//Next up is the function table:</span>
+<span class="token keyword">int</span> <span class="token function">AddFunc</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrName<span class="token punctuation">,</span> <span class="token keyword">int</span> iEntryPoint <span class="token punctuation">)</span><span class="token punctuation">;</span>
+FuncNode <span class="token operator">*</span> <span class="token function">GetFuncByName</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrName <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">SetFuncInfo</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrName<span class="token punctuation">,</span> <span class="token keyword">int</span> iParamCount<span class="token punctuation">,</span> <span class="token keyword">int</span> iLocalDataSize <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//Followed by the symbol and label tables:</span>
+<span class="token keyword">int</span> <span class="token function">AddSymbol</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iSize<span class="token punctuation">,</span> <span class="token keyword">int</span> iStackIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+SymbolNode <span class="token operator">*</span> <span class="token function">GetSymbolByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">GetStackIndexByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">GetSizeByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">AddLabel</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iTargetIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+LabelNode <span class="token operator">*</span> <span class="token function">GetLabelByIdent</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent<span class="token punctuation">,</span> <span class="token keyword">int</span> iFuncIndex <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//Lastly, there’s the instruction lookup table:</span>
+<span class="token keyword">int</span> <span class="token function">AddInstrLookup</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrMnemonic<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpcode<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpCount <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">SetOpType</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> iInstrIndex<span class="token punctuation">,</span> <span class="token keyword">int</span> iOpIndex<span class="token punctuation">,</span> OpTypes iOpType <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">GetInstrByMnemonic</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrMnemonic<span class="token punctuation">,</span> InstrLookup <span class="token operator">*</span> pInstr <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <hr>
 <script>
         document.querySelectorAll('.github-emoji')
@@ -1661,12 +1661,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

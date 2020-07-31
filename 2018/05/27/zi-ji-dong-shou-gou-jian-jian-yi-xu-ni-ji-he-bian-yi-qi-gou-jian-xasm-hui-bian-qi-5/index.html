@@ -440,397 +440,397 @@ X
 <p> index0 和 index1 跳过空白，index0 指向第一个字符，index1 不断扫描直到遇到下一个  <code>Token</code> 时停止。</p>
 <p> 值得注意的是，由于我们允许转义字符，所以在扫描字符串时，需要注意判断当前是否在字符串中的方法。</p>
  <pre class="line-numbers language-c" data-language="c"><code class="language-c">
-  /******************************************************************************************
+  <span class="token comment">/******************************************************************************************
   *
   *   GetNextToken ()
   *
   *   Extracts and returns the next token from the character stream. Also makes a copy of
   *   the current lexeme for use with GetCurrLexeme ().
-  */
+  */</span>
 
-  Token GetNextToken ()
-  {
-      // ---- Lexeme Extraction
+  Token <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+      <span class="token comment">// ---- Lexeme Extraction</span>
 
-      // Move the first index (Index0) past the end of the last token, which is marked
-      // by the second index (Index1).
+      <span class="token comment">// Move the first index (Index0) past the end of the last token, which is marked</span>
+      <span class="token comment">// by the second index (Index1).</span>
 
-      g_Lexer.iIndex0 = g_Lexer.iIndex1;
+      g_Lexer<span class="token punctuation">.</span>iIndex0 <span class="token operator">=</span> g_Lexer<span class="token punctuation">.</span>iIndex1<span class="token punctuation">;</span>
 
-      // Make sure we aren't past the end of the current line. If a string is 8 characters long,
-      // it's indexed from 0 to 7; therefore, indices 8 and beyond lie outside of the string and
-      // require us to move to the next line. This is why I use &gt;= for the comparison rather
-      // than &gt;. The value returned by strlen () is always one greater than the last valid
-      // character index.
+      <span class="token comment">// Make sure we aren't past the end of the current line. If a string is 8 characters long,</span>
+      <span class="token comment">// it's indexed from 0 to 7; therefore, indices 8 and beyond lie outside of the string and</span>
+      <span class="token comment">// require us to move to the next line. This is why I use &gt;= for the comparison rather</span>
+      <span class="token comment">// than &gt;. The value returned by strlen () is always one greater than the last valid</span>
+      <span class="token comment">// character index.</span>
 
-      if ( g_Lexer.iIndex0 &gt;= strlen ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ] ) )
-      {
-          // If so, skip to the next line but make sure we don't go past the end of the file.
-          // SkipToNextLine () will return FALSE if we hit the end of the file, which is
-          // the end of the token stream.
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iIndex0 <span class="token operator">&gt;=</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+          <span class="token comment">// If so, skip to the next line but make sure we don't go past the end of the file.</span>
+          <span class="token comment">// SkipToNextLine () will return FALSE if we hit the end of the file, which is</span>
+          <span class="token comment">// the end of the token stream.</span>
 
-          if ( ! SkipToNextLine () )
-              return END_OF_TOKEN_STREAM;
-      }
+          <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span> <span class="token function">SkipToNextLine</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+              <span class="token keyword">return</span> END_OF_TOKEN_STREAM<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
 
-      // If we just ended a string, tell the lexer to stop lexing
-      // strings and return to the normal state
+      <span class="token comment">// If we just ended a string, tell the lexer to stop lexing</span>
+      <span class="token comment">// strings and return to the normal state</span>
 
-      if ( g_Lexer.iCurrLexState == LEX_STATE_END_STRING )
-          g_Lexer.iCurrLexState = LEX_STATE_NO_STRING;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">==</span> LEX_STATE_END_STRING <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">=</span> LEX_STATE_NO_STRING<span class="token punctuation">;</span>
 
-      // Scan through the potential whitespace preceding the next lexeme, but ONLY if we're
-      // not currently parsing a string lexeme (since strings can contain arbitrary whitespace
-      // which must be preserved).
+      <span class="token comment">// Scan through the potential whitespace preceding the next lexeme, but ONLY if we're</span>
+      <span class="token comment">// not currently parsing a string lexeme (since strings can contain arbitrary whitespace</span>
+      <span class="token comment">// which must be preserved).</span>
 
-      if ( g_Lexer.iCurrLexState != LEX_STATE_IN_STRING )
-      {
-          // Scan through the whitespace and check for the end of the line
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">!=</span> LEX_STATE_IN_STRING <span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+          <span class="token comment">// Scan through the whitespace and check for the end of the line</span>
 
-          while ( TRUE )
-          {
-              // If the current character is not whitespace, exit the loop because the lexeme
-              // is starting.
+          <span class="token keyword">while</span> <span class="token punctuation">(</span> TRUE <span class="token punctuation">)</span>
+          <span class="token punctuation">{</span>
+              <span class="token comment">// If the current character is not whitespace, exit the loop because the lexeme</span>
+              <span class="token comment">// is starting.</span>
 
-              if ( ! IsCharWhitespace ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ][ g_Lexer.iIndex0 ] ) )
-                  break;
+              <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span> <span class="token function">IsCharWhitespace</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span><span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iIndex0 <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // It is whitespace, however, so move to the next character and continue scanning
+              <span class="token comment">// It is whitespace, however, so move to the next character and continue scanning</span>
 
-              ++ g_Lexer.iIndex0;
-          }
-      }
+              <span class="token operator">++</span> g_Lexer<span class="token punctuation">.</span>iIndex0<span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
 
-      // Bring the second index (Index1) to the lexeme's starting character, which is marked by
-      // the first index (Index0)
+      <span class="token comment">// Bring the second index (Index1) to the lexeme's starting character, which is marked by</span>
+      <span class="token comment">// the first index (Index0)</span>
 
-      g_Lexer.iIndex1 = g_Lexer.iIndex0;
+      g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token operator">=</span> g_Lexer<span class="token punctuation">.</span>iIndex0<span class="token punctuation">;</span>
 
-      // Scan through the lexeme until a delimiter is hit, incrementing Index1 each time
+      <span class="token comment">// Scan through the lexeme until a delimiter is hit, incrementing Index1 each time</span>
 
-      while ( TRUE )
-      {
-          // Are we currently scanning through a string?
+      <span class="token keyword">while</span> <span class="token punctuation">(</span> TRUE <span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+          <span class="token comment">// Are we currently scanning through a string?</span>
 
-          if ( g_Lexer.iCurrLexState == LEX_STATE_IN_STRING )
-          {
-              // If we're at the end of the line, return an invalid token since the string has no
-              // ending double-quote on the line
+          <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">==</span> LEX_STATE_IN_STRING <span class="token punctuation">)</span>
+          <span class="token punctuation">{</span>
+              <span class="token comment">// If we're at the end of the line, return an invalid token since the string has no</span>
+              <span class="token comment">// ending double-quote on the line</span>
 
-              if ( g_Lexer.iIndex1 &gt;= strlen ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ] ) )
-              {
-                  g_Lexer.CurrToken = TOKEN_TYPE_INVALID;
-                  return g_Lexer.CurrToken;
-              }
+              <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token operator">&gt;=</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+              <span class="token punctuation">{</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_INVALID<span class="token punctuation">;</span>
+                  <span class="token keyword">return</span> g_Lexer<span class="token punctuation">.</span>CurrToken<span class="token punctuation">;</span>
+              <span class="token punctuation">}</span>
 
-              // If the current character is a backslash, move ahead two characters to skip the
-              // escape sequence and jump to the next iteration of the loop
+              <span class="token comment">// If the current character is a backslash, move ahead two characters to skip the</span>
+              <span class="token comment">// escape sequence and jump to the next iteration of the loop</span>
 
-              if ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ][ g_Lexer.iIndex1 ] == '\\' )
-              {
-                  g_Lexer.iIndex1 += 2;
-                  continue;
-              }
+              <span class="token keyword">if</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span><span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'\\'</span> <span class="token punctuation">)</span>
+              <span class="token punctuation">{</span>
+                  g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token operator">+=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+                  <span class="token keyword">continue</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span>
 
-              // If the current character isn't a double-quote, move to the next, otherwise exit
-              // the loop, because the string has ended.
+              <span class="token comment">// If the current character isn't a double-quote, move to the next, otherwise exit</span>
+              <span class="token comment">// the loop, because the string has ended.</span>
 
-              if ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ][ g_Lexer.iIndex1 ] == '"' )
-                  break;
+              <span class="token keyword">if</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span><span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'"'</span> <span class="token punctuation">)</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              ++ g_Lexer.iIndex1;
-          }
+              <span class="token operator">++</span> g_Lexer<span class="token punctuation">.</span>iIndex1<span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
 
-          // We are not currently scanning through a string
+          <span class="token comment">// We are not currently scanning through a string</span>
 
-          else
-          {
-              // If we're at the end of the line, the lexeme has ended so exit the loop
+          <span class="token keyword">else</span>
+          <span class="token punctuation">{</span>
+              <span class="token comment">// If we're at the end of the line, the lexeme has ended so exit the loop</span>
 
-              if ( g_Lexer.iIndex1 &gt;= strlen ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ] ) )
-                  break;
+              <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token operator">&gt;=</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // If the current character isn't a delimiter, move to the next, otherwise exit the loop
+              <span class="token comment">// If the current character isn't a delimiter, move to the next, otherwise exit the loop</span>
 
-              if ( IsCharDelimiter ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ][ g_Lexer.iIndex1 ] ) )
-                  break;
+              <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">IsCharDelimiter</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span><span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              ++ g_Lexer.iIndex1;
-          }
-      }
+              <span class="token operator">++</span> g_Lexer<span class="token punctuation">.</span>iIndex1<span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
 
-      // Single-character lexemes will appear to be zero characters at this point (since Index1
-      // will equal Index0), so move Index1 over by one to give it some noticable width
+      <span class="token comment">// Single-character lexemes will appear to be zero characters at this point (since Index1</span>
+      <span class="token comment">// will equal Index0), so move Index1 over by one to give it some noticable width</span>
 
-      if ( g_Lexer.iIndex1 - g_Lexer.iIndex0 == 0 )
-          ++ g_Lexer.iIndex1;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iIndex1 <span class="token operator">-</span> g_Lexer<span class="token punctuation">.</span>iIndex0 <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+          <span class="token operator">++</span> g_Lexer<span class="token punctuation">.</span>iIndex1<span class="token punctuation">;</span>
 
-      // The lexeme has been isolated and lies between Index0 and Index1 (inclusive), so make a local
-      // copy for the lexer
+      <span class="token comment">// The lexeme has been isolated and lies between Index0 and Index1 (inclusive), so make a local</span>
+      <span class="token comment">// copy for the lexer</span>
 
-      unsigned int iCurrDestIndex = 0;
-      for ( unsigned int iCurrSourceIndex = g_Lexer.iIndex0; iCurrSourceIndex &lt; g_Lexer.iIndex1; ++ iCurrSourceIndex )
-      {
-          // If we're parsing a string, check for escape sequences and just copy the character after
-          // the backslash
+      <span class="token keyword">unsigned</span> <span class="token keyword">int</span> iCurrDestIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> iCurrSourceIndex <span class="token operator">=</span> g_Lexer<span class="token punctuation">.</span>iIndex0<span class="token punctuation">;</span> iCurrSourceIndex <span class="token operator">&lt;</span> g_Lexer<span class="token punctuation">.</span>iIndex1<span class="token punctuation">;</span> <span class="token operator">++</span> iCurrSourceIndex <span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+          <span class="token comment">// If we're parsing a string, check for escape sequences and just copy the character after</span>
+          <span class="token comment">// the backslash</span>
 
-          if ( g_Lexer.iCurrLexState == LEX_STATE_IN_STRING )
-              if ( g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ][ iCurrSourceIndex ] == '\\' )
-                  ++ iCurrSourceIndex;
+          <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">==</span> LEX_STATE_IN_STRING <span class="token punctuation">)</span>
+              <span class="token keyword">if</span> <span class="token punctuation">(</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span><span class="token punctuation">[</span> iCurrSourceIndex <span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'\\'</span> <span class="token punctuation">)</span>
+                  <span class="token operator">++</span> iCurrSourceIndex<span class="token punctuation">;</span>
 
-          // Copy the character from the source line to the lexeme
+          <span class="token comment">// Copy the character from the source line to the lexeme</span>
 
-          g_Lexer.pstrCurrLexeme [ iCurrDestIndex ] = g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ][ iCurrSourceIndex ];
+          g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">[</span> iCurrDestIndex <span class="token punctuation">]</span> <span class="token operator">=</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span><span class="token punctuation">[</span> iCurrSourceIndex <span class="token punctuation">]</span><span class="token punctuation">;</span>
 
-          // Advance the destination index
+          <span class="token comment">// Advance the destination index</span>
 
-          ++ iCurrDestIndex;
-      }
+          <span class="token operator">++</span> iCurrDestIndex<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
 
-      // Set the null terminator
+      <span class="token comment">// Set the null terminator</span>
 
-      g_Lexer.pstrCurrLexeme [ iCurrDestIndex ] = '\0';
+      g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">[</span> iCurrDestIndex <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'\0'</span><span class="token punctuation">;</span>
 
-      // Convert it to uppercase if it's not a string
+      <span class="token comment">// Convert it to uppercase if it's not a string</span>
 
-      if ( g_Lexer.iCurrLexState != LEX_STATE_IN_STRING )
-          _strupr ( g_Lexer.pstrCurrLexeme );
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">!=</span> LEX_STATE_IN_STRING <span class="token punctuation">)</span>
+          <span class="token function">_strupr</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-      // ---- Token Identification
+      <span class="token comment">// ---- Token Identification</span>
 
-      // Let's find out what sort of token our new lexeme is
+      <span class="token comment">// Let's find out what sort of token our new lexeme is</span>
 
-      // We'll set the type to invalid now just in case the lexer doesn't match any
-      // token types
+      <span class="token comment">// We'll set the type to invalid now just in case the lexer doesn't match any</span>
+      <span class="token comment">// token types</span>
 
-      g_Lexer.CurrToken = TOKEN_TYPE_INVALID;
+      g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_INVALID<span class="token punctuation">;</span>
 
-      // The first case is the easiest-- if the string lexeme state is active, we know we're
-      // dealing with a string token. However, if the string is the double-quote sign, it
-      // means we've read an empty string and should return a double-quote instead
+      <span class="token comment">// The first case is the easiest-- if the string lexeme state is active, we know we're</span>
+      <span class="token comment">// dealing with a string token. However, if the string is the double-quote sign, it</span>
+      <span class="token comment">// means we've read an empty string and should return a double-quote instead</span>
 
-      if ( strlen ( g_Lexer.pstrCurrLexeme ) &gt; 1 || g_Lexer.pstrCurrLexeme [ 0 ] != '"' )
-      {
-          if ( g_Lexer.iCurrLexState == LEX_STATE_IN_STRING )
-          {
-              g_Lexer.CurrToken = TOKEN_TYPE_STRING;
-              return TOKEN_TYPE_STRING;
-          }
-      }
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">1</span> <span class="token operator">||</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">[</span> <span class="token number">0</span> <span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token string">'"'</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">==</span> LEX_STATE_IN_STRING <span class="token punctuation">)</span>
+          <span class="token punctuation">{</span>
+              g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_STRING<span class="token punctuation">;</span>
+              <span class="token keyword">return</span> TOKEN_TYPE_STRING<span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
 
-      // Now let's check for the single-character tokens
+      <span class="token comment">// Now let's check for the single-character tokens</span>
 
-      if ( strlen ( g_Lexer.pstrCurrLexeme ) == 1 )
-      {
-          switch ( g_Lexer.pstrCurrLexeme [ 0 ] )
-          {
-              // Double-Quote
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+          <span class="token keyword">switch</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">[</span> <span class="token number">0</span> <span class="token punctuation">]</span> <span class="token punctuation">)</span>
+          <span class="token punctuation">{</span>
+              <span class="token comment">// Double-Quote</span>
 
-              case '"':
-                  // If a quote is read, advance the lexing state so that strings are lexed
-                  // properly
+              <span class="token keyword">case</span> <span class="token string">'"'</span><span class="token operator">:</span>
+                  <span class="token comment">// If a quote is read, advance the lexing state so that strings are lexed</span>
+                  <span class="token comment">// properly</span>
 
-                  switch ( g_Lexer.iCurrLexState )
-                  {
-                      // If we're not lexing strings, tell the lexer we're now
-                      // in a string
+                  <span class="token keyword">switch</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token punctuation">)</span>
+                  <span class="token punctuation">{</span>
+                      <span class="token comment">// If we're not lexing strings, tell the lexer we're now</span>
+                      <span class="token comment">// in a string</span>
 
-                      case LEX_STATE_NO_STRING:
-                          g_Lexer.iCurrLexState = LEX_STATE_IN_STRING;
-                          break;
+                      <span class="token keyword">case</span> LEX_STATE_NO_STRING<span class="token operator">:</span>
+                          g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">=</span> LEX_STATE_IN_STRING<span class="token punctuation">;</span>
+                          <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-                      // If we're in a string, tell the lexer we just ended a string
+                      <span class="token comment">// If we're in a string, tell the lexer we just ended a string</span>
 
-                      case LEX_STATE_IN_STRING:
-                          g_Lexer.iCurrLexState = LEX_STATE_END_STRING;
-                          break;
-                  }
+                      <span class="token keyword">case</span> LEX_STATE_IN_STRING<span class="token operator">:</span>
+                          g_Lexer<span class="token punctuation">.</span>iCurrLexState <span class="token operator">=</span> LEX_STATE_END_STRING<span class="token punctuation">;</span>
+                          <span class="token keyword">break</span><span class="token punctuation">;</span>
+                  <span class="token punctuation">}</span>
 
-                  g_Lexer.CurrToken = TOKEN_TYPE_QUOTE;
-                  break;
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_QUOTE<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // Comma
+              <span class="token comment">// Comma</span>
 
-              case ',':
-                  g_Lexer.CurrToken = TOKEN_TYPE_COMMA;
-                  break;
+              <span class="token keyword">case</span> <span class="token string">','</span><span class="token operator">:</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_COMMA<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // Colon
+              <span class="token comment">// Colon</span>
 
-              case ':':
-                  g_Lexer.CurrToken = TOKEN_TYPE_COLON;
-                  break;
+              <span class="token keyword">case</span> <span class="token string">':'</span><span class="token operator">:</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_COLON<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // Opening Bracket
+              <span class="token comment">// Opening Bracket</span>
 
-              case '[':
-                  g_Lexer.CurrToken = TOKEN_TYPE_OPEN_BRACKET;
-                  break;
+              <span class="token keyword">case</span> <span class="token string">'['</span><span class="token operator">:</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_OPEN_BRACKET<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // Closing Bracket
+              <span class="token comment">// Closing Bracket</span>
 
-              case ']':
-                  g_Lexer.CurrToken = TOKEN_TYPE_CLOSE_BRACKET;
-                  break;
+              <span class="token keyword">case</span> <span class="token string">']'</span><span class="token operator">:</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_CLOSE_BRACKET<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // Opening Brace
+              <span class="token comment">// Opening Brace</span>
 
-              case '{':
-                  g_Lexer.CurrToken = TOKEN_TYPE_OPEN_BRACE;
-                  break;
+              <span class="token keyword">case</span> <span class="token string">'{'</span><span class="token operator">:</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_OPEN_BRACE<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // Closing Brace
+              <span class="token comment">// Closing Brace</span>
 
-              case '}':
-                  g_Lexer.CurrToken = TOKEN_TYPE_CLOSE_BRACE;
-                  break;
+              <span class="token keyword">case</span> <span class="token string">'}'</span><span class="token operator">:</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_CLOSE_BRACE<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-              // Newline
+              <span class="token comment">// Newline</span>
 
-              case '\n':
-                  g_Lexer.CurrToken = TOKEN_TYPE_NEWLINE;
-                  break;
-          }
-      }
+              <span class="token keyword">case</span> <span class="token string">'\n'</span><span class="token operator">:</span>
+                  g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_NEWLINE<span class="token punctuation">;</span>
+                  <span class="token keyword">break</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
 
-      // Now let's check for the multi-character tokens
+      <span class="token comment">// Now let's check for the multi-character tokens</span>
 
-      // Is it an integer?
+      <span class="token comment">// Is it an integer?</span>
 
-      if ( IsStringInteger ( g_Lexer.pstrCurrLexeme ) )
-          g_Lexer.CurrToken = TOKEN_TYPE_INT;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">IsStringInteger</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_INT<span class="token punctuation">;</span>
 
-      // Is it a float?
+      <span class="token comment">// Is it a float?</span>
 
-      if ( IsStringFloat ( g_Lexer.pstrCurrLexeme ) )
-          g_Lexer.CurrToken = TOKEN_TYPE_FLOAT;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">IsStringFloat</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_FLOAT<span class="token punctuation">;</span>
 
-      // Is it an identifier (which may also be a line label or instruction)?
+      <span class="token comment">// Is it an identifier (which may also be a line label or instruction)?</span>
 
-      if ( IsStringIdent ( g_Lexer.pstrCurrLexeme ) )
-          g_Lexer.CurrToken = TOKEN_TYPE_IDENT;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">IsStringIdent</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_IDENT<span class="token punctuation">;</span>
 
-      // Check for directives or _RetVal
+      <span class="token comment">// Check for directives or _RetVal</span>
 
-      // Is it SetStackSize?
+      <span class="token comment">// Is it SetStackSize?</span>
 
-      if ( strcmp ( g_Lexer.pstrCurrLexeme, "SETSTACKSIZE" ) == 0 )
-          g_Lexer.CurrToken = TOKEN_TYPE_SETSTACKSIZE;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme<span class="token punctuation">,</span> <span class="token string">"SETSTACKSIZE"</span> <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_SETSTACKSIZE<span class="token punctuation">;</span>
 
-      // Is it Var/Var []?
+      <span class="token comment">// Is it Var/Var []?</span>
 
-      if ( strcmp ( g_Lexer.pstrCurrLexeme, "VAR" ) == 0 )
-          g_Lexer.CurrToken = TOKEN_TYPE_VAR;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme<span class="token punctuation">,</span> <span class="token string">"VAR"</span> <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_VAR<span class="token punctuation">;</span>
 
-      // Is it Func?
+      <span class="token comment">// Is it Func?</span>
 
-      if ( strcmp ( g_Lexer.pstrCurrLexeme, "FUNC" ) == 0 )
-          g_Lexer.CurrToken = TOKEN_TYPE_FUNC;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme<span class="token punctuation">,</span> <span class="token string">"FUNC"</span> <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_FUNC<span class="token punctuation">;</span>
 
-      // Is it Param?
+      <span class="token comment">// Is it Param?</span>
 
-      if ( strcmp ( g_Lexer.pstrCurrLexeme, "PARAM" ) == 0 )
-          g_Lexer.CurrToken =TOKEN_TYPE_PARAM;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme<span class="token punctuation">,</span> <span class="token string">"PARAM"</span> <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span>TOKEN_TYPE_PARAM<span class="token punctuation">;</span>
 
-      // Is it _RetVal?
+      <span class="token comment">// Is it _RetVal?</span>
 
-      if ( strcmp ( g_Lexer.pstrCurrLexeme, "_RETVAL" ) == 0 )
-          g_Lexer.CurrToken = TOKEN_TYPE_REG_RETVAL;
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme<span class="token punctuation">,</span> <span class="token string">"_RETVAL"</span> <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+          g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_REG_RETVAL<span class="token punctuation">;</span>
 
-// Is it an instruction?
+<span class="token comment">// Is it an instruction?</span>
 
-InstrLookup Instr;
-if ( GetInstrByMnemonic ( g_Lexer.pstrCurrLexeme, &amp; Instr ) )
-    g_Lexer.CurrToken = TOKEN_TYPE_INSTR;
+InstrLookup Instr<span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetInstrByMnemonic</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>pstrCurrLexeme<span class="token punctuation">,</span> <span class="token operator">&amp;</span> Instr <span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">=</span> TOKEN_TYPE_INSTR<span class="token punctuation">;</span>
 
-      return g_Lexer.CurrToken;
-  }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      <span class="token keyword">return</span> g_Lexer<span class="token punctuation">.</span>CurrToken<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
  <div class="note warning"><p>词法分析一般用正则语言描述，通过状态机实现</p></div>
 
 <h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p> 编写代码难免有错误，编译器应该有能力指出错误，错误处理包含三个方面：<br> dectection,resynchroization and message output. 在这里为了简化，我们不会 <code>重新同步</code> ，只要发现错误立即打印并终止编译。涉及到的函数如下：</p>
- <pre class="line-numbers language-c" data-language="c"><code class="language-c"> void ExitOnError ( char * pstrErrorMssg )
-{
-  // Print the message
-  printf ( "Fatal Error: %s.\n", pstrErrorMssg );
-  // Exit the program
-  Exit ();
-}
-void ExitOnCodeError ( char * pstrErrorMssg )
-{
-  // Print the message
-  printf ( "Error: %s.\n\n", pstrErrorMssg );
-  printf ( "Line %d\n", g_Lexer.iCurrSourceLine );
-  // Reduce all of the source line's spaces to tabs so it takes less
-  // space and so the caret lines up with the current token properly
-  char pstrSourceLine [ MAX_SOURCE_LINE_SIZE ];
-  strcpy ( pstrSourceLine, g_ppstrSourceCode [ g_Lexer.iCurrSourceLine ] );
-  // Loop through each character and replace tabs with spaces
-  for ( unsigned int iCurrCharIndex = 0;
-      iCurrCharIndex &lt; strlen ( pstrSourceLine ); ++ iCurrCharIndex )
-    if ( pstrSourceLine [ iCurrCharIndex ] == '\t' )
-  pstrSourceLine [ iCurrCharIndex ] = ' ';
-  // Print the offending source line
-  printf ( "%s", pstrSourceLine );
-  // Print a caret at the start of the (presumably) offending lexeme
-  for ( unsigned int iCurrSpace = 0; iCurrSpace &lt; g_Lexer.iIndex0;
-  ++ iCurrSpace )
-    printf ( " " );
-  printf ( "^\n" );
-  // Print message indicating that the script could not be assembled
-  printf ( "Could not assemble %s.\n", g_pstrExecFilename );
-  // Exit the program
-  Exit ();
-}
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"> <span class="token keyword">void</span> <span class="token function">ExitOnError</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrErrorMssg <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Print the message</span>
+  <span class="token function">printf</span> <span class="token punctuation">(</span> <span class="token string">"Fatal Error: %s.\n"</span><span class="token punctuation">,</span> pstrErrorMssg <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Exit the program</span>
+  <span class="token function">Exit</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">void</span> <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> pstrErrorMssg <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Print the message</span>
+  <span class="token function">printf</span> <span class="token punctuation">(</span> <span class="token string">"Error: %s.\n\n"</span><span class="token punctuation">,</span> pstrErrorMssg <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span> <span class="token punctuation">(</span> <span class="token string">"Line %d\n"</span><span class="token punctuation">,</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Reduce all of the source line's spaces to tabs so it takes less</span>
+  <span class="token comment">// space and so the caret lines up with the current token properly</span>
+  <span class="token keyword">char</span> pstrSourceLine <span class="token punctuation">[</span> MAX_SOURCE_LINE_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pstrSourceLine<span class="token punctuation">,</span> g_ppstrSourceCode <span class="token punctuation">[</span> g_Lexer<span class="token punctuation">.</span>iCurrSourceLine <span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Loop through each character and replace tabs with spaces</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> iCurrCharIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      iCurrCharIndex <span class="token operator">&lt;</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> pstrSourceLine <span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">++</span> iCurrCharIndex <span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> pstrSourceLine <span class="token punctuation">[</span> iCurrCharIndex <span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'\t'</span> <span class="token punctuation">)</span>
+  pstrSourceLine <span class="token punctuation">[</span> iCurrCharIndex <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">' '</span><span class="token punctuation">;</span>
+  <span class="token comment">// Print the offending source line</span>
+  <span class="token function">printf</span> <span class="token punctuation">(</span> <span class="token string">"%s"</span><span class="token punctuation">,</span> pstrSourceLine <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Print a caret at the start of the (presumably) offending lexeme</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> iCurrSpace <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> iCurrSpace <span class="token operator">&lt;</span> g_Lexer<span class="token punctuation">.</span>iIndex0<span class="token punctuation">;</span>
+  <span class="token operator">++</span> iCurrSpace <span class="token punctuation">)</span>
+    <span class="token function">printf</span> <span class="token punctuation">(</span> <span class="token string">" "</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span> <span class="token punctuation">(</span> <span class="token string">"^\n"</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Print message indicating that the script could not be assembled</span>
+  <span class="token function">printf</span> <span class="token punctuation">(</span> <span class="token string">"Could not assemble %s.\n"</span><span class="token punctuation">,</span> g_pstrExecFilename <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Exit the program</span>
+  <span class="token function">Exit</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-void ExitOnCharExpectedError ( char cChar )
-{
-  // Create an error message based on the character
-  char * pstrErrorMssg = ( char * ) malloc ( strlen ( "' ' expected" ) );
-  sprintf ( pstrErrorMssg, "'%c' expected", cChar );
-  // Exit on the code error
-  ExitOnCodeError ( pstrErrorMssg );
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token keyword">void</span> <span class="token function">ExitOnCharExpectedError</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> cChar <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Create an error message based on the character</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span> pstrErrorMssg <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token function">malloc</span> <span class="token punctuation">(</span> <span class="token function">strlen</span> <span class="token punctuation">(</span> <span class="token string">"' ' expected"</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">sprintf</span> <span class="token punctuation">(</span> pstrErrorMssg<span class="token punctuation">,</span> <span class="token string">"'%c' expected"</span><span class="token punctuation">,</span> cChar <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Exit on the code error</span>
+  <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> pstrErrorMssg <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="语法分析（Parsing）"><a href="#语法分析（Parsing）" class="headerlink" title="语法分析（Parsing）"></a>语法分析（Parsing）</h2><p>完成词法分析后，接下来将进行语法分析，语法分析一般采用两种方法：自底向上和自顶向下。这里采用类似与 <code>递归下降</code> 的方法解析语句，由于 XASM 汇编语言比较简单，我们的语法分析中没有 <code>递归</code> 的调用。</p>
 <p><img src="parser.png" alt="parser"></p>
 <h3 id="初始化分析器"><a href="#初始化分析器" class="headerlink" title="初始化分析器"></a>初始化分析器</h3><p>首先初始化一些标志位和变量。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">// ---- Initialize the script header
-g_ScriptHeader.iStackSize = 0;
-g_ScriptHeader.iIsMainFuncPresent = FALSE;
-// ---- Set some initial variables
-g_iInstrStreamSize = 0;
-g_iIsSetStackSizeFound = FALSE;
-g_ScriptHeader.iGlobalDataSize = 0;
-// Set the current function's flags and variables
-int iIsFuncActive = FALSE;
-FuncNode * pCurrFunc;
-int iCurrFuncIndex;
-char pstrCurrFuncName [ MAX_IDENT_SIZE ];
-int iCurrFuncParamCount = 0;
-int iCurrFuncLocalDataSize = 0;
-// Create an instruction definition structure to hold instruction information
-// when dealing with instructions.
-InstrLookup CurrInstr;
-// Reset the lexer
-ResetLexer ();<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// ---- Initialize the script header</span>
+g_ScriptHeader<span class="token punctuation">.</span>iStackSize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+g_ScriptHeader<span class="token punctuation">.</span>iIsMainFuncPresent <span class="token operator">=</span> FALSE<span class="token punctuation">;</span>
+<span class="token comment">// ---- Set some initial variables</span>
+g_iInstrStreamSize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+g_iIsSetStackSizeFound <span class="token operator">=</span> FALSE<span class="token punctuation">;</span>
+g_ScriptHeader<span class="token punctuation">.</span>iGlobalDataSize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token comment">// Set the current function's flags and variables</span>
+<span class="token keyword">int</span> iIsFuncActive <span class="token operator">=</span> FALSE<span class="token punctuation">;</span>
+FuncNode <span class="token operator">*</span> pCurrFunc<span class="token punctuation">;</span>
+<span class="token keyword">int</span> iCurrFuncIndex<span class="token punctuation">;</span>
+<span class="token keyword">char</span> pstrCurrFuncName <span class="token punctuation">[</span> MAX_IDENT_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> iCurrFuncParamCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> iCurrFuncLocalDataSize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token comment">// Create an instruction definition structure to hold instruction information</span>
+<span class="token comment">// when dealing with instructions.</span>
+InstrLookup CurrInstr<span class="token punctuation">;</span>
+<span class="token comment">// Reset the lexer</span>
+<span class="token function">ResetLexer</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="解析指令"><a href="#解析指令" class="headerlink" title="解析指令"></a>解析指令</h3><h4 id="SetStackSize"><a href="#SetStackSize" class="headerlink" title="SetStackSize"></a>SetStackSize</h4><p><code>SetStackSize 1024</code></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">case TOKEN_TYPE_SETSTACKSIZE:
-  // SetStackSize can only be found in the global scope, so make sure we
-  // aren't in a function.
-  if ( iIsFuncActive )
-    ExitOnCodeError ( ERROR_MSSG_LOCAL_SETSTACKSIZE );
-  // It can only be found once, so make sure we haven't already found it
-  if ( g_iIsSetStackSizeFound )
-    ExitOnCodeError ( ERROR_MSSG_MULTIPLE_SETSTACKSIZES );
-  // Read the next lexeme, which should contain the stack size
-  if ( GetNextToken () != TOKEN_TYPE_INT )
-    ExitOnCodeError ( ERROR_MSSG_INVALID_STACK_SIZE );
-  // Convert the lexeme to an integer value from its string
-  // representation and store it in the script header
-  g_ScriptHeader.iStackSize = atoi ( GetCurrLexeme () );
-  // Mark the presence of SetStackSize for future encounters
-  g_iIsSetStackSizeFound = TRUE;
-  break;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">case</span> TOKEN_TYPE_SETSTACKSIZE<span class="token operator">:</span>
+  <span class="token comment">// SetStackSize can only be found in the global scope, so make sure we</span>
+  <span class="token comment">// aren't in a function.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> iIsFuncActive <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_LOCAL_SETSTACKSIZE <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// It can only be found once, so make sure we haven't already found it</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> g_iIsSetStackSizeFound <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_MULTIPLE_SETSTACKSIZES <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read the next lexeme, which should contain the stack size</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_INT <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_INVALID_STACK_SIZE <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Convert the lexeme to an integer value from its string</span>
+  <span class="token comment">// representation and store it in the script header</span>
+  g_ScriptHeader<span class="token punctuation">.</span>iStackSize <span class="token operator">=</span> <span class="token function">atoi</span> <span class="token punctuation">(</span> <span class="token function">GetCurrLexeme</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Mark the presence of SetStackSize for future encounters</span>
+  g_iIsSetStackSizeFound <span class="token operator">=</span> TRUE<span class="token punctuation">;</span>
+  <span class="token keyword">break</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="Func"><a href="#Func" class="headerlink" title="Func"></a>Func</h4><pre class="line-numbers language-none"><code class="language-none">Func MovePlayer
 {<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -840,196 +840,196 @@ TOKEN_TYPE_IDENT
 TOKEN_TYPE_NEWLINE
 TOKEN_TYPE_OPEN_BRACE<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在函数分析中，主要处理函数入口、设置 <code>iIsFuncAative</code> 标志位、设置函数索引、函数参数数量、函数局部变量数量、是否是主函数以及添加返回指令。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">case TOKEN_TYPE_FUNC:
-{
-  // First make sure we aren't in a function already, since nested functions
-  // are illegal
-  if ( iIsFuncActive )
-    ExitOnCodeError ( ERROR_MSSG_NESTED_FUNC );
-  // Read the next lexeme, which is the function name
-  if ( GetNextToken () != TOKEN_TYPE_IDENT )
-    ExitOnCodeError ( ERROR_MSSG_IDENT_EXPECTED );
-  char * pstrFuncName = GetCurrLexeme ();
-  // Calculate the function's entry point, which is the instruction
-  // immediately following the current one, which is in turn equal to the
-  // instruction stream size
-  int iEntryPoint = g_iInstrStreamSize;
-  // Try adding it to the function table, and print an error if it's already
-  // been declared
-  int iFuncIndex = AddFunc ( pstrFuncName, iEntryPoint );
-  if ( iFuncIndex == -1 )
-    ExitOnCodeError ( ERROR_MSSG_FUNC_REDEFINITION );
-  // Is this the _Main () function?
-  if ( strcmp ( pstrFuncName, MAIN_FUNC_NAME ) == 0 )
-  {
-    g_ScriptHeader.iIsMainFuncPresent = TRUE;
-    g_ScriptHeader.iMainFuncIndex = iFuncIndex;
-  }
-  // Set the function flag to true for any future encounters and
-  // reinitialize function tracking variables
-  iIsFuncActive = TRUE;
-  strcpy ( pstrCurrFuncName, pstrFuncName );
-  iCurrFuncIndex = iFuncIndex;
-  iCurrFuncParamCount = 0;
-  iCurrFuncLocalDataSize = 0;
-  // Read any number of line breaks until the opening brace is found
-  while ( GetNextToken () == TOKEN_TYPE_NEWLINE );
-    // Make sure the lexeme was an opening brace
-    if ( g_Lexer.CurrToken != TOKEN_TYPE_OPEN_BRACE )
-      ExitOnCharExpectedError ( '{' );
-  // All functions are automatically appended with Ret, so increment the
-  // required size of the instruction stream
-  ++ g_iInstrStreamSize;
-  break;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">case</span> TOKEN_TYPE_FUNC<span class="token operator">:</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// First make sure we aren't in a function already, since nested functions</span>
+  <span class="token comment">// are illegal</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> iIsFuncActive <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_NESTED_FUNC <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read the next lexeme, which is the function name</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_IDENT <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_IDENT_EXPECTED <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span> pstrFuncName <span class="token operator">=</span> <span class="token function">GetCurrLexeme</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Calculate the function's entry point, which is the instruction</span>
+  <span class="token comment">// immediately following the current one, which is in turn equal to the</span>
+  <span class="token comment">// instruction stream size</span>
+  <span class="token keyword">int</span> iEntryPoint <span class="token operator">=</span> g_iInstrStreamSize<span class="token punctuation">;</span>
+  <span class="token comment">// Try adding it to the function table, and print an error if it's already</span>
+  <span class="token comment">// been declared</span>
+  <span class="token keyword">int</span> iFuncIndex <span class="token operator">=</span> <span class="token function">AddFunc</span> <span class="token punctuation">(</span> pstrFuncName<span class="token punctuation">,</span> iEntryPoint <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> iFuncIndex <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_FUNC_REDEFINITION <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Is this the _Main () function?</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">strcmp</span> <span class="token punctuation">(</span> pstrFuncName<span class="token punctuation">,</span> MAIN_FUNC_NAME <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    g_ScriptHeader<span class="token punctuation">.</span>iIsMainFuncPresent <span class="token operator">=</span> TRUE<span class="token punctuation">;</span>
+    g_ScriptHeader<span class="token punctuation">.</span>iMainFuncIndex <span class="token operator">=</span> iFuncIndex<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">// Set the function flag to true for any future encounters and</span>
+  <span class="token comment">// reinitialize function tracking variables</span>
+  iIsFuncActive <span class="token operator">=</span> TRUE<span class="token punctuation">;</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pstrCurrFuncName<span class="token punctuation">,</span> pstrFuncName <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  iCurrFuncIndex <span class="token operator">=</span> iFuncIndex<span class="token punctuation">;</span>
+  iCurrFuncParamCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  iCurrFuncLocalDataSize <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read any number of line breaks until the opening brace is found</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> TOKEN_TYPE_NEWLINE <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Make sure the lexeme was an opening brace</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> g_Lexer<span class="token punctuation">.</span>CurrToken <span class="token operator">!=</span> TOKEN_TYPE_OPEN_BRACE <span class="token punctuation">)</span>
+      <span class="token function">ExitOnCharExpectedError</span> <span class="token punctuation">(</span> <span class="token string">'{'</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// All functions are automatically appended with Ret, so increment the</span>
+  <span class="token comment">// required size of the instruction stream</span>
+  <span class="token operator">++</span> g_iInstrStreamSize<span class="token punctuation">;</span>
+  <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <div class="note warning"><p>注意函数返回语句 Ret </p></div>
 
 <p>当匹配到函数结束符时，写入函数参数数量、局部变量数量同时设置<code>iIsFuncAative</code> 标志位。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">case TOKEN_TYPE_CLOSE_BRACE:
-  // This should be closing a function, so make sure we're in one
-  if ( ! iIsFuncActive )
-    ExitOnCharExpectedError ( '}' );
-  // Set the fields we've collected
-  SetFuncInfo ( pstrCurrFuncName, iCurrFuncParamCount,
-  iCurrFuncLocalDataSize );
-  // Close the function
-  iIsFuncActive = FALSE;
-  break;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">case</span> TOKEN_TYPE_CLOSE_BRACE<span class="token operator">:</span>
+  <span class="token comment">// This should be closing a function, so make sure we're in one</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span> iIsFuncActive <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCharExpectedError</span> <span class="token punctuation">(</span> <span class="token string">'}'</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Set the fields we've collected</span>
+  <span class="token function">SetFuncInfo</span> <span class="token punctuation">(</span> pstrCurrFuncName<span class="token punctuation">,</span> iCurrFuncParamCount<span class="token punctuation">,</span>
+  iCurrFuncLocalDataSize <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Close the function</span>
+  iIsFuncActive <span class="token operator">=</span> FALSE<span class="token punctuation">;</span>
+  <span class="token keyword">break</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="Var-Var"><a href="#Var-Var" class="headerlink" title="Var/Var []"></a>Var/Var []</h4><p>由于变量和数组前面部分是一样的，所以需要向前看符号确定是否是数组。</p>
 <p><img src="variable.png" alt="variable"></p>
 <p>另一方面变量分为本地变量和全局变量，同时我们为每个栈帧保留了一个元素，以供虚拟机使用。</p>
 <p><img src="stackframe.png" alt="stackframe"></p>
 <p><img src="runtimeStack.png" alt="runtimeStack"></p>
 <p>变量的解析：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">case TOKEN_TYPE_VAR:
-{
-  // Get the variable's identifier
-  if ( GetNextToken () != TOKEN_TYPE_IDENT )
-    ExitOnCodeError ( ERROR_MSSG_IDENT_EXPECTED );
-  char pstrIdent [ MAX_IDENT_SIZE ];
-  strcpy ( pstrIdent, GetCurrLexeme () );
-  // This version of the code only handles single variables
-  int iSize = 1;
-  // Determine the variable's index into the stack
-  // If the variable is local, then its stack index is always the local data
-  // size + 2 subtracted from zero
-  int iStackIndex;
-  if ( iIsFuncActive )
-    iStackIndex = -( iCurrFuncLocalDataSize + 2 );
-  // Otherwise it's global, so it's equal to the current global data size
-  else
-    iStackIndex = g_ScriptHeader.iGlobalDataSize;
-  // Attempt to add the symbol to the table
-  if ( AddSymbol ( pstrIdent, iSize, iStackIndex, iCurrFuncIndex ) == -1 )
-    ExitOnCodeError ( ERROR_MSSG_IDENT_REDEFINITION );
-  // Depending on the scope, increment either the local or global data size
-  // by the size of the variable
-  if ( iIsFuncActive )
-    iCurrFuncLocalDataSize += iSize;
-  else
-    g_ScriptHeader.iGlobalDataSize += iSize;
-  break;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">case</span> TOKEN_TYPE_VAR<span class="token operator">:</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Get the variable's identifier</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_IDENT <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_IDENT_EXPECTED <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">char</span> pstrIdent <span class="token punctuation">[</span> MAX_IDENT_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> <span class="token function">GetCurrLexeme</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// This version of the code only handles single variables</span>
+  <span class="token keyword">int</span> iSize <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token comment">// Determine the variable's index into the stack</span>
+  <span class="token comment">// If the variable is local, then its stack index is always the local data</span>
+  <span class="token comment">// size + 2 subtracted from zero</span>
+  <span class="token keyword">int</span> iStackIndex<span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> iIsFuncActive <span class="token punctuation">)</span>
+    iStackIndex <span class="token operator">=</span> <span class="token operator">-</span><span class="token punctuation">(</span> iCurrFuncLocalDataSize <span class="token operator">+</span> <span class="token number">2</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Otherwise it's global, so it's equal to the current global data size</span>
+  <span class="token keyword">else</span>
+    iStackIndex <span class="token operator">=</span> g_ScriptHeader<span class="token punctuation">.</span>iGlobalDataSize<span class="token punctuation">;</span>
+  <span class="token comment">// Attempt to add the symbol to the table</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">AddSymbol</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iSize<span class="token punctuation">,</span> iStackIndex<span class="token punctuation">,</span> iCurrFuncIndex <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_IDENT_REDEFINITION <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Depending on the scope, increment either the local or global data size</span>
+  <span class="token comment">// by the size of the variable</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> iIsFuncActive <span class="token punctuation">)</span>
+    iCurrFuncLocalDataSize <span class="token operator">+=</span> iSize<span class="token punctuation">;</span>
+  <span class="token keyword">else</span>
+    g_ScriptHeader<span class="token punctuation">.</span>iGlobalDataSize <span class="token operator">+=</span> iSize<span class="token punctuation">;</span>
+  <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>数组的格式如下：</p>
 <pre class="line-numbers language-none"><code class="language-none">Var MyArray[1024]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>其对应的 Token 序列为：</p>
 <p><code>TOKEN_TYPE_VAR, TOKEN_TYPE_IDENT, TOKEN_TYPE_OPEN_BRACE, TOKEN_TYPE_INT, TOKEN_TYPE_CLOSE_BRACE</code></p>
 <p>代码如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">case TOKEN_TYPE_VAR:
-{
-  // Get the variable's identifier
-  if ( GetNextToken () != TOKEN_TYPE_IDENT )
-    ExitOnCodeError ( ERROR_MSSG_IDENT_EXPECTED );
-  char pstrIdent [ MAX_IDENT_SIZE ];
-  strcpy ( pstrIdent, GetCurrLexeme () );
-  // Now determine its size by finding out if it's an array or not, otherwise
-  // default to 1.
-  int iSize = 1;
-  // Find out if an opening bracket lies ahead
-  if ( GetLookAheadChar () == '[' )
-  {
-    // Validate and consume the opening bracket
-    if ( GetNextToken () != TOKEN_TYPE_OPEN_BRACKET )
-      ExitOnCharExpectedError ( '[' );
-      // We're parsing an array, so the next lexeme should be an integer
-    // describing the array's size
-    if ( GetNextToken () != TOKEN_TYPE_INT )
-      ExitOnCodeError ( ERROR_MSSG_INVALID_ARRAY_SIZE );
-    // Convert the size lexeme to an integer value
-    iSize = atoi ( GetCurrLexeme () );
-    // Make sure the size is valid, in that it's greater than zero
-    if ( iSize &lt;= 0 )
-      ExitOnCodeError ( ERROR_MSSG_INVALID_ARRAY_SIZE );
-    // Make sure the closing bracket is present as well
-    if ( GetNextToken () != TOKEN_TYPE_CLOSE_BRACKET )
-      ExitOnCharExpectedError ( ']' );
-    }
-    // Determine the variable's index into the stack
-    // If the variable is local, then its stack index is always the local data
-    // size + 2 subtracted from zero
-    int iStackIndex;
-    if ( iIsFuncActive )
-      iStackIndex = -( iCurrFuncLocalDataSize + 2 );
-    // Otherwise it's global, so it's equal to the current global data size
-    else
-      iStackIndex = g_ScriptHeader.iGlobalDataSize;
-    // Attempt to add the symbol to the table
-    if ( AddSymbol ( pstrIdent, iSize, iStackIndex, iCurrFuncIndex ) == -1 )
-      ExitOnCodeError ( ERROR_MSSG_IDENT_REDEFINITION );
-    // Depending on the scope, increment either the local or global data size
-    // by the size of the variable
-    if ( iIsFuncActive )
-      iCurrFuncLocalDataSize += iSize;
-    else
-      g_ScriptHeader.iGlobalDataSize += iSize;
-    break;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">case</span> TOKEN_TYPE_VAR<span class="token operator">:</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Get the variable's identifier</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_IDENT <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_IDENT_EXPECTED <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">char</span> pstrIdent <span class="token punctuation">[</span> MAX_IDENT_SIZE <span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token function">strcpy</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> <span class="token function">GetCurrLexeme</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Now determine its size by finding out if it's an array or not, otherwise</span>
+  <span class="token comment">// default to 1.</span>
+  <span class="token keyword">int</span> iSize <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token comment">// Find out if an opening bracket lies ahead</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetLookAheadChar</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">'['</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// Validate and consume the opening bracket</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_OPEN_BRACKET <span class="token punctuation">)</span>
+      <span class="token function">ExitOnCharExpectedError</span> <span class="token punctuation">(</span> <span class="token string">'['</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// We're parsing an array, so the next lexeme should be an integer</span>
+    <span class="token comment">// describing the array's size</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_INT <span class="token punctuation">)</span>
+      <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_INVALID_ARRAY_SIZE <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Convert the size lexeme to an integer value</span>
+    iSize <span class="token operator">=</span> <span class="token function">atoi</span> <span class="token punctuation">(</span> <span class="token function">GetCurrLexeme</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Make sure the size is valid, in that it's greater than zero</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> iSize <span class="token operator">&lt;=</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+      <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_INVALID_ARRAY_SIZE <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Make sure the closing bracket is present as well</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_CLOSE_BRACKET <span class="token punctuation">)</span>
+      <span class="token function">ExitOnCharExpectedError</span> <span class="token punctuation">(</span> <span class="token string">']'</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// Determine the variable's index into the stack</span>
+    <span class="token comment">// If the variable is local, then its stack index is always the local data</span>
+    <span class="token comment">// size + 2 subtracted from zero</span>
+    <span class="token keyword">int</span> iStackIndex<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> iIsFuncActive <span class="token punctuation">)</span>
+      iStackIndex <span class="token operator">=</span> <span class="token operator">-</span><span class="token punctuation">(</span> iCurrFuncLocalDataSize <span class="token operator">+</span> <span class="token number">2</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Otherwise it's global, so it's equal to the current global data size</span>
+    <span class="token keyword">else</span>
+      iStackIndex <span class="token operator">=</span> g_ScriptHeader<span class="token punctuation">.</span>iGlobalDataSize<span class="token punctuation">;</span>
+    <span class="token comment">// Attempt to add the symbol to the table</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">AddSymbol</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iSize<span class="token punctuation">,</span> iStackIndex<span class="token punctuation">,</span> iCurrFuncIndex <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+      <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_IDENT_REDEFINITION <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Depending on the scope, increment either the local or global data size</span>
+    <span class="token comment">// by the size of the variable</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> iIsFuncActive <span class="token punctuation">)</span>
+      iCurrFuncLocalDataSize <span class="token operator">+=</span> iSize<span class="token punctuation">;</span>
+    <span class="token keyword">else</span>
+      g_ScriptHeader<span class="token punctuation">.</span>iGlobalDataSize <span class="token operator">+=</span> iSize<span class="token punctuation">;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <div class="note warning"><p>注意变量作用域是本地还是全局，以及变量栈索引的计算</p></div>
 
 <h4 id="Param"><a href="#Param" class="headerlink" title="Param"></a>Param</h4><p>根据栈帧的分配，函数参数的位置如下：</p>
 <p><img src="param.png" alt="param"></p>
 <p>参数格式为 <code>Param Y</code> ， Token 序列为 TOKEN_TYPE_PARAM,  TOKEN_TYPE_IDENT</p>
 <p>代码如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">case TOKEN_TYPE_PARAM:
-{
-  // Read the next token to get the identifier
-  if ( GetNextToken () != TOKEN_TYPE_IDENT )
-    ExitOnCodeError ( ERROR_MSSG_IDENT_EXPECTED );
-  // Read the identifier, which is the current lexeme
-  char * pstrIdent = GetCurrLexeme ();
-  // Calculate the parameter's stack index
-  int iStackIndex = -( pCurrFunc-&gt;iLocalDataSize + 2 +
-  ( iCurrFuncParamCount + 1 ) );
-  // Add the parameter to the symbol table
-  if ( AddSymbol ( pstrIdent, 1, iStackIndex, iCurrFuncIndex ) == -1 )
-    ExitOnCodeError ( ERROR_MSSG_IDENT_REDEFINITION );
-  // Increment the current parameter count
-  ++ iCurrFuncParamCount;
-  break;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">case</span> TOKEN_TYPE_PARAM<span class="token operator">:</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Read the next token to get the identifier</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetNextToken</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> TOKEN_TYPE_IDENT <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_IDENT_EXPECTED <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Read the identifier, which is the current lexeme</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent <span class="token operator">=</span> <span class="token function">GetCurrLexeme</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Calculate the parameter's stack index</span>
+  <span class="token keyword">int</span> iStackIndex <span class="token operator">=</span> <span class="token operator">-</span><span class="token punctuation">(</span> pCurrFunc<span class="token operator">-&gt;</span>iLocalDataSize <span class="token operator">+</span> <span class="token number">2</span> <span class="token operator">+</span>
+  <span class="token punctuation">(</span> iCurrFuncParamCount <span class="token operator">+</span> <span class="token number">1</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Add the parameter to the symbol table</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">AddSymbol</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> iStackIndex<span class="token punctuation">,</span> iCurrFuncIndex <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_IDENT_REDEFINITION <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Increment the current parameter count</span>
+  <span class="token operator">++</span> iCurrFuncParamCount<span class="token punctuation">;</span>
+  <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="Line-Labels"><a href="#Line-Labels" class="headerlink" title="Line Labels"></a>Line Labels</h4><p>标签格式 <code>MyLabel:</code> 其 Token 序列为 TOKEN_TYPE_IDENT TOKEN_TYPE_COLON<br>代码如下：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">case TOKEN_TYPE_IDENT:
-{
-  // Make sure it's a line label
-  if ( GetLookAheadChar () != ':' )
-    ExitOnCodeError ( ERROR_MSSG_INVALID_INSTR );
-  // Make sure we're in a function, since labels can only appear there
-  if ( ! iIsFuncActive )
-    ExitOnCodeError ( ERROR_MSSG_GLOBAL_LINE_LABEL );
-  // The current lexeme is the label's identifier
-  char * pstrIdent = GetCurrLexeme ();
-  // The target instruction is always the value of the current
-  // instruction count, which is the current size - 1
-  int iTargetIndex = g_iInstrStreamSize - 1;
-  // Save the label's function index as well
-  int iFuncIndex = iCurrFuncIndex;
-  // Try adding the label to the label table, and print an error if it
-  // already exists
-  if ( AddLabel ( pstrIdent, iTargetIndex, iFuncIndex ) == -1 )
-    ExitOnCodeError ( ERROR_MSSG_LINE_LABEL_REDEFINITION );
-  break;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">case</span> TOKEN_TYPE_IDENT<span class="token operator">:</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Make sure it's a line label</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">GetLookAheadChar</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token string">':'</span> <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_INVALID_INSTR <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Make sure we're in a function, since labels can only appear there</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span> iIsFuncActive <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_GLOBAL_LINE_LABEL <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// The current lexeme is the label's identifier</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span> pstrIdent <span class="token operator">=</span> <span class="token function">GetCurrLexeme</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// The target instruction is always the value of the current</span>
+  <span class="token comment">// instruction count, which is the current size - 1</span>
+  <span class="token keyword">int</span> iTargetIndex <span class="token operator">=</span> g_iInstrStreamSize <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token comment">// Save the label's function index as well</span>
+  <span class="token keyword">int</span> iFuncIndex <span class="token operator">=</span> iCurrFuncIndex<span class="token punctuation">;</span>
+  <span class="token comment">// Try adding the label to the label table, and print an error if it</span>
+  <span class="token comment">// already exists</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">AddLabel</span> <span class="token punctuation">(</span> pstrIdent<span class="token punctuation">,</span> iTargetIndex<span class="token punctuation">,</span> iFuncIndex <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">)</span>
+    <span class="token function">ExitOnCodeError</span> <span class="token punctuation">(</span> ERROR_MSSG_LINE_LABEL_REDEFINITION <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <div class="note warning"><p>注意标签代表的指令为 g_iInstrStreamSize - 1</p></div>
 
 <h4 id="Instructions"><a href="#Instructions" class="headerlink" title="Instructions"></a>Instructions</h4><p>在解析指令是只需要根据指令查找表，逐一比对当前 Token 和 当前指令的各个部分即可。指令查找表中每一条指令包含以下内容：</p>
@@ -1771,12 +1771,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     

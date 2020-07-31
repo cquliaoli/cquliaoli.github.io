@@ -477,18 +477,18 @@ Considered Harmful">这儿</a>。<br>异常按照同步、异步以及异常的�
 <p>详细请参考<a target="_blank" rel="noopener" href="https://www.cs.york.ac.uk/rts/books/RTSbookThirdEdition/chap6.pdf" title="Exceptions and Exception Handling">这儿</a></p>
 <h3 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h3><p>信号是硬件中断的软件等价物。通过信号处理程序处理错误事件，程序从被中断的位置继续执行。操作系统为每个信号提供了合理的错误处理程序，我们可以覆盖这些默认的处理程序。</p>
 <h2 id="检测错误"><a href="#检测错误" class="headerlink" title="检测错误"></a>检测错误</h2><h3 id="返回值和错误状态变量"><a href="#返回值和错误状态变量" class="headerlink" title="返回值和错误状态变量"></a>返回值和错误状态变量</h3><p>这两种错误表现形式决定了，我们需要判断函数的返回值或者全局变量，以确定是否发生故障。<br>不过调用层次较多时，会让我的代码结构可读性降低，变得混乱不堪。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">void nastyErrorHandling(){
-  if(op1()){
-    //do something
-    if(op2()){
-      //do something
-      if(op3()){
-        //do more..
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">void</span> <span class="token function">nastyErrorHandling</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">op1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment">//do something</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">op2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token comment">//do something</span>
+      <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">op3</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token comment">//do more..</span>
 
-      }
-    }
-  }
-}
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>以上问题可以解决吗？可以的，通过引入一个状态变量 <code>ok</code> 比如：</p>
 <pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">void flattenedErrorHandling(){
@@ -1288,12 +1288,11 @@ $(function () {
     
 
     
-    <script type="text/javascript" color="0,0,255"
-        pointColor="0,0,255" opacity='0.7'
-        zIndex="-1" count="99"
-        src="/libs/background/canvas-nest.js"></script>
-    
 
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon-refresh.min.js" async="async"></script>
     
 
     
