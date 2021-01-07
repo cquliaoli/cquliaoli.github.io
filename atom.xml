@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.cqull.com/"/>
-  <updated>2019-09-01T07:15:24.613Z</updated>
+  <updated>2020-07-31T10:03:12.519Z</updated>
   <id>http://www.cqull.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://www.cqull.com/2020/07/31/mian-xiang-dui-xiang-bian-cheng-c-he-java-bi-jiao-lei-ji-qi-guan-jian-gai-nian/"/>
+    <id>http://www.cqull.com/2020/07/31/mian-xiang-dui-xiang-bian-cheng-c-he-java-bi-jiao-lei-ji-qi-guan-jian-gai-nian/</id>
+    <published>2020-07-31T00:39:21.113Z</published>
+    <updated>2020-07-31T10:03:12.519Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;script&gt;
+        document.querySelectorAll(&#39;.github-emoji&#39;)
+          .forEach(el =&gt; {
+            if (!el.dataset.src) { return; }
+       
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>汇编语言总结</title>
@@ -425,37 +452,6 @@
     
     
       <category term="C" scheme="http://www.cqull.com/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>面向对象编程 C++ 和 Java 比较-类及其关键概念</title>
-    <link href="http://www.cqull.com/2018/10/23/mian-xiang-dui-xiang-bian-cheng-c-he-java-bi-jiao-lei-ji-qi-guan-jian-gai-nian/"/>
-    <id>http://www.cqull.com/2018/10/23/mian-xiang-dui-xiang-bian-cheng-c-he-java-bi-jiao-lei-ji-qi-guan-jian-gai-nian/</id>
-    <published>2018-10-23T13:16:21.000Z</published>
-    <updated>2018-10-24T01:04:50.213Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;OO 编程最重要的概念是类、封装（Encapsulation）、继承（Inheritance）和多态（Polymorphism）。&lt;/p&gt;
-    
-    </summary>
-    
-    <content src="http://www.cqull.com/oop.png" type="image" />
-    
-    
-      <category term="Java" scheme="http://www.cqull.com/categories/Java/"/>
-    
-      <category term="C++" scheme="http://www.cqull.com/categories/Java/C/"/>
-    
-      <category term="OOP" scheme="http://www.cqull.com/categories/Java/C/OOP/"/>
-    
-    
-      <category term="Java" scheme="http://www.cqull.com/tags/Java/"/>
-    
-      <category term="C++" scheme="http://www.cqull.com/tags/C/"/>
-    
-      <category term="OOP" scheme="http://www.cqull.com/tags/OOP/"/>
     
   </entry>
   
